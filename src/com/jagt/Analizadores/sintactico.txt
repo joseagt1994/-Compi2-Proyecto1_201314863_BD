@@ -4,7 +4,7 @@ STATIC = false;
 }
 
 PARSER_BEGIN(Sintactico)
-package com.jagt.Analisis;
+package com.jagt.Analizadores;
 import com.jagt.AST.*;
 public class Sintactico{
 	
@@ -40,14 +40,14 @@ TOKEN:{
         <ENTERO: ("-")?(<DIGITO>)+ >                                                                // INTEGER
     |   <DOBLE: ("-")?(<DIGITO>)+("."(<DIGITO>)+)? >                                                // DOUBLE 
     |   <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    // TEXT
-    |   <FECHA: (["0"-3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)>                         // DATE
-    |   <HORA: ((["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"]):(["0"-"5"]["0"-"9"])    // TIME
+    |   <FECHA: (["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)>                         // DATE
+    |   <HORA: ((["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]) > // TIME
     |   <RES_DOBLE: "Double" >
     |   <RES_ENTERO: "Integer" >
     |   <RES_CADENA: "Text" >
     |   <RES_BOOLEAN: "Bool" >
-    |   <RES_FECHA: "Date" >
-    |   <RES_FECHAHORA: "Datetime" >
+    |   <RES_DATE: "Date" >
+    |   <RES_DATETIME: "Datetime" >
     |   <VERDADERO: ("true"|"verdadero") >
     |   <FALSO: ("falso"|"false") >
     |   <RES_CREAR: "Crear" >
@@ -82,8 +82,8 @@ TOKEN:{
     |   <RES_DESC: "DESC" >
     |   <RES_DECLARAR: "Declarar" >
     |   <RES_IMPRIMIR: "Imprimir" >
-    |   <FECHA: "Fecha" >
-    |   <FECHAHORA: "Fecha_Hora" >
+    |   <RES_FECHA: "Fecha" >
+    |   <RES_FECHAHORA: "Fecha_Hora" >
     |   <RES_CONTAR: "Contar" >
     |   <RES_BACKUP: "Backup" >
     |   <RES_USQLDUMP: "USQLDUMP" >
@@ -124,6 +124,7 @@ TOKEN:{
     |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
     |   <VAR: "@"(<ID>) >
     |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
  
 }
 
@@ -135,7 +136,7 @@ int inicio():
           c = instruccionSQL()        {cuerpos.hijos().add(c);}
         )*
         <EOF>
-        {return cuerpos;}
+        {Compilador compi = new Compilador(cuerpos); return 0;}
 }
 
 void Empty():
@@ -226,7 +227,7 @@ NodoParser tipo_backup():
 {Token t;}
 {
             t = <RES_USQLDUMP>  {return new NodoParser("TIPO","USQLDUMP",t.beginLine,t.beginColumn);}
-        |   t = <RES_COMPLETO>  return new NodoParser("TIPO","COMPLETO",t.beginLine,t.beginColumn);}
+        |   t = <RES_COMPLETO>  {return new NodoParser("TIPO","COMPLETO",t.beginLine,t.beginColumn);}
 }
 
 NodoParser imprimir():
@@ -339,7 +340,7 @@ NodoParser actualizar():
         ")"
         <RES_VALORES>
         "("
-        exps = lista_expresiones()  {nodo.hijos().add(new NodoParser(exps);}
+        exps = lista_expresiones()  {nodo.hijos().add(new NodoParser(exps));}
         ")"
         (
             d = donde()             {nodo.hijos().add(d);}
@@ -657,9 +658,10 @@ NodoParser tipo():
 {
       t = <RES_ENTERO> {System.out.println("entero"); return new NodoParser("TIPO","entero",t.beginLine,t.beginColumn);}
     | t = <RES_CADENA> {System.out.println("cadena"); return new NodoParser("TIPO","cadena",t.beginLine,t.beginColumn);}
-    | t = <RES_CARACTER> {System.out.println("caracter"); return new NodoParser("TIPO","caracter",t.beginLine,t.beginColumn);}
     | t = <RES_BOOLEAN> {System.out.println("cadena"); return new NodoParser("TIPO","boolean",t.beginLine,t.beginColumn);}
     | t = <RES_DOBLE> {System.out.println("caracter"); return new NodoParser("TIPO","doble",t.beginLine,t.beginColumn);}
+    | t = <RES_DATE> {System.out.println("fecha"); return new NodoParser("TIPO","fecha",t.beginLine,t.beginColumn);}
+    | t = <RES_DATETIME> {System.out.println("fecha y hora"); return new NodoParser("TIPO","fechahora",t.beginLine,t.beginColumn);}
 }
 
 //EXP
@@ -668,6 +670,17 @@ NodoParser expresion():
 {
     ope = operacion1()  {}
     exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); return exp;}else{return ope;}}
+}
+
+NodoParser lista_expresiones():
+{NodoParser nodo,exp;}
+{
+        exp = expresion()            {nodo = new NodoParser("EXPRESIONES","",0,0); nodo.hijos().add(exp);} 
+        (
+            ","
+            exp = expresion()        {nodo.hijos().add(exp);}
+        )*
+        {return nodo;}
 }
 
 NodoParser expresion2():
@@ -708,11 +721,12 @@ NodoParser tipoValor():
         ")"                 {return nodo;}
     |   t = <ENTERO>        {tipo = new NodoParser("entero",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo; }
     |   t = <CADENA>        {tipo = new NodoParser("cadena",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
-    |   t = <CARACTER>      {tipo = new NodoParser("caracter",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <FECHA>         {tipo = new NodoParser("fecha",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <HORA>          {tipo = new NodoParser("fechahora",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   t = <DOBLE>         {tipo = new NodoParser("doble",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   t = <VERDADERO>     {tipo = new NodoParser("boolean","1",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   t = <FALSO>         {tipo = new NodoParser("boolean","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
-    |   t = <ID> tipoL = tipoLlamada()    {nodo.hijos().add(new NodoParser("ID",t.image,t.beginLine,t.beginColumn)); if(tipoL != null){ nodo.hijos().add(tipoL); } return nodo;}
+    |   tipoL = llamada()   {nodo.hijos().add(tipoL); return nodo;}
     //Puede ser metodo o llamada a una dimension del arreglo AGREGAR ORDENAR Y SUMARIZAR
 }
 
@@ -721,7 +735,7 @@ NodoParser control():
 {
         si()
     |   para()
-    |   seleccion()
+    |   seleccion_casos()
     |   mientras()
 }
 
@@ -732,40 +746,34 @@ NodoParser si():
     "("
     con = condicion()       {nodo.hijos().add(con);}
     ")"
-    abreInterrogacion()                {sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
-    (
-        sen = lista_sentencias()      {sns.hijos().add(sen);}
-    )*
-    "?"                     {nodo.hijos().add(sns);}
+    "{"   
+    sen = lista_sentencias()      {sns.hijos().add(sen);}
+    "}"                     {nodo.hijos().add(sns);}
     (
         t = <SINO>              {sn = new NodoParser("SINO","",t.beginLine,t.beginColumn);}
-        abreInterrogacion()            {sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
-        (
-            sen = lista_sentencias()  {sns.hijos().add(sen);}
-        )*
-        "?"                 {sn.hijos().add(sns); nodo.hijos().add(sn);}
+        "{"                     {sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
+        sen = lista_sentencias()  {sns.hijos().add(sen);}
+        "}"                 {sn.hijos().add(sns); nodo.hijos().add(sn);}
     )?
     {return nodo;}
 }
 
-NodoParser comprobar():
+NodoParser seleccion_casos():
 {NodoParser nodo,exp,cas,def,sen,sns; Token t;}
 {
-    t = <COMPROBAR>         {nodo = new NodoParser("COMPROBAR","",t.beginLine,t.beginColumn);}
+    t = <SELECCIONA>         {nodo = new NodoParser("SELECCIONA","",t.beginLine,t.beginColumn);}
     "("
     exp = expresion()            {nodo.hijos().add(exp);}
     ")"
-    abreInterrogacion()
+    "{"
     cas = casos()       {nodo.hijos().add(cas);}
     (
         t = <DEFECTO>       {def = new NodoParser("DEFECTO","",t.beginLine,t.beginColumn); sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
         ":"
-        (
-            sen = lista_sentencias()      {sns.hijos().add(sen);}
-        )*
+        sen = lista_sentencias()      {sns.hijos().add(sen);}
         {def.hijos().add(sns); nodo.hijos().add(def);}
     )?
-    "?"                         {return nodo;}
+    "}"                         {return nodo;}
 }
 
 NodoParser casos():
@@ -774,17 +782,13 @@ NodoParser casos():
     t = <CASO>              {nodo = new NodoParser("CASOS","",t.beginLine,t.beginColumn); caso = new NodoParser("CASO","",t.beginLine,t.beginColumn);}
     exp = expresion()   {caso.hijos().add(exp); sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
     ":"
-    (   
-        sen = lista_sentencias()  {sns.hijos().add(sen);}
-    )*
+    sen = lista_sentencias()  {sns.hijos().add(sen);}
     {caso.hijos().add(sns); nodo.hijos().add(caso);}
     (
         t = <CASO>              {caso = new NodoParser("CASO","",t.beginLine,t.beginColumn);}
         exp = expresion()   {caso.hijos().add(exp); sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
         ":"
-        (
-            sen = lista_sentencias()  {sns.hijos().add(sen);}
-        )*
+        sen = lista_sentencias()  {sns.hijos().add(sen);}
         {caso.hijos().add(sns); nodo.hijos().add(caso);}
     )*                      
     {return nodo;}
@@ -797,18 +801,15 @@ Token t,tp;}
     // para -> asignacion condicion crecimiento sentencias
     t = <PARA>               {nodo = new NodoParser("PARA","",t.beginLine,t.beginColumn);}
     "("
-    asig = asignacion()  {nodo.hijos().add(asig);}
-    ";"
+    asig = asignar()  {nodo.hijos().add(asig);}
     con = condicion()    {nodo.hijos().add(con);}
     ";"
     tp = <ID>
     cre = crecimiento()  {cre.hijos().addFirst(new NodoParser("ID",tp.image,tp.beginLine,tp.beginColumn)); nodo.hijos().add(cre);}   
     ")"
-    abreInterrogacion()             {sns = new NodoParser("SENTENCIAS","",tp.beginLine,tp.beginColumn);}
-    (
-        sen = lista_sentencias()   {sns.hijos().add(sen);}
-    )*
-    "?"                  {nodo.hijos().add(sns); return nodo;}
+    "{"             {sns = new NodoParser("SENTENCIAS","",tp.beginLine,tp.beginColumn);}
+    sen = lista_sentencias()   {sns.hijos().add(sen);}
+    "}"                  {nodo.hijos().add(sns); return nodo;}
 }
 
 NodoParser mientras():
@@ -818,11 +819,9 @@ NodoParser mientras():
     "("
     con = condicion()   {nodo.hijos().add(con);}
     ")"
-    abreInterrogacion()            {sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
-    (   
-        sen = lista_sentencias()  {sns.hijos().add(sen);}
-    )* 
-    "?"                 {nodo.hijos().add(sns); return nodo;}
+    "{"            {sns = new NodoParser("SENTENCIAS","",t.beginLine,t.beginColumn);}
+    sen = lista_sentencias()  {sns.hijos().add(sen);}
+    "}"                 {nodo.hijos().add(sns); return nodo;}
 }
 
 NodoParser condicion():
@@ -875,8 +874,8 @@ NodoParser subcondicion():
 {
         // subcondicion2 -> NULO id
         
-        t = <NULO>             {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn);}
-        t = <ID>               {nodo.hijos().add(new NodoParser("NULO","!&¡",t.beginLine,t.beginColumn)); nodo.hijos().add(new NodoParser("ID",t.image,t.beginLine,t.beginColumn)); return nodo;}
+        t = <NOT>             {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn);}
+        t = <ID>               {nodo.hijos().add(new NodoParser("NOT","!&¡",t.beginLine,t.beginColumn)); nodo.hijos().add(new NodoParser("ID",t.image,t.beginLine,t.beginColumn)); return nodo;}
     |   nodo = subcondicion2() {return nodo;}
 }
 
@@ -911,15 +910,7 @@ NodoParser crecimiento():
 {
         t = <INCREMENTO>    {nodo = new NodoParser("CRECIMIENTO","++",t.beginLine,t.beginColumn); return nodo;}
     |   t= <DECREMENTO>    {nodo = new NodoParser("CRECIMIENTO","--",t.beginLine,t.beginColumn); return nodo;}
-    |   t = <MAS_IGUAL>     
-        exp = expresion()   {nodo = new NodoParser("ASIGNACION","+=",t.beginLine,t.beginColumn); nodo.hijos().add(exp); return nodo;}
-    |   t = <MENOS_IGUAL>   
-        exp = expresion()   {nodo = new NodoParser("ASIGNACION","-=",t.beginLine,t.beginColumn); nodo.hijos().add(exp); return nodo;}
     |   t = <ASIGNA>
         exp = expresion()   {nodo = new NodoParser("ASIGNACION","=",t.beginLine,t.beginColumn); nodo.hijos().add(exp); return nodo;}
-    |   exp = valores()     {return exp;}
-    |   dim = dimensiones() 
-        t = <ASIGNA>        {nodo = new NodoParser("ARREGLO","=",t.beginLine,t.beginColumn); nodo.hijos().add(dim);}
-        exp = expresion()   {nodo.hijos().add(exp); return nodo;}
         
 }
