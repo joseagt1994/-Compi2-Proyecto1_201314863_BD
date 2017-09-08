@@ -5,10 +5,18 @@
  */
 package com.jagt.Logica;
 
+import com.jagt.AST.*;
+import java.util.LinkedList;
+
 /**
  *
  * @author Jose Antonio
  */
 public class BaseDatos {
+    
+    private String nombre;
+    private LinkedList<Tabla> tablas;
+    private LinkedList<Metodo> metodos;
+    private LinkedList<Objeto> objetos;
     
 }

@@ -11,11 +11,14 @@ package com.jagt.GUI;
  */
 public class Servidor extends javax.swing.JFrame {
 
+    // Variables a usar en el servidor!!!
+    
     /**
      * Creates new form Servidor
      */
     public Servidor() {
         initComponents();
+        // Iniciar procesos
     }
 
     /**
