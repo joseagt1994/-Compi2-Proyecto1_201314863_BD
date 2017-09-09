@@ -12,6 +12,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /**
  *
@@ -64,6 +67,16 @@ public class Archivo {
             
         }catch(IOException e){
             System.out.println("Error: "+e.getMessage());
+        }
+        
+    }
+    
+    public void modificar(String ruta,String texto){
+        
+        try {
+            Files.write(Paths.get(ruta), texto.getBytes(), StandardOpenOption.APPEND);
+        }catch (IOException e) {
+            //exception handling left as an exercise for the reader
         }
         
     }
