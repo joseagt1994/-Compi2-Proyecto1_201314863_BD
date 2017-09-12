@@ -2,22 +2,22 @@ options{
 STATIC = false;
 }
 
-PARSER_BEGIN(SintacticoMaster)
+PARSER_BEGIN(SintacticoUsuarios)
 package com.jagt.Analizadores.XML.Usuarios;
 import com.jagt.Logica.Usuario;
 import java.util.LinkedList;
 
-public class SintacticoMaster{
+public class SintacticoUsuarios{
 	
         public static void main(String args[]) throws ParseException{
 
-		SintacticoMaster parser = new SintacticoMaster(System.in);
+		SintacticoUsuarios parser = new SintacticoUsuarios(System.in);
 		parser.inicio();
 
 	}
 
 }
-PARSER_END(SintacticoMaster)
+PARSER_END(SintacticoUsuarios)
 
 /* ESPACIOS */
 

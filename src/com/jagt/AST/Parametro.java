@@ -11,7 +11,7 @@ import com.jagt.Logica.SistemaBaseDatos;
  *
  * @author Jose Antonio
  */
-class Parametro {
+public class Parametro {
     
     String nombre;
     int tipo;

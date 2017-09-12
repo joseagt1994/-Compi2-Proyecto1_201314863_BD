@@ -6,6 +6,8 @@ STATIC = false;
 PARSER_BEGIN(SintacticoMetodos)
 package com.jagt.Analizadores.XML.Metodos;
 import com.jagt.AST.*;
+import java.util.LinkedList;
+
 public class SintacticoMetodos{
 	
         public static void main(String args[]) throws ParseException{
@@ -136,7 +138,7 @@ Metodo procedimiento():
         <FIN_NOMBRE>
         (
             <INICIO_RET>
-            n = tipo()          {nuevo.agregarTipo(n);}
+            n = tipo()          {nuevo.guardarTipo(n);}
             <FIN_RET>
         )?
         <INICIO_PARAMS>

@@ -3,7 +3,7 @@ STATIC = false;
 }
 
 PARSER_BEGIN(SintacticoObjetos)
-package com.jagt.Analizadores.XML.Registros;
+package com.jagt.Analizadores.XML.Objetos;
 import com.jagt.AST.*;
 import com.jagt.Logica.*;
 
