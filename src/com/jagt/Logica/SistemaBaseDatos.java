@@ -30,18 +30,18 @@ public class SistemaBaseDatos {
     public LinkedList<Tabla> tablas;
     public LinkedList<Objeto> objetos;
     public LinkedList<Metodo> metodos;
-    public LinkedList<Variable> variables;
+    //public LinkedList<Variable> variables;
+     Archivo master = new Archivo();
     
     // Unica instancia de SistemaBaseDatos
     private static SistemaBaseDatos BD = null;
     
     private SistemaBaseDatos(){
-        usuarios = new LinkedList<Usuario>();
+        llenarUsuarios();
         basesDatos = new LinkedList<DataBase>();
         tablas = new LinkedList<Tabla>();
         objetos = new LinkedList<Objeto>();
         metodos = new LinkedList<Metodo>();
-        variables = new LinkedList<Variable>();
     }
     
     public static SistemaBaseDatos getInstance(){
@@ -58,25 +58,22 @@ public class SistemaBaseDatos {
     
     /**************************** CREAR *************************/
     public void crearUsuario(String nombre,String password){
-        Archivo master = new Archivo();
-        String listado = master.leer(Servidor.rutaUsuarios);
         // Analizar archivo maestro
-        LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
-        usuarios.add(Servidor.logueado);
         Servidor.codUsuario = usuarios.getLast().getCodigo()+1;
-        if(!existeUsuario(nombre,usuarios)){
+        if(!existeUsuario(nombre)){
             // Se escribe en el archivo usuarios.usac
             String nuevo = "<usuario id=\""+Servidor.codUsuario+"\">\n" +
                            "\t<nombre>"+nombre+"</nombre>\n" +
                            "\t<password>"+password+"</password>\n" +
                            "</usuario>\n";
             master.modificar(Servidor.rutaUsuarios, nuevo);
+            llenarUsuarios();
         }else{
             //Error! El usuario ya existe!
         }
     }
     
-    public boolean existeUsuario(String nombre,LinkedList<Usuario> usuarios){
+    public boolean existeUsuario(String nombre){
         for(Usuario u : usuarios){
             if(u.getNombre().equals(nombre)){
                 return true;
@@ -86,11 +83,8 @@ public class SistemaBaseDatos {
     }
     
     public void crearBD(String nombreBD,int usuario){
-        Archivo master = new Archivo();
-        String bases = master.leer(Servidor.rutaMaestra);
         // Analizar archivo maestro
-        LinkedList<String> basesDatos = new LinkedList<String>();
-        if(!existeBD(nombreBD,basesDatos)){
+        if(!existeBD(nombreBD)){
             // Se escribe en el archivo master.usac
             String rutaBD = Servidor.rutaBDS+nombreBD+".usac";
             String nueva = "<DB>\n"+
@@ -113,14 +107,15 @@ public class SistemaBaseDatos {
                               "\t<path>"+rutaObj+"</path>\n" +
                               "</Object>\n";
             master.escribir(rutaBD, cuerpoBD);
+            llenarBases();
         }else{
             // Error! La base de datos ya existe!
         }
     }
     
-    public boolean existeBD(String nombre,LinkedList<String> bds){
-        for(String bd : bds){
-            if(bd.equals(nombre)){
+    public boolean existeBD(String nombre){
+        for(DataBase bd : basesDatos){
+            if(bd.getNombre().equals(nombre)){
                 return true;
             }
         }
@@ -129,12 +124,10 @@ public class SistemaBaseDatos {
     
     public void crearTabla(Tabla tabla){
         // Se escribe en la base de datos seleccionada, bd.usac
-        Archivo master = new Archivo();
-        String bd = master.leer(Servidor.rutaBDS+Servidor.bd_actual+".usac");
         String rutaTabla = Servidor.rutaBDS+tabla.getNombre()+"_"+Servidor.bd_actual+".usac";
         master.escribir(rutaTabla, "");
         LinkedList<String> tablas = new LinkedList<String>();
-        if(!existeTabla(tabla.getNombre(),tablas)){
+        if(!existeTabla(tabla.getNombre())){
             String nueva = "<Tabla>\n" +
                            "\t<nombre>"+tabla.getNombre()+"</nombre>\n" +
                            "\t<path>"+rutaTabla+"</path>\n" +
@@ -150,14 +143,15 @@ public class SistemaBaseDatos {
             nueva += "\t</rows>\n" +
                      "</Tabla>\n";
             master.modificar(Servidor.rutaBDS+Servidor.bd_actual+".usac", nueva);
+            llenarTablas();
         }else{
             // Error! La tabla ya existe en la base de datos!
         }
     }
     
-    public boolean existeTabla(String nombre,LinkedList<String> tablas){
-        for(String tabla : tablas){
-            if(tabla.equals(nombre)){
+    public boolean existeTabla(String nombre){
+        for(Tabla tabla : tablas){
+            if(tabla.getNombre().equals(nombre)){
                 return true;
             }
         }
@@ -166,10 +160,9 @@ public class SistemaBaseDatos {
     
     public void crearObjeto(Objeto objeto){
         // Se escribe en obj_bd.usac
-        Archivo master = new Archivo();
-        String rutaTabla = Servidor.rutaBDS+"objeto_"+Servidor.bd_actual+".usac";
+        String rutaObjeto = Servidor.rutaBDS+"obj_"+Servidor.bd_actual+".usac";
         LinkedList<String> objetos = new LinkedList<String>();
-        if(!existeTabla(objeto.getNombre(),objetos)){
+        if(!existeObjeto(objeto.getNombre())){
             String nueva = "<Obj>\n" +
                            "\t<nombre>"+objeto.getNombre()+"</nombre>\n" +
                            "\t<attr>\n";
@@ -179,15 +172,16 @@ public class SistemaBaseDatos {
             }
             nueva += "\t</attr>\n" +
                      "</Obj>\n";
-            master.modificar(Servidor.rutaBDS+Servidor.bd_actual+".usac", nueva);
+            master.modificar(rutaObjeto, nueva);
+            llenarObjetos();
         }else{
             // Error! La tabla ya existe en la base de datos!
         }
     }
     
-    public boolean existeObjeto(String nombre,LinkedList<String> objs){
-        for(String obj : objs){
-            if(obj.equals(nombre)){
+    public boolean existeObjeto(String nombre){
+        for(Objeto obj : objetos){
+            if(obj.getNombre().equals(nombre)){
                 return true;
             }
         }
@@ -199,20 +193,21 @@ public class SistemaBaseDatos {
         
     }
     
-    public void crearVariable(){
-        // Se escribe en vars_bd.usac
-        
-    }
-    
     /**************************** USAR *************************/
     public boolean usarBD(String nombre){
-        Archivo master = new Archivo();
-        String bases = master.leer(Servidor.rutaMaestra);
-        // Analizar archivo maestro
-        LinkedList<String> basesDatos = new LinkedList<String>();
-        if(existeBD(nombre,basesDatos)){
+        // Llenar las bases!
+        llenarBases();
+        if(existeBD(nombre)){
+            // Obtener los demas listados!
+            llenarTablas();
+            llenarMetodos();
+            llenarObjetos();
             return true;
         }else{
+            // Reiniciar los listados!
+            tablas = new LinkedList<Tabla>();
+            objetos = new LinkedList<Objeto>();
+            metodos = new LinkedList<Metodo>();
             return false;
         }
     }
@@ -241,4 +236,38 @@ public class SistemaBaseDatos {
     
     /**************************** DENEGAR *************************/
     
+    /************************************************************/
+    /***************************** LEE **************************/
+    /************************************************************/
+    
+    public final void llenarUsuarios(){
+        String listado = master.leer(Servidor.rutaUsuarios);
+        usuarios = XML.getUsuarios(listado);
+    }
+    
+    public final void llenarBases(){
+        String bases = master.leer(Servidor.rutaMaestra);
+        basesDatos = XML.getBasesDatos(bases);
+    }
+    
+    public final void llenarTablas(){
+        String contenido = master.leer(Servidor.rutaBDS+Servidor.bd_actual+".usac");
+        tablas = XML.getTablas(contenido);
+    }
+    
+    public final void llenarObjetos(){
+        String contenido = master.leer(Servidor.rutaBDS+"obj_"+Servidor.bd_actual+".usac");
+        objetos = XML.getObjetos(contenido);
+    }
+    
+    // Se usa cuando se hace un Seleccionar
+    public final LinkedList<Registro> getRegistro(String tabla){
+        String registros = master.leer(Servidor.rutaBDS+tabla+"_"+Servidor.bd_actual+".usac");
+        return XML.getRegistros(registros);
+    }
+    
+    public final void llenarMetodos(){
+        String contenido = master.leer(Servidor.rutaBDS+"proc_"+Servidor.bd_actual+".usac");
+        metodos = XML.getMetodos(contenido);
+    }
 }
