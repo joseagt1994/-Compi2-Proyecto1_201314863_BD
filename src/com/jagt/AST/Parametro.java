@@ -6,49 +6,31 @@
 package com.jagt.AST;
 
 import com.jagt.Logica.SistemaBaseDatos;
-import java.util.LinkedList;
 
 /**
  *
  * @author Jose Antonio
  */
-public class Metodo {
+class Parametro {
     
-    private String nombre;
-    private LinkedList<Parametro> parametros;
-    private int tipo = -1;
-    private NodoParser instrucciones;
+    String nombre;
+    int tipo;
+
+    public Parametro(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public Parametro(String nombre, int tipo) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+    }
 
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public LinkedList<Parametro> getParametros() {
-        return parametros;
-    }
-
-    public void setParametros(LinkedList<Parametro> parametros) {
-        this.parametros = parametros;
-    }
-
     public int getTipo() {
         return tipo;
-    }
-
-    public void setTipo(int tipo) {
-        this.tipo = tipo;
-    }
-
-    public NodoParser getInstrucciones() {
-        return instrucciones;
-    }
-
-    public void setInstrucciones(NodoParser instrucciones) {
-        this.instrucciones = instrucciones;
     }
     
     public void guardarTipo(NodoParser nodo){

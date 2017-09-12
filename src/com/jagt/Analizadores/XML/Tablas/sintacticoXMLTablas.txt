@@ -1,0 +1,164 @@
+options{
+STATIC = false;
+}
+
+PARSER_BEGIN(SintacticoTablas)
+package com.jagt.Analizadores.XML.Tablas;
+import com.jagt.AST.*;
+import com.jagt.Logica.*;
+
+import java.util.LinkedList;
+
+public class SintacticoTablas{
+	
+        public static void main(String args[]) throws ParseException{
+
+		SintacticoTablas parser = new SintacticoTablas(System.in);
+		parser.inicio();
+
+	}
+
+}
+PARSER_END(SintacticoTablas)
+
+/* ESPACIOS */
+
+SKIP:{
+
+	" "
+	| "\n"              
+	| "\t"
+        | "\r"
+        | "\f"
+        | "\b"
+
+}
+
+/* AQUI VAN LOS TOKENS (ANALIZADOR LEXICO) */
+
+TOKEN:{
+    
+        <INICIO_PROC : "<Procedure>" >
+    |   <FIN_PROC: "</Procedure>" >
+    |   <INICIO_OBJ : "<Object>" >
+    |   <FIN_OBJ: "</Object>" >
+    |   <INICIO_RUTA : "<path>" >
+    |   <FIN_RUTA: "</path>" >
+    |   <INICIO_TABLA : "<Tabla>" >
+    |   <FIN_TABLA: "</Tabla>" >
+    |   <INICIO_ROWS : "<rows>" >
+    |   <FIN_ROWS: "</rows>" >
+    |   <INICIO_CAMPO : "<campo" >
+    |   <FIN_CAMPO: "</campo>" >
+    |   <INICIO_NOMBRE : "<nombre>" >
+    |   <FIN_NOMBRE: "</nombre>" >
+    |   <RES_NULO : "nulo" >
+    |   <RES_AUTO: "auto" >
+    |   <RES_PRIMARIA: "primaria" >
+    |   <RES_UNICO: "unico" >
+    |   <INICIO_FORANEA : "<foranea>" >
+    |   <FIN_FORANEA: "</foranea>" >
+    |   <RES_TRUE: "\"true\"" >
+    |   <RES_FALSE: "\"false\"" >
+    |   <INT: "int" >
+    |   <BOOL: "bool" >
+    |   <DOUBLE: "double" >
+    |   <DATE: "date" >
+    |   <DATETIME: "datetime" >
+    |   <TEXT: "text" >
+    |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
+    |   <RUTA: (<LETRA>)"://"(<ID>"//")*(<ID>)".usac" >
+    |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
+ 
+}
+
+LinkedList<Tabla> inicio():
+{LinkedList<Tabla> tablas = new LinkedList<Tabla>(); Tabla t;}
+{
+        <INICIO_PROC>
+        <INICIO_RUTA>
+        <RUTA>
+        <FIN_RUTA>
+        <FIN_PROC>
+        <INICIO_OBJ>
+        <INICIO_RUTA>
+        <RUTA>
+        <FIN_RUTA>
+        <FIN_OBJ>
+        (
+            t = tabla()     {tablas.add(t);}
+        )*
+        <EOF>
+        {return tablas;}
+}
+
+Tabla tabla():
+{Tabla t; Token id,ruta; LinkedList<Campo> campos; Campo campo;}
+{
+        <INICIO_TABLA>
+        <INICIO_NOMBRE>
+        id = <ID>           
+        <FIN_NOMBRE>
+        <INICIO_RUTA>
+        ruta = <RUTA>           {t = new Tabla(id.image,ruta.image);}
+        <FIN_RUTA>
+        <INICIO_ROWS>
+        (
+            campo = cuerpo()    {t.agregarCampo(campo);}
+        )*
+        <FIN_ROWS>
+        <FIN_TABLA>
+        {return t;}
+}
+
+Campo cuerpo():
+{Campo c; int val; Token t,f; boolean n,a,p,u;}
+{
+        <INICIO_CAMPO>
+        <RES_NULO>
+        "="
+        n = valor()
+        <RES_AUTO>
+        "="
+        a = valor()
+        <RES_PRIMARIA>
+        "="
+        p = valor()
+        <RES_UNICO>
+        "="
+        u = valor()
+        ">"
+        "<"
+        val = tipo()
+        ">"
+        t = <ID>                {c = new Campo(t.image,val); c.setNulo(n); c.setAutoincrementable(a); c.setPrimaria(p); c.setUnica(u);}
+        "</"
+        tipo()
+        ">"
+        (
+            <INICIO_FORANEA>
+            f = <ID>            {c.setForanea(f.image);}
+            <FIN_FORANEA>
+        )?
+        <FIN_CAMPO>
+        {return c;}
+}
+
+int tipo():
+{}
+{
+        <INT>       {return SistemaBaseDatos.ENTERO;}
+    |   <DOUBLE>    {return SistemaBaseDatos.DOBLE;}
+    |   <TEXT>      {return SistemaBaseDatos.TEXTO;}
+    |   <BOOL>      {return SistemaBaseDatos.BOOL;}
+    |   <DATE>      {return SistemaBaseDatos.DATE;}
+    |   <DATETIME>  {return SistemaBaseDatos.DATETIME;}
+}
+
+boolean valor():
+{}
+{
+        <RES_TRUE>  {return true;}
+    |   <RES_FALSE> {return false;}
+}

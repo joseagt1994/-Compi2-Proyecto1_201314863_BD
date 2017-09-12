@@ -1,0 +1,101 @@
+options{
+STATIC = false;
+}
+
+PARSER_BEGIN(SintacticoMaster)
+package com.jagt.Analizadores.XML.Master;
+import com.jagt.AST.*;
+import java.util.LinkedList;
+
+public class SintacticoMaster{
+	
+        public static void main(String args[]) throws ParseException{
+
+		SintacticoMaster parser = new SintacticoMaster(System.in);
+		parser.inicio();
+
+	}
+
+}
+PARSER_END(SintacticoMaster)
+
+/* ESPACIOS */
+
+SKIP:{
+
+	" "
+	| "\n"              
+	| "\t"
+        | "\r"
+        | "\f"
+        | "\b"
+
+}
+
+/* AQUI VAN LOS TOKENS (ANALIZADOR LEXICO) */
+
+TOKEN:{
+    
+        <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    
+    |   <INICIO_BD : "<BD>" >
+    |   <FIN_BD: "</BD>" >
+    |   <INICIO_NOMBRE : "<nombre>" >
+    |   <FIN_NOMBRE: "</nombre>" >
+    |   <INICIO_RUTA : "<path>" >
+    |   <FIN_RUTA: "</path>" >
+    |   <INICIO_PERMISOS : "<permisos>" >
+    |   <FIN_PERMISOS: "</permisos>" >
+    |   <INICIO_USUARIO : "<usuario>" >
+    |   <FIN_USUARIO: "</usuario>" >
+    |   <RUTA: (<LETRA>)"://"(<ID>"//")*(<ID>)".usac" >
+    |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
+    |   <NUMERO: (<DIGITO>)+ >
+    |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
+ 
+}
+
+LinkedList<DataBase> inicio():
+{LinkedList<DataBase> bases = new LinkedList<DataBase>(); DataBase bd;}
+{
+        (
+            bd = base_datos()   {bases.add(bd);}
+        )*
+        <EOF>
+        {return bases;}
+}
+
+DataBase base_datos():
+{DataBase bd;}
+{
+        <INICIO_BD>
+        bd = cuerpo()
+        <FIN_BD>
+        {return bd;}
+}
+
+DataBase cuerpo():
+{DataBase bd; Token id,ruta; LinkedList<String> usuarios;}
+{
+        <INICIO_NOMBRE>         {bd = new DataBase();}
+        id = <ID>               {bd.setNombre(id.image);}
+        <FIN_NOMBRE>
+        <INICIO_RUTA>
+        ruta = <RUTA>           {bd.setRuta(ruta.image);}
+        <FIN_RUTA>
+        <INICIO_PERMISOS>
+        usuarios = permisos()   {bd.setPermisos(usuarios);}
+        <FIN_PERMISOS>
+        {return bd;}
+}
+
+LinkedList<String> permisos():
+{Token cod; LinkedList<String> usuarios = new LinkedList<String>();}
+{
+        (
+            <INICIO_USUARIO>    
+            cod = <NUMERO>      {usuarios.add(cod.image);}
+            <FIN_USUARIO>
+        )+
+        {return usuarios;}
+}

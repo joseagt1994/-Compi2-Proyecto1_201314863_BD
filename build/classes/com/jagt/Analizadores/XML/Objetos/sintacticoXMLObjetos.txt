@@ -1,0 +1,109 @@
+options{
+STATIC = false;
+}
+
+PARSER_BEGIN(SintacticoObjetos)
+package com.jagt.Analizadores.XML.Registros;
+import com.jagt.AST.*;
+import com.jagt.Logica.*;
+
+import java.util.LinkedList;
+
+public class SintacticoObjetos{
+	
+        public int contador = 1;
+
+        public static void main(String args[]) throws ParseException{
+
+		SintacticoObjetos parser = new SintacticoObjetos(System.in);
+		parser.inicio();
+
+	}
+
+}
+PARSER_END(SintacticoObjetos)
+
+/* ESPACIOS */
+
+SKIP:{
+
+	" "
+	| "\n"              
+	| "\t"
+        | "\r"
+        | "\f"
+        | "\b"
+
+}
+
+/* AQUI VAN LOS TOKENS (ANALIZADOR LEXICO) */
+
+TOKEN:{
+    
+        <INICIO_OBJ : "<Obj>" >
+    |   <FIN_OBJ: "</Obj>" >
+    |   <INICIO_NOMBRE : "<nombre>" >
+    |   <FIN_NOMBRE: "</nombre>" >
+    |   <INICIO_ATR : "<attr>" >
+    |   <FIN_ATR: "</attr>" >
+    |   <INT: "int" >
+    |   <BOOL: "bool" >
+    |   <DOUBLE: "double" >
+    |   <DATE: "date" >
+    |   <DATETIME: "datetime" >
+    |   <TEXT: "text" >
+    |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
+    |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
+ 
+}
+
+LinkedList<Objeto> inicio():
+{LinkedList<Objeto> plantillas = new LinkedList<Objeto>(); Objeto obj;}
+{
+        (
+            obj = objeto()  {plantillas.add(obj);}
+        )*
+        <EOF>
+        {return plantillas;}
+}
+
+Objeto objeto():
+{Objeto nuevo,c; Token t;}
+{
+        <INICIO_OBJ>
+        <INICIO_NOMBRE>
+        t = <ID>            {nuevo = new Objeto(t.image,SistemaBaseDatos.OBJETO);}
+        <FIN_NOMBRE>
+        <INICIO_ATR>
+        (
+            c = atributo() {nuevo.agregarAtributo(c);}
+        )*
+        <FIN_ATR>
+        <FIN_OBJ>
+        {return nuevo;}
+}
+
+Objeto atributo():
+{Objeto atr; int val; Token t;}
+{
+        "<"
+        val = tipo()
+        ">"
+        t = <ID>        {atr = new Objeto(t.image,val);}
+        "</"
+        tipo()
+        ">"
+        {return atr;}
+}
+
+int tipo():
+{}
+{
+        <INT>       {return SistemaBaseDatos.ENTERO;}
+    |   <DOUBLE>    {return SistemaBaseDatos.DOBLE;}
+    |   <TEXT>      {return SistemaBaseDatos.TEXTO;}
+    |   <BOOL>      {return SistemaBaseDatos.BOOL;}
+    |   <DATE>      {return SistemaBaseDatos.DATE;}
+    |   <DATETIME>  {return SistemaBaseDatos.DATETIME;}
+}

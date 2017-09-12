@@ -9,12 +9,10 @@ package com.jagt.AST;
  *
  * @author Jose Antonio
  */
-public class Compilador {
+public class Variable {
     
-    public Compilador(NodoParser nodo){}
-    
-    public void ejecutar(){
-        
-    }
+    int tipo;
+    String nombre;
+    Objeto valor;
     
 }

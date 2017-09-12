@@ -14,6 +14,11 @@ public class Usuario {
     private int codigo;
     private String nombre,contrasenia;
 
+    public Usuario(String nombre, String contrasenia) {
+        this.nombre = nombre;
+        this.contrasenia = contrasenia;
+    }
+
     public Usuario(int codigo, String nombre, String contrasenia) {
         this.codigo = codigo;
         this.nombre = nombre;

@@ -1,0 +1,657 @@
+options{
+IGNORE_CASE = true;
+STATIC = false;
+}
+
+PARSER_BEGIN(SintacticoMetodos)
+package com.jagt.Analizadores.XML.Metodos;
+import com.jagt.AST.*;
+public class SintacticoMetodos{
+	
+        public static void main(String args[]) throws ParseException{
+
+		SintacticoMetodos parser = new SintacticoMetodos(System.in);
+		parser.inicio();
+
+	}
+
+}
+PARSER_END(SintacticoMetodos)
+
+/* ESPACIOS */
+
+SKIP:{
+
+	" "
+	| "\n"              
+	| "\t"
+        | "\r"
+        | "\f"
+        | "\b"
+        | <LINEA: "#"(~["\n"])*"\n" >    {System.out.println("Esto es un comentario unilinea!");}
+        | <MULTILINEA: "#*"(~["*","#"]|~["*"]("#")|("*")~["#"])*"*""""#" >
+
+}
+
+/* AQUI VAN LOS TOKENS (ANALIZADOR LEXICO) */
+
+TOKEN:{
+    
+        <ENTERO: ("-")?(<DIGITO>)+ >                                                                // INTEGER
+    |   <DOBLE: ("-")?(<DIGITO>)+("."(<DIGITO>)+)? >                                                // DOUBLE 
+    |   <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    // TEXT
+    |   <FECHA: (["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)>                         // DATE
+    |   <HORA: ((["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]) > // TIME
+    |   <INICIO_PROC: "<Proc>" >
+    |   <FIN_PROC: "</Proc>" >
+    |   <INICIO_NOMBRE: "<nombre>" >
+    |   <FIN_NOMBRE: "</nombre>" >
+    |   <INICIO_PARAMS: "<params>" >
+    |   <FIN_PARAMS: "</params>" >
+    |   <INICIO_SRC: "<src>" >
+    |   <FIN_SRC: "</src>" >
+    |   <INICIO_RET: "<ret>" >
+    |   <FIN_RET: "</ret>" >
+    |   <RES_DOBLE: "Double" >
+    |   <RES_ENTERO: ("Integer"|"int") >
+    |   <RES_CADENA: "Text" >
+    |   <RES_BOOLEAN: "Bool" >
+    |   <RES_DATE: "Date" >
+    |   <RES_DATETIME: "Datetime" >
+    |   <VERDADERO: ("true"|"verdadero") >
+    |   <FALSO: ("falso"|"false") >
+    |   <RES_INSERTAR: "Insertar" >
+    |   <RES_EN: "En" >
+    |   <RES_VALORES: "Valores" >
+    |   <RES_DONDE: "Donde" >
+    |   <RES_ACTUALIZAR: "Actualizar" >
+    |   <RES_BORRAR: "Borrar" >
+    |   <RES_SELECCIONAR: "Seleccionar" >
+    |   <RES_DE: "De" >
+    |   <RES_TABLA: "Tabla" >
+    |   <RES_ORDENAR: "Ordenar_Por" >
+    |   <RES_ASC: "ASC" >
+    |   <RES_DESC: "DESC" >
+    |   <RES_DECLARAR: "Declarar" >
+    |   <RES_IMPRIMIR: "Imprimir" >
+    |   <RES_FECHA: "Fecha" >
+    |   <RES_FECHAHORA: "Fecha_Hora" >
+    |   <RES_CONTAR: "Contar" >
+    |   <SI: "Si" >
+    |   <SINO: "Sino" >
+    |   <SELECCIONA: "Selecciona" >
+    |   <CASO: "Caso" >
+    |   <DEFECTO: "Defecto" >
+    |   <DETENER: "Detener" >
+    |   <PARA: "Para" >
+    |   <MIENTRAS: "Mientras" >
+    |   <RETORNAR: "Retorno" >
+    |   <INCREMENTO: "++" >
+    |   <DECREMENTO: "--" >
+    |   <PUNTO: "." >
+    |   <MAS: "+" >
+    |   <MENOS: "-" >
+    |   <POR: "*" >
+    |   <DIV: "/" >
+    |   <POT: "^" >
+    |   <MAYOR: ">" >
+    |   <MENOR: "<" >
+    |   <IGUAL: "==" >
+    |   <DIFERENTE: "!=" >
+    |   <MENOR_IGUAL: "<=" >
+    |   <MAYOR_IGUAL: ">=" >
+    |   <ASIGNA: "=" >
+    |   <RES_NO: "No" >
+    |   <RES_NULO: "Nulo" >
+    |   <RES_AUTOINC: "Autoincrementable" >
+    |   <RES_PRIMARIA: "Llave_Primaria" >
+    |   <RES_FORANEA: "Llave_Foranea" >
+    |   <RES_UNICO: "Unico" >
+    |   <OR: "||" >
+    |   <AND: "&&" >
+    |   <NOT: "!" >
+    |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
+    |   <VAR: "@"(<ID>) >
+    |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
+ 
+}
+
+LinkedList<Metodo> inicio():
+{LinkedList<Metodo> metodos = new LinkedList<Metodo>(); Metodo m;}
+{
+        (
+            m = procedimiento() {metodos.add(m);}
+        )*
+        <EOF>
+        {return metodos;}
+}
+
+Metodo procedimiento():
+{Metodo nuevo = new Metodo(); LinkedList<Parametro> params; NodoParser ins,n; Token t;}
+{
+        <INICIO_PROC>
+        <INICIO_NOMBRE>
+        t = <ID>                {nuevo.setNombre(t.image);}
+        <FIN_NOMBRE>
+        (
+            <INICIO_RET>
+            n = tipo()          {nuevo.agregarTipo(n);}
+            <FIN_RET>
+        )?
+        <INICIO_PARAMS>
+        params = parametros()   {nuevo.setParametros(params);}
+        <FIN_PARAMS>
+        <INICIO_SRC>
+        ins = instrucciones()   {nuevo.setInstrucciones(ins);}
+        <FIN_SRC>
+        <FIN_PROC>
+        {return nuevo;}
+}
+
+LinkedList<Parametro> parametros():
+{LinkedList<Parametro> parametros = new LinkedList<Parametro>(); Parametro p;}
+{
+        (
+            p = parametro() {parametros.add(p);}
+        )*
+        {return parametros;}
+}
+
+Parametro parametro():
+{Token t; Parametro p; NodoParser nodo;}
+{
+        <MENOR>
+        nodo = tipo()
+        <MAYOR>
+        t = <ID>        {p = new Parametro(t.image); p.guardarTipo(nodo);}
+        <MENOR>
+        "/"
+        tipo()
+        <MAYOR>
+        {return p;}
+}
+
+void Empty():
+{}
+{
+    {System.out.println("epsilon");}
+}
+
+NodoParser instrucciones():
+{NodoParser ins;}
+{
+        ins = sentencia()       {return ins;}
+}
+
+NodoParser sentencia():
+{NodoParser sen;}
+{
+        sen = insertar()        {return sen;}
+    |   sen = seleccionar()     
+        ";"                     {return sen;}
+    |   sen = actualizar()      {return sen;}
+    |   sen = borrar()          {return sen;}
+    |   sen = declarar()        {return sen;}
+    |   sen = asignar()         {return sen;}       
+    |   sen = imprimir()        {return sen;}
+    |   sen = llamada()         {return sen;}
+        ";"
+    |   sen = retorno()         {return sen;}
+    |   sen = detener()         {return sen;}
+    |   sen = control()         {return sen;}
+    |   sen = contar()          
+        ";"                     {return sen;}
+}
+
+NodoParser contar():
+{NodoParser nodo,sel; Token t;}
+{
+    t = <RES_CONTAR>    {nodo = new NodoParser("CONTAR","",t.beginLine,t.beginColumn);}
+    "("
+    "<"
+    "<"
+    sel = seleccionar() {nodo.hijos().add(sel);}
+    ">"
+    ">"
+    ")"
+    {return nodo;}
+}
+
+NodoParser lista_sentencias():
+{NodoParser sentencias,s;}
+{
+        {sentencias = new NodoParser("SENTENCIAS","",0,0);}
+        (
+            s = sentencia() {sentencias.hijos().add(s);}
+        )*
+        {return sentencias;}
+}
+
+NodoParser detener():
+{Token t; NodoParser nodo;}
+{
+        t = <DETENER> {nodo = new NodoParser("DETENER","",t.beginLine,t.beginColumn);}
+        ";"
+        {return nodo;}
+}
+
+NodoParser retorno():
+{Token t; NodoParser nodo,exp;}
+{
+        t = <RETORNAR>      {nodo = new NodoParser("RETORNAR","",t.beginLine,t.beginColumn);}
+        exp = expresion()   {nodo.hijos().add(exp);}
+        ";"
+        {return nodo;}
+}
+
+NodoParser imprimir():
+{NodoParser nodo,exp; Token t;}
+{
+        t = <RES_IMPRIMIR>      {nodo = new NodoParser("IMPRIMIR","",t.beginLine,t.beginColumn);}
+        "("
+        exp = expresion()       {nodo.hijos().add(exp);}
+        ")"
+        ";"
+        {return nodo;}
+}
+
+NodoParser asignar():
+{Token v,id; NodoParser nodo = new NodoParser("ASIGNAR","",0,0); NodoParser acceso,exp;}
+{
+        v = <VAR>               {nodo.hijos().add(new NodoParser("VAR",v.image,v.beginLine,v.beginColumn));}
+        {acceso = new NodoParser("ACCESO","",0,0);}
+        (
+            <PUNTO>
+            id = <ID>           {acceso.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        )?
+        {nodo.hijos().add(acceso);}
+        <ASIGNA>
+        exp = expresion()       {nodo.hijos().add(exp);}
+        ";"
+        {return nodo;}
+}
+
+NodoParser declarar():
+{NodoParser declara = new NodoParser("DECLARAR","",0,0); NodoParser vars,tipov,exp;}
+{
+        <RES_DECLARAR>
+        vars = lista_variables()    {declara.hijos().add(vars);}
+        tipov = tipo()              {declara.hijos().add(tipov);}
+        (
+            <ASIGNA>
+            exp = expresion()       {declara.hijos().add(exp);}
+        )?
+        ";"
+        {return declara;}
+}
+
+NodoParser lista_variables():
+{NodoParser nodo = new NodoParser("VARIABLES","",0,0); NodoParser var; Token v;}
+{
+        v = <VAR>       {nodo.hijos().add(new NodoParser("VAR",v.image,v.beginLine,v.beginColumn));}
+        (
+            ","
+            v = <VAR>   {nodo.hijos().add(new NodoParser("VAR",v.image,v.beginLine,v.beginColumn));}
+        )*
+        {return nodo;}
+}
+
+NodoParser borrar():
+{NodoParser nodo,d; Token t,id;}
+{
+        t = <RES_BORRAR>        {nodo = new NodoParser("BORRAR",t.image,t.beginLine,t.beginColumn);}
+        <RES_EN>
+        <RES_TABLA>
+        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        (
+            d = donde()         {nodo.hijos().add(d);}
+        )?
+        ";"                     {return nodo;}
+}
+
+NodoParser actualizar():
+{NodoParser nodo,lista,d,exps; Token t,id;}
+{
+        t = <RES_ACTUALIZAR>        {nodo = new NodoParser("ACTUALIZAR",t.image,t.beginLine,t.beginColumn);}
+        <RES_TABLA>
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        "("
+        lista = lista_ids()         {nodo.hijos().add(lista);}
+        ")"
+        <RES_VALORES>
+        "("
+        exps = lista_expresiones()  {nodo.hijos().add(exps);}
+        ")"
+        (
+            d = donde()             {nodo.hijos().add(d);}
+        )?
+        ";"                         {return nodo;}
+}
+
+NodoParser seleccionar():
+{NodoParser nodo,s,d,tipo,o; Token or,t,id,tabla;}
+{
+        t = <RES_SELECCIONAR>       {nodo = new NodoParser("SELECCIONAR",t.image,t.beginLine,t.beginColumn);}
+        s = seleccion()             {nodo.hijos().add(s);}
+        <RES_DE>
+        tabla = <ID>                {nodo.hijos().add(new NodoParser("ID",tabla.image,tabla.beginLine,tabla.beginColumn));}
+        (
+            d = donde()             {nodo.hijos().add(d);}
+        )?  
+        (
+            or = <RES_ORDENAR>       {o = new NodoParser("ORDENAR",or.image,or.beginLine,or.beginColumn);}
+            id = <ID>               {o.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+            tipo = tipo_orden()     {o.hijos().add(tipo); nodo.hijos().add(o);}
+        )?
+        {return nodo;}
+}
+
+NodoParser seleccion():
+{NodoParser nodo; Token id;}
+{
+        nodo = lista_ids()          {return nodo;}
+    |   id = <POR>                  {return new NodoParser("TODO",id.image,id.beginLine,id.beginColumn);}
+}
+
+NodoParser tipo_orden():
+{NodoParser nodo; Token t;}
+{
+        t = <RES_ASC>               {return new NodoParser("ASC",t.image,t.beginLine,t.beginColumn);}
+    |   t = <RES_DESC>              {return new NodoParser("DESC",t.image,t.beginLine,t.beginColumn);}
+}
+
+NodoParser donde():
+{NodoParser cond;}
+{
+        <RES_DONDE>             
+        cond = condicion()          {return cond;}
+}
+
+NodoParser llamada():
+{NodoParser nodo,temp,lista; Token id;}
+{
+        id = <ID>                       {nodo = new NodoParser("ID",id.image,id.beginLine,id.beginColumn);}
+        (
+            "("
+            lista = lista_expresiones() {nodo = new NodoParser("LLAMADA","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); nodo.hijos().add(lista);}
+            ")"
+        )?                              
+        {return nodo;}
+}
+
+NodoParser insertar():
+{NodoParser nodo,lista,exps; Token t,id;}
+{
+        t = <RES_INSERTAR>          {nodo = new NodoParser("INSERTAR",t.image,t.beginLine,t.beginColumn);}
+        <RES_EN>       
+        <RES_TABLA>
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        (
+            "("
+            lista = lista_ids()     {nodo.hijos().add(lista);}
+            ")"
+        )?
+        <RES_VALORES>
+        "("
+        exps = lista_expresiones()  {nodo.hijos().add(exps);}
+        ")"
+        ";"                         {return nodo;}
+}
+
+NodoParser lista_ids():
+{NodoParser nodo; Token id;}
+{
+        id = <ID>                   {nodo = new NodoParser("IDS","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        (
+            ","
+            id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        )*
+        {return nodo;}
+}
+
+NodoParser tipo():
+{Token t;}
+{
+      t = <RES_ENTERO> {System.out.println("entero"); return new NodoParser("TIPO","entero",t.beginLine,t.beginColumn);}
+    | t = <RES_CADENA> {System.out.println("cadena"); return new NodoParser("TIPO","cadena",t.beginLine,t.beginColumn);}
+    | t = <RES_BOOLEAN> {System.out.println("cadena"); return new NodoParser("TIPO","boolean",t.beginLine,t.beginColumn);}
+    | t = <RES_DOBLE> {System.out.println("caracter"); return new NodoParser("TIPO","doble",t.beginLine,t.beginColumn);}
+    | t = <RES_DATE> {System.out.println("fecha"); return new NodoParser("TIPO","fecha",t.beginLine,t.beginColumn);}
+    | t = <RES_DATETIME> {System.out.println("fecha y hora"); return new NodoParser("TIPO","fechahora",t.beginLine,t.beginColumn);}
+    | t = <ID> {System.out.println("id: "+t.image); return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
+}
+
+//EXP
+NodoParser expresion():
+{NodoParser nodo,ope,exp;}
+{
+        ope = operacion1()  {}
+        exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); return exp;}else{return ope;}}
+    |   exp = contar()      {return exp;}
+}
+
+NodoParser lista_expresiones():
+{NodoParser nodo,exp;}
+{
+        exp = expresion()            {nodo = new NodoParser("EXPRESIONES","",0,0); nodo.hijos().add(exp);} 
+        (
+            ","
+            exp = expresion()        {nodo.hijos().add(exp);}
+        )*
+        {return nodo;}
+}
+
+NodoParser expresion2():
+{NodoParser nodo,ope,exp; Token t;}
+{
+        t = <MAS>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","+",t.beginLine,t.beginColumn));}
+        ope = operacion1()  {}
+        exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); nodo.hijos().add(exp);}else{nodo.hijos().add(ope);} return nodo;}
+    |   t = <MENOS>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","-",t.beginLine,t.beginColumn));}
+        ope = operacion1()  {}
+        exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); nodo.hijos().add(exp);}else{nodo.hijos().add(ope);} return nodo;}
+    |   Empty()             {return null;}
+}
+
+NodoParser operacion1():
+{NodoParser nodo,tip,exp;}
+{
+    tip = tipoValor()       {}
+    exp = operacion2()      {if(exp!=null){exp.hijos().addFirst(tip); return exp;}else{return tip;}}
+}
+
+NodoParser operacion2():
+{NodoParser nodo,exp,ope; Token t;}
+{
+        t = <POR>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","*",t.beginLine,t.beginColumn));}
+        exp = tipoValor()   {}
+        ope = operacion2()  {if(ope!=null){ope.hijos().addFirst(exp); nodo.hijos().add(ope);}else{nodo.hijos().add(exp);} return nodo;}
+    |   t = <DIV>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","/",t.beginLine,t.beginColumn));}
+        exp = tipoValor()   {}
+        ope = operacion2()  {if(ope!=null){ope.hijos().addFirst(exp); nodo.hijos().add(ope);}else{nodo.hijos().add(exp);} return nodo;}
+    |   Empty()             {return null;}
+}
+
+NodoParser tipoValor():
+{NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,tipoL; Token t;}
+{       "("
+        nodo = expresion()
+        ")"                 {return nodo;}
+    |   t = <ENTERO>        {tipo = new NodoParser("entero",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo; }
+    |   t = <CADENA>        {tipo = new NodoParser("cadena",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <FECHA>         {tipo = new NodoParser("fecha",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <HORA>          {tipo = new NodoParser("fechahora",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <DOBLE>         {tipo = new NodoParser("doble",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <VERDADERO>     {tipo = new NodoParser("boolean","1",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <FALSO>         {tipo = new NodoParser("boolean","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   tipoL = llamada()   {nodo.hijos().add(tipoL); return nodo;}
+    |   t = <VAR>           {tipo = new NodoParser("VAR",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+}
+
+NodoParser control():
+{NodoParser nodo;}
+{
+        nodo = si()                 {return nodo;}
+    |   nodo = para()               {return nodo;}
+    |   nodo = seleccion_casos()    {return nodo;}
+    |   nodo = mientras()           {return nodo;}
+}
+
+NodoParser si():
+{NodoParser nodo,con,sen; Token t;}
+{
+    t = <SI>                        {nodo = new NodoParser("SI","",t.beginLine,t.beginColumn);}
+    "("
+    con = condicion()               {nodo.hijos().add(con);}
+    ")"
+    "{"   
+    sen = lista_sentencias()        {nodo.hijos().add(sen);}
+    "}"
+    (
+        t = <SINO>              
+        "{"                     
+        sen = lista_sentencias()    {nodo.hijos().add(sen);}
+        "}"                 
+    )?
+    {return nodo;}
+}
+
+NodoParser seleccion_casos():
+{NodoParser nodo,exp,cas,def,sen,sns; Token t;}
+{
+    t = <SELECCIONA>                {nodo = new NodoParser("SELECCIONA","",t.beginLine,t.beginColumn);}
+    "("
+    exp = expresion()               {nodo.hijos().add(exp);}
+    ")"
+    "{"
+    cas = casos()                   {nodo.hijos().add(cas);}
+    (
+        <DEFECTO>           
+        ":"
+        sen = lista_sentencias()    {nodo.hijos().add(sen);}
+    )?
+    "}"                             {return nodo;}
+}
+
+NodoParser casos():
+{NodoParser nodo,caso,exp,sns,sen; Token t;}
+{
+    t = <CASO>                      {nodo = new NodoParser("CASOS","",t.beginLine,t.beginColumn); caso = new NodoParser("CASO","",t.beginLine,t.beginColumn);}
+    exp = expresion()               {caso.hijos().add(exp);}
+    ":"
+    sen = lista_sentencias()        {caso.hijos().add(sen);}
+    {nodo.hijos().add(caso);}
+    (
+        t = <CASO>                  {caso = new NodoParser("CASO","",t.beginLine,t.beginColumn);}
+        exp = expresion()           {caso.hijos().add(exp);}
+        ":"
+        sen = lista_sentencias()    {caso.hijos().add(sen);}
+        {nodo.hijos().add(caso);}
+    )*                      
+    {return nodo;}
+}
+
+NodoParser para():
+{NodoParser nodo,asig,con,cre,sen; Token t;}
+{
+    t = <PARA>                  {nodo = new NodoParser("PARA","",t.beginLine,t.beginColumn);}
+    "("
+    asig = declarar()           {nodo.hijos().add(asig);}
+    con = condicion()           {nodo.hijos().add(con);}
+    ";"
+    cre = crecimiento()         {nodo.hijos().add(cre);}   
+    ")"
+    "{"             
+    sen = lista_sentencias()    {nodo.hijos().add(sen);}
+    "}"                         {return nodo;}
+}
+
+NodoParser mientras():
+{NodoParser nodo,con,sns,sen; Token t;}
+{
+    t = <MIENTRAS>              {nodo = new NodoParser("MIENTRAS","",t.beginLine,t.beginColumn);}
+    "("
+    con = condicion()           {nodo.hijos().add(con);}
+    ")"
+    "{"             
+    sen = lista_sentencias()    {nodo.hijos().add(sen);}
+    "}"                         {return nodo;}
+}
+
+NodoParser condicion():
+{NodoParser nodo,ope,con;}
+{
+    ope = operando1()   {nodo = new NodoParser("EXP","",0,0); if(ope!=null){nodo.hijos().add(ope);}}
+    con = condicion2()  {if(con!=null){nodo.hijos().add(con);}}
+    {return nodo;}
+}
+
+NodoParser condicion2():
+{NodoParser nodo,ope,con; Token t;}
+{
+        t = <OR>                {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","OR",t.beginLine,t.beginColumn));}
+        ope = operando1()       {}
+        con = condicion2()      {if(con!=null){con.hijos().addFirst(ope); nodo.hijos().add(con);}else{nodo.hijos().add(ope);} return nodo;}
+    |   Empty()                 {return null;}
+}
+
+NodoParser operando1():
+{NodoParser tip,ope;}
+{
+    tip = tipoCondicion()
+    ope = operando2()           {if(ope!=null){ope.hijos().addFirst(tip); return ope;}else{return tip;}}
+}
+
+NodoParser operando2():
+{NodoParser nodo,tip,ope; Token t;}
+{
+        t = <AND>                   {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","AND",t.beginLine,t.beginColumn));}
+        tip = tipoCondicion()   {}
+        ope = operando2()       {if(ope!=null){ope.hijos().addFirst(tip); nodo.hijos().add(ope);}else{nodo.hijos().add(tip);} return nodo;}
+    |   Empty()                 {return null;}
+}
+
+NodoParser tipoCondicion():
+{NodoParser exp,sub,nodo; boolean no = false; Token t;}
+{
+        // condicion -> NOT subcondicion | subcondicion;
+        t = <NOT>                   {System.out.println("! -> NOT"); exp = new NodoParser("EXP","",t.beginLine,t.beginColumn);}
+        "("                         {System.out.println("( -> Parentesis condicion");}
+        sub = subcondicion()        {exp.hijos().addFirst(new NodoParser("NOT","!",t.beginLine,t.beginColumn)); exp.hijos().add(sub);}
+        ")"                         {System.out.println(") -> Parentesis condicion"); return exp;}
+    |   sub = subcondicion()        {System.out.println(") -> Parentesis condicion"); return sub;}
+}
+
+NodoParser subcondicion():
+{NodoParser nodo,exp,opl;}
+{      
+        // exp -> exp Ope_Logica exp
+        exp = expresion()       {}
+        opl = operacionLogica() {if(opl!=null){opl.hijos().addFirst(exp); return opl;}else{return exp;}}
+}
+
+NodoParser operacionLogica():
+{NodoParser nodo,exp; Token t;}
+{
+        t = <IGUAL>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","==",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <DIFERENTE>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","!=",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MENOR>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","<",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MENOR_IGUAL>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","<=",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MAYOR_IGUAL>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA",">=",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MAYOR>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA",">",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   Empty()           {return null;}
+}
+
+NodoParser crecimiento():
+{NodoParser nodo,dim,exp; Token t;}
+{
+        t = <INCREMENTO>    {nodo = new NodoParser("INCREMENTO","++",t.beginLine,t.beginColumn); return nodo;}
+    |   t = <DECREMENTO>    {nodo = new NodoParser("DECREMENTO","--",t.beginLine,t.beginColumn); return nodo;}    
+}

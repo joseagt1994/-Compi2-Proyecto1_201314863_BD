@@ -11,4 +11,82 @@ package com.jagt.AST;
  */
 public class Campo {
     
+    String nombre,tforanea;
+    int tipo;
+    boolean nulo,autoincrementable,primaria,foranea,unica;
+
+    public Campo(String nombre, int tipo) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+    }
+
+    public void setNulo(boolean nulo) {
+        this.nulo = nulo;
+    }
+
+    public void setAutoincrementable(boolean autoincrementable) {
+        this.autoincrementable = autoincrementable;
+    }
+
+    public void setPrimaria(boolean primaria) {
+        this.primaria = primaria;
+    }
+
+    public void setForanea(String tabla) {
+        this.foranea = true;
+        this.tforanea = tabla;
+    }
+
+    public void setUnica(boolean unica) {
+        this.unica = unica;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getTforanea() {
+        return tforanea;
+    }
+
+    public int getTipo() {
+        return tipo;
+    }
+
+    public boolean isNulo() {
+        return nulo;
+    }
+
+    public boolean isAutoincrementable() {
+        return autoincrementable;
+    }
+
+    public boolean isPrimaria() {
+        return primaria;
+    }
+
+    public boolean isForanea() {
+        return foranea;
+    }
+
+    public boolean isUnica() {
+        return unica;
+    }
+    
+    public String getComplementos(){
+        String complementos = "";
+        if(nulo){
+            complementos += "nulo ";
+        }
+        if(autoincrementable){
+            complementos += "auto ";
+        }
+        if(primaria){
+            complementos += "primaria ";
+        }
+        if(unica){
+            complementos += "unica ";
+        }
+        return complementos;
+    }
 }

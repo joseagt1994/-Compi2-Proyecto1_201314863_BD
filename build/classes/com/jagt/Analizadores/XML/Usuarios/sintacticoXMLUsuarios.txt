@@ -1,0 +1,92 @@
+options{
+STATIC = false;
+}
+
+PARSER_BEGIN(SintacticoMaster)
+package com.jagt.Analizadores.XML.Usuarios;
+import com.jagt.Logica.Usuario;
+import java.util.LinkedList;
+
+public class SintacticoMaster{
+	
+        public static void main(String args[]) throws ParseException{
+
+		SintacticoMaster parser = new SintacticoMaster(System.in);
+		parser.inicio();
+
+	}
+
+}
+PARSER_END(SintacticoMaster)
+
+/* ESPACIOS */
+
+SKIP:{
+
+	" "
+	| "\n"              
+	| "\t"
+        | "\r"
+        | "\f"
+        | "\b"
+
+}
+
+/* AQUI VAN LOS TOKENS (ANALIZADOR LEXICO) */
+
+TOKEN:{
+    
+        <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    
+    |   <INICIO_USUARIO : "<usuario" >
+    |   <FIN_USUARIO: "</usuario>" >
+    |   <INICIO_NOMBRE : "<nombre>" >
+    |   <FIN_NOMBRE: "</nombre>" >
+    |   <INICIO_PASS : "<password>" >
+    |   <FIN_PASS: "</password>" >
+    |   <INICIO_PERMISOS : "<permisos>" >
+    |   <FIN_PERMISOS: "</permisos>" >
+    |   <RES_ID: "id" >
+    |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
+    |   <NUMERO: (<DIGITO>)+ >
+    |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
+    |   <FIN: ">" >
+    |   <IGUAL: "=" >
+    |   <TODOS: ~[] >
+ 
+}
+
+LinkedList<Usuario> inicio():
+{LinkedList<Usuario> usuarios = new LinkedList<Usuario>(); Usuario u;}
+{
+        (
+            u = usuario()   {usuarios.add(u);}
+        )*
+        <EOF>
+        {return usuarios;}
+}
+
+Usuario usuario():
+{Usuario u; Token id;}
+{
+        <INICIO_USUARIO>
+        <RES_ID>
+        <IGUAL>
+        id = <CADENA>
+        <FIN>
+        u = cuerpo()        {u.setCodigo(Integer.parseInt(id.image.replaceAll("\"", "")));}
+        <FIN_USUARIO>
+        {return u;}
+}
+
+Usuario cuerpo():
+{Usuario u; Token id,pass; LinkedList<String> usuarios;}
+{
+        <INICIO_NOMBRE>         
+        id = <ID>               
+        <FIN_NOMBRE>
+        <INICIO_PASS>
+        pass = <TODOS>           
+        <FIN_PASS>          {u = new Usuario(id.image,pass.image);}
+        {return u;}
+}

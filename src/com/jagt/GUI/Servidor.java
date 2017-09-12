@@ -5,8 +5,11 @@
  */
 package com.jagt.GUI;
 
-import com.jagt.Logica.BaseDatos;
+import com.jagt.Analizadores.USQL.Sintactico;
+import com.jagt.Logica.SistemaBaseDatos;
 import com.jagt.Logica.Usuario;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 /**
  *
@@ -22,13 +25,14 @@ public class Servidor extends javax.swing.JFrame {
     public static String rutaBDS = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\BD\\";
     public static Usuario logueado = new Usuario(0,"","");
     
+    public static Sintactico parser = null;
     /**
      * Creates new form Servidor
      */
     public Servidor() {
         initComponents();
         // Iniciar procesos
-        BaseDatos bd = new BaseDatos();
+        SistemaBaseDatos bd = SistemaBaseDatos.getInstance();
         //bd.crearBD("Prueba", logueado.getCodigo());
         bd.crearUsuario("Jose", "123");
     }
@@ -44,23 +48,31 @@ public class Servidor extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtConsola = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel1.setText("Consola del Servidor");
 
-        jTextArea1.setBackground(new java.awt.Color(0, 0, 0));
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jTextArea1.setForeground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setRows(5);
-        jTextArea1.setTabSize(12);
-        jTextArea1.setToolTipText("");
-        jTextArea1.setBorder(null);
-        jTextArea1.setCaretColor(new java.awt.Color(255, 255, 255));
-        jScrollPane1.setViewportView(jTextArea1);
+        txtConsola.setBackground(new java.awt.Color(0, 0, 0));
+        txtConsola.setColumns(20);
+        txtConsola.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        txtConsola.setForeground(new java.awt.Color(255, 255, 255));
+        txtConsola.setRows(5);
+        txtConsola.setTabSize(12);
+        txtConsola.setToolTipText("");
+        txtConsola.setBorder(null);
+        txtConsola.setCaretColor(new java.awt.Color(255, 255, 255));
+        jScrollPane1.setViewportView(txtConsola);
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -74,6 +86,10 @@ public class Servidor extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(0, 551, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(344, 344, 344)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,12 +97,42 @@ public class Servidor extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
-                .addGap(18, 18, 18))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 446, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Compilar jajaja
+        InputStream is = new ByteArrayInputStream(txtConsola.getText().getBytes());
+        if(parser == null) parser = new Sintactico(is);   
+        else parser.ReInit(is);
+        try
+        {
+          switch (parser.inicio())
+          {
+            case 0 :
+                txtConsola.append("Se ejecuto correctamente!\n");
+                break;
+            default :
+                break;
+          }
+        }
+        catch (Exception e)
+        {
+          txtConsola.append("Error:\n"+ e.getMessage()+"\n");
+        }
+        catch (Error e)
+        {
+         txtConsola.append("Error:\n"+ e.getMessage()+"\n");
+        }
+        finally
+        {}
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -124,8 +170,9 @@ public class Servidor extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea txtConsola;
     // End of variables declaration//GEN-END:variables
 }

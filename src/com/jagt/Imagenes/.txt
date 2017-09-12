@@ -1,0 +1,12 @@
+digraph grafica {
+nodo0[label="CUERPOS"];
+nodo1[label="CREAR"];
+nodo2[label="BD BASE_DATOS"];
+nodo3[label="ID nueva"];
+nodo0->nodo1;
+
+nodo1->nodo2;
+
+nodo1->nodo3;
+
+}

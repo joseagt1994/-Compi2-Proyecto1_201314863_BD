@@ -13,11 +13,13 @@ import java.util.LinkedList;
  */
 public class Tabla {
     
-    String nombre;
-    LinkedList<Campo> campos = new LinkedList<Campo>();
+    String nombre,ruta;
+    LinkedList<Campo> campos;
     
-    public Tabla(String nombre){
+    public Tabla(String nombre,String ruta){
         this.nombre = nombre;
+        this.ruta = ruta;
+        this.campos = new LinkedList<Campo>();
     }
 
     public String getNombre() {
@@ -28,10 +30,12 @@ public class Tabla {
         return campos;
     }
 
-    public void setCampos(LinkedList<Campo> campos) {
-        this.campos = campos;
+    public void agregarCampo(Campo campo) {
+        this.campos.add(campo);
     }
-    
-    
+
+    public String getRuta() {
+        return ruta;
+    }
     
 }

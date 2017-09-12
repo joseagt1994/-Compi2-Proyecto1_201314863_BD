@@ -1,0 +1,119 @@
+options{
+STATIC = false;
+}
+
+PARSER_BEGIN(SintacticoRegistros)
+package com.jagt.Analizadores.XML.Registros;
+import com.jagt.AST.*;
+import com.jagt.Logica.*;
+
+import java.util.LinkedList;
+
+public class SintacticoRegistros{
+	
+        public int contador = 1;
+
+        public static void main(String args[]) throws ParseException{
+
+		SintacticoRegistros parser = new SintacticoRegistros(System.in);
+		parser.inicio();
+
+	}
+
+}
+PARSER_END(SintacticoRegistros)
+
+/* ESPACIOS */
+
+SKIP:{
+
+	" "
+	| "\n"              
+	| "\t"
+        | "\r"
+        | "\f"
+        | "\b"
+
+}
+
+/* AQUI VAN LOS TOKENS (ANALIZADOR LEXICO) */
+
+TOKEN:{
+    
+        <INICIO_ROW : "<Row>" >
+    |   <FIN_ROW: "</Row>" >
+    |   <INICIO_CAMPO : "<"(<ID>)">" >
+    |   <FIN_CAMPO: "</"(<ID>)">" >
+    |   <FALSO: "falso" | "false" >
+    |   <VERDADERO: "verdadero" | "true" >
+    |   <ENTERO: ("-")?(<DIGITO>)+ >                                                                // INTEGER
+    |   <DOBLE: ("-")?(<DIGITO>)+("."(<DIGITO>)+)? >                                                // DOUBLE 
+    |   <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    // TEXT
+    |   <FECHA: (["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)>                         // DATE
+    |   <HORA: ((["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]) > // TIME
+    |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
+    |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
+ 
+}
+
+LinkedList<Registro> inicio():
+{LinkedList<Registro> registros = new LinkedList<Registro>(); Registro r;}
+{
+        (
+            r = fila()      {registros.add(r);}
+        )*
+        <EOF>
+        {return registros;}
+}
+
+Registro fila():
+{Registro nuevo = new Registro(); Objeto c;}
+{
+        <INICIO_ROW>
+        (
+            c = campo() {nuevo.agregarColumna(c);}
+        )*
+        <FIN_ROW>
+        {return nuevo;}
+}
+
+Objeto campo():
+{Objeto var; Token t;}
+{
+        t = <INICIO_CAMPO>
+        var = tipo_registro()   
+        <FIN_CAMPO>             {var.setNombre(t.image.substring(1, t.image.length()-1));}
+        {return var;}
+}
+
+Objeto tipo_registro():
+{Objeto var; Objeto atr; Objeto nuevo = new Objeto("",SistemaBaseDatos.OBJETO);}
+{
+        (
+            atr = atributo()    {nuevo.agregarAtributo(atr);}
+        )+  
+        {return nuevo;}
+    |   atr = expresion()       {return atr;}
+}
+
+Objeto atributo():
+{Objeto atr;}
+{
+        <INICIO_CAMPO>
+        atr = expresion()
+        <FIN_CAMPO>
+        {return atr;}
+}
+
+Objeto expresion():
+{Objeto atr; Token t;}
+{
+        t = <ENTERO>    {return new Objeto("",t.image,SistemaBaseDatos.ENTERO);}
+    |   t = <DOBLE>     {return new Objeto("",t.image,SistemaBaseDatos.DOBLE);}
+    |   t = <CADENA>    {return new Objeto("",t.image,SistemaBaseDatos.TEXTO);}
+    |   t = <FECHA>     {return new Objeto("",t.image,SistemaBaseDatos.DATE);}
+    |   t = <HORA>      {return new Objeto("",t.image,SistemaBaseDatos.DATETIME);}
+    |   t = <FALSO>     {return new Objeto("",t.image,SistemaBaseDatos.BOOL);}
+    |   t = <VERDADERO> {return new Objeto("",t.image,SistemaBaseDatos.BOOL);}
+}

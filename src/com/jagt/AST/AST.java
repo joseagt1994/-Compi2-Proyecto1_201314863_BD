@@ -30,8 +30,8 @@ public class AST {
         generarNodos(n);
         enlazarNodos(n);
         try {
-            generarArchivo(n.valor()+".txt");
-            graficar(n.nombre());
+            generarArchivo("instrucciones.txt");
+            graficar("instrucciones");
         } catch (IOException ex) {
             Logger.getLogger(AST.class.getName()).log(Level.SEVERE, null, ex);
         }
