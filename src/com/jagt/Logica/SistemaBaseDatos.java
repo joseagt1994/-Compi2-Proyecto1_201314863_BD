@@ -190,7 +190,7 @@ public class SistemaBaseDatos {
         return false;
     }
     
-    public void crearMetodo(){
+    public void crearMetodo(Metodo metodo){
         // Se escribe en proc_bd.usac
         
     }

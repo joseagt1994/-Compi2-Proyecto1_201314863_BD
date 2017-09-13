@@ -633,7 +633,9 @@ NodoParser crear_procedimiento():
             sens = lista_sentencias()       {
                                                 nodo.hijos().add(sens);
                                                 if(sens.hijos().size() > 0){
-                                                    nodo.inicio = sens.getFirst().linea; nodo.fin = sens.getLast().linea;
+                                                    NodoParser primero = sens.hijos().getFirst();
+                                                    NodoParser ultimo = sens.hijos().getLast();
+                                                    nodo.inicio = primero.hijos().getFirst().linea; nodo.fin = ultimo.hijos().getLast().linea;
                                                 }
                                             }
         "}"
@@ -663,10 +665,12 @@ NodoParser crear_funcion():
             sens = lista_sentencias()   {
                                             nodo.hijos().add(sens);
                                             if(sens.hijos().size() > 0){
-                                                nodo.inicio = sens.getFirst().linea; nodo.fin = sens.getLast().linea;
+                                                NodoParser primero = sens.hijos().getFirst();
+                                                NodoParser ultimo = sens.hijos().getLast();
+                                                nodo.inicio = primero.hijos().getFirst().linea; nodo.fin = ultimo.hijos().getLast().linea;
                                             }
                                         }
-        "}"
+    "}"
         {return nodo;}
 }
 

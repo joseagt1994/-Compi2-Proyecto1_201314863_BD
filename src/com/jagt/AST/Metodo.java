@@ -17,8 +17,17 @@ public class Metodo {
     private String nombre;
     private LinkedList<Parametro> parametros;
     private int tipo = -1;
+    private String objeto;
     private NodoParser instrucciones;
     private String textoInstrucciones;
+
+    public String getObjeto() {
+        return objeto;
+    }
+
+    public void setObjeto(String objeto) {
+        this.objeto = objeto;
+    }
 
     public String getTextoInstrucciones() {
         return textoInstrucciones;

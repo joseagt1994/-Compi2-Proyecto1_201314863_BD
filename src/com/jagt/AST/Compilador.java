@@ -7,6 +7,7 @@ package com.jagt.AST;
 
 import com.jagt.GUI.Servidor;
 import com.jagt.Logica.SistemaBaseDatos;
+import java.util.LinkedList;
 
 /**
  *
@@ -26,7 +27,12 @@ public class Compilador {
     private void ejecutarSentencias(NodoParser nodo){
         switch(nodo.nombre()){
             case "CREAR":
+                crear(nodo);
+                break;
             case "USAR":
+                Servidor.bd_actual = nodo.hijos().get(0).valor();
+                bd.usarBD(Servidor.bd_actual);
+                break;
             case "ALTERAR":
             case "OTORGAR":
             case "DENEGAR":
@@ -77,9 +83,53 @@ public class Compilador {
                 break;
             default:
                 // FUNCION O PROCEDIMIENTO
-                bd.crearMetodo();
+                bd.crearMetodo(crearProcedimiento(nodo));
                 break;
         }
+    }
+    
+    /*
+        ************ CREAR PROCEDIMIENTO ************
+    */
+    private Metodo crearProcedimiento(NodoParser nodo){
+        // CREAR -> PROCEDIMIENTO ID PARAMS? SENTENCIAS
+        Metodo nuevo = new Metodo();
+        nuevo.setNombre(nodo.hijos().get(1).valor());
+        // Guardar sentencias
+        nuevo.setTextoInstrucciones(getSentencias(nodo.inicio,nodo.fin));
+        int i_tipo = 3;
+        if(nodo.hijos().get(2).nombre().equals("PARAMS")){
+            // Guardar parametros si tiene
+            nuevo.setParametros(getParametros(nodo.hijos().get(2)));
+        }else{
+            i_tipo = 2;
+        }
+        if(nodo.hijos().get(0).nombre().equals("FUNCION")){
+            // CREAR -> FUNCION ID PARAMS? TIPO SENTENCIAS
+            nuevo.setTipo(bd.obtenerTipo(nodo.hijos().get(i_tipo).valor()));
+            if(nodo.hijos().get(i_tipo).nombre().equals("ID")){
+                nuevo.setObjeto(nodo.hijos().get(i_tipo).valor());
+            }
+        }
+        return nuevo;
+    }
+    
+    // Guardar sentencias
+    private String getSentencias(int inicio,int fin){
+        String sentencias = "";
+        for(int i = inicio+1; i < fin+1; i++){
+            sentencias += lineas[i]+"\n";
+        }
+        return sentencias;
+    }
+    
+    // Guardar los parametros
+    private LinkedList<Parametro> getParametros(NodoParser nodo){
+        LinkedList<Parametro> params = new LinkedList<Parametro>();
+        for(NodoParser p : nodo.hijos()){
+            params.add(new Parametro(p.hijos().get(1).valor(),bd.obtenerTipo(p.hijos().get(0).valor())));
+        }
+        return params;
     }
     
     /*
@@ -120,8 +170,7 @@ public class Compilador {
         // Recorrer los complementos del campo
         NodoParser complementos = campo.hijos().get(2);
         for(NodoParser com : complementos.hijos()){
-            NodoParser valor = com.hijos().get(0);
-            switch(valor.hijos().get(0).nombre()){
+            switch(com.hijos().get(0).nombre()){
                 case "PRIMARIA":
                     nuevo.setPrimaria(true);
                     break;
@@ -135,7 +184,7 @@ public class Compilador {
                     nuevo.setNulo(true);
                     break;
                 case "FORANEA":
-                    nuevo.setForanea(valor.hijos().get(1).valor());
+                    nuevo.setForanea(com.hijos().get(1).valor());
                     break;
                 default:
                     // UNICO
@@ -145,6 +194,34 @@ public class Compilador {
         }
         return nuevo;
     }
+    
+    /*
+        ************ ALTERAR ************
+    */
+    
+    /*
+        ************ OTORGAR ************
+    */
+    
+    /*
+        ************ DENEGAR ************
+    */
+    
+    /*
+        ************ BACKUP ************
+    */
+    
+    /*
+        ************ RESTAURAR ************
+    */
+    
+    
+    
+    
+    
+    
+    
+    
     
     /*********************************************************
      * EVALUAR EXPRESION

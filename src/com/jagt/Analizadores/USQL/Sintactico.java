@@ -1014,7 +1014,12 @@ public class Sintactico implements SintacticoConstants {
     jj_consume_token(99);
     jj_consume_token(101);
     sens = lista_sentencias();
-                                             nodo.hijos().add(sens);
+                                                nodo.hijos().add(sens);
+                                                if(sens.hijos().size() > 0){
+                                                    NodoParser primero = sens.hijos().getFirst();
+                                                    NodoParser ultimo = sens.hijos().getLast();
+                                                    nodo.inicio = primero.hijos().getFirst().linea; nodo.fin = ultimo.hijos().getLast().linea;
+                                                }
     jj_consume_token(102);
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");
@@ -1057,7 +1062,12 @@ public class Sintactico implements SintacticoConstants {
                                          nodo.hijos().add(ti);
     jj_consume_token(101);
     sens = lista_sentencias();
-                                         nodo.hijos().add(sens);
+                                            nodo.hijos().add(sens);
+                                            if(sens.hijos().size() > 0){
+                                                NodoParser primero = sens.hijos().getFirst();
+                                                NodoParser ultimo = sens.hijos().getLast();
+                                                nodo.inicio = primero.hijos().getFirst().linea; nodo.fin = ultimo.hijos().getLast().linea;
+                                            }
     jj_consume_token(102);
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");

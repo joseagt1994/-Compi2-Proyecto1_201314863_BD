@@ -148,28 +148,37 @@ nodo145[label="EXP"];
 nodo146[label="VAR @precio"];
 nodo147[label="EXP"];
 nodo148[label="VAR @i"];
-nodo149[label="CREAR"];
-nodo150[label="FUNCION FUNCION"];
-nodo151[label="ID generarPrecio"];
-nodo152[label="PARAMS"];
-nodo153[label="PARAMETRO"];
-nodo154[label="TIPO entero"];
-nodo155[label="VAR @a"];
-nodo156[label="TIPO doble"];
-nodo157[label="SENTENCIAS"];
-nodo158[label="DECLARAR"];
-nodo159[label="VARIABLES"];
-nodo160[label="VAR @retorno"];
-nodo161[label="TIPO doble"];
-nodo162[label="EXP"];
-nodo163[label="doble 1.5"];
-nodo164[label="RETORNAR"];
-nodo165[label="EXP"];
-nodo166[label="EXP"];
-nodo167[label="VAR @retorno"];
-nodo168[label="OPEARIT *"];
-nodo169[label="EXP"];
-nodo170[label="VAR @a"];
+nodo149[label="ASIGNAR"];
+nodo150[label="VAR @producto"];
+nodo151[label="ACCESO"];
+nodo152[label="EXP"];
+nodo153[label="EXP"];
+nodo154[label="VAR @producto"];
+nodo155[label="OPEARIT +"];
+nodo156[label="EXP"];
+nodo157[label="entero 1"];
+nodo158[label="CREAR"];
+nodo159[label="FUNCION FUNCION"];
+nodo160[label="ID generarPrecio"];
+nodo161[label="PARAMS"];
+nodo162[label="PARAMETRO"];
+nodo163[label="TIPO entero"];
+nodo164[label="VAR @a"];
+nodo165[label="TIPO doble"];
+nodo166[label="SENTENCIAS"];
+nodo167[label="DECLARAR"];
+nodo168[label="VARIABLES"];
+nodo169[label="VAR @retorno"];
+nodo170[label="TIPO doble"];
+nodo171[label="EXP"];
+nodo172[label="doble 1.5"];
+nodo173[label="RETORNAR"];
+nodo174[label="EXP"];
+nodo175[label="EXP"];
+nodo176[label="VAR @retorno"];
+nodo177[label="OPEARIT *"];
+nodo178[label="EXP"];
+nodo179[label="VAR @a"];
 nodo0->nodo1;
 
 nodo1->nodo2;
@@ -466,7 +475,7 @@ nodo136->nodo147;
 
 nodo147->nodo148;
 
-nodo0->nodo149;
+nodo123->nodo149;
 
 nodo149->nodo150;
 
@@ -478,36 +487,54 @@ nodo152->nodo153;
 
 nodo153->nodo154;
 
-nodo153->nodo155;
+nodo152->nodo155;
 
-nodo149->nodo156;
+nodo152->nodo156;
 
-nodo149->nodo157;
+nodo156->nodo157;
 
-nodo157->nodo158;
+nodo0->nodo158;
 
 nodo158->nodo159;
 
-nodo159->nodo160;
+nodo158->nodo160;
 
 nodo158->nodo161;
 
-nodo158->nodo162;
+nodo161->nodo162;
 
 nodo162->nodo163;
 
-nodo157->nodo164;
+nodo162->nodo164;
 
-nodo164->nodo165;
+nodo158->nodo165;
 
-nodo165->nodo166;
+nodo158->nodo166;
 
 nodo166->nodo167;
 
-nodo165->nodo168;
+nodo167->nodo168;
 
-nodo165->nodo169;
+nodo168->nodo169;
 
-nodo169->nodo170;
+nodo167->nodo170;
+
+nodo167->nodo171;
+
+nodo171->nodo172;
+
+nodo166->nodo173;
+
+nodo173->nodo174;
+
+nodo174->nodo175;
+
+nodo175->nodo176;
+
+nodo174->nodo177;
+
+nodo174->nodo178;
+
+nodo178->nodo179;
 
 }
