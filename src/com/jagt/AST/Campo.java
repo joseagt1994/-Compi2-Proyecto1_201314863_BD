@@ -11,13 +11,22 @@ package com.jagt.AST;
  */
 public class Campo {
     
-    String nombre,tforanea;
+    String nombre,tforanea,objeto;
     int tipo;
     boolean nulo,autoincrementable,primaria,foranea,unica;
 
     public Campo(String nombre, int tipo) {
         this.nombre = nombre;
         this.tipo = tipo;
+        this.nulo = this.autoincrementable = this.primaria = this.foranea = this.unica = false;
+    }
+
+    public String getObjeto() {
+        return objeto;
+    }
+
+    public void setObjeto(String objeto) {
+        this.objeto = objeto;
     }
 
     public void setNulo(boolean nulo) {

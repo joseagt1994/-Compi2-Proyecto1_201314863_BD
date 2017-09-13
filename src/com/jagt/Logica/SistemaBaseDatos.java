@@ -32,6 +32,7 @@ public class SistemaBaseDatos {
     public LinkedList<Metodo> metodos;
     //public LinkedList<Variable> variables;
      Archivo master = new Archivo();
+     public static String textoCompilado = "";
     
     // Unica instancia de SistemaBaseDatos
     private static SistemaBaseDatos BD = null;
@@ -137,7 +138,8 @@ public class SistemaBaseDatos {
                 // Agregar complementos
                 nueva += "complementos=\""+c.getComplementos()+"\" >\n";
                 // Agregar nombre del campo y tipo
-                nueva += "\t\t\t<"+c.getTipo()+">"+c.getNombre()+"</"+c.getTipo()+">\n";
+                String tipo = obtenerTipo(c.getTipo());
+                nueva += "\t\t\t<"+tipo+">"+c.getNombre()+"</"+tipo+">\n";
                 nueva += "\t\t</campo>\n";
             }
             nueva += "\t</rows>\n" +
@@ -161,14 +163,14 @@ public class SistemaBaseDatos {
     public void crearObjeto(Objeto objeto){
         // Se escribe en obj_bd.usac
         String rutaObjeto = Servidor.rutaBDS+"obj_"+Servidor.bd_actual+".usac";
-        LinkedList<String> objetos = new LinkedList<String>();
         if(!existeObjeto(objeto.getNombre())){
             String nueva = "<Obj>\n" +
                            "\t<nombre>"+objeto.getNombre()+"</nombre>\n" +
                            "\t<attr>\n";
             for(Objeto a : objeto.getAtributos()){
                 // Agregar nombre del atributo y tipo
-                //nueva += "\t\t<"+a.getTipo()+">"+a.getNombre()+"</"+a.getTipo()+">\n";
+                String tipo = obtenerTipo(a.getTipo());
+                nueva += "\t\t<"+tipo+">"+a.getNombre()+"</"+tipo+">\n";
             }
             nueva += "\t</attr>\n" +
                      "</Obj>\n";
@@ -270,4 +272,44 @@ public class SistemaBaseDatos {
         String contenido = master.leer(Servidor.rutaBDS+"proc_"+Servidor.bd_actual+".usac");
         metodos = XML.getMetodos(contenido);
     }
+    
+    //************* Manejo de Tipos *************************//
+    public String obtenerTipo(int tipo){
+        switch(tipo){
+            case ENTERO:
+                return "int";
+            case DOBLE:
+                return "double";
+            case TEXTO:
+                return "text";
+            case BOOL:
+                return "bool";
+            case DATETIME:
+                return "datetime";
+            case DATE:
+                return "date";
+            default:
+                return "objeto";
+        }
+    }
+    
+    public int obtenerTipo(String tipo){
+        switch(tipo){
+            case "entero":
+                return ENTERO;
+            case "doble":
+                return DOBLE;
+            case "cadena":
+                return TEXTO;
+            case "boolean":
+                return BOOL;
+            case "fecha":
+                return DATE;
+            case "fechahora":
+                return DATETIME;
+            default:
+                return OBJETO;
+        }
+    }
+    
 }

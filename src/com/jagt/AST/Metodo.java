@@ -18,6 +18,15 @@ public class Metodo {
     private LinkedList<Parametro> parametros;
     private int tipo = -1;
     private NodoParser instrucciones;
+    private String textoInstrucciones;
+
+    public String getTextoInstrucciones() {
+        return textoInstrucciones;
+    }
+
+    public void setTextoInstrucciones(String textoInstrucciones) {
+        this.textoInstrucciones = textoInstrucciones;
+    }
 
     public String getNombre() {
         return nombre;

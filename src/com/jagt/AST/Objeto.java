@@ -5,6 +5,10 @@
  */
 package com.jagt.AST;
 
+import com.jagt.Logica.SistemaBaseDatos;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -13,43 +17,97 @@ import java.util.LinkedList;
  */
 public class Objeto {
     
-    String nombre,valor;
     int tipo;
+    // Atributos para el manejo de expresiones!
+    public int numero;
+    public double decimal;
+    public boolean bool;
+    public String texto;
+    private Date fecha;
+    
+    // Atributos para el manejo de objetos!
+    String nombre;
     LinkedList<Objeto> atributos;
 
-    public Objeto(String nombre,String valor,int tipo) {
-        this.nombre = nombre;
-        this.valor = valor;
-        this.tipo = tipo;
-        this.atributos = new LinkedList<Objeto>();
+    // Constructor para numeros enteros
+    public Objeto(int numero){
+        this.numero = numero;
+        this.tipo = SistemaBaseDatos.ENTERO;
     }
 
+    // Constructor para numeros decimales
+    public Objeto(double decimal){
+        this.decimal = decimal;
+        this.tipo = SistemaBaseDatos.DOBLE;
+    }
+    
+    // Constructor para booleanos
+    public Objeto(boolean bool){
+        this.bool = bool;
+        this.tipo = SistemaBaseDatos.BOOL;
+    }
+    
+    // Constructor para cadenas
+    public Objeto(String texto){
+        this.texto = texto;
+    }
+    
+    // Constructor para fechas (date,datetime)
+    public Objeto(int tipo,String fecha){
+        SimpleDateFormat ft;
+        if(tipo == SistemaBaseDatos.DATE){
+            ft = new SimpleDateFormat ("dd-MM-yyyy");
+        }else{
+            ft = new SimpleDateFormat ("dd-MM-yyyy hh:mm:ss");
+        }
+        try {
+           this.fecha = ft.parse(fecha);
+        }catch (ParseException e) {
+            this.fecha = new Date();
+            System.out.println("Unparseable using " + ft); 
+        }
+        this.tipo = tipo;
+    }
+    
+    // Obtener fecha
+    public String getFecha(){
+        SimpleDateFormat formato;
+        if(tipo == SistemaBaseDatos.DATE){
+            formato = new SimpleDateFormat ("dd-MM-yyyy");
+        }else{
+            formato = new SimpleDateFormat ("dd-MM-yyyy hh:mm:ss");
+        }
+        return formato.format(fecha);
+    }
+    
+    // Constructor para objetos
     public Objeto(String nombre,int tipo) {
         this.nombre = nombre;
         this.tipo = tipo;
         this.atributos = new LinkedList<Objeto>();
     }
     
+    // Agregar un atributo al objeto
     public void agregarAtributo(Objeto atr){
         atributos.add(atr);
     }
     
+    // Colocar un nombre al objeto
     public void setNombre(String n){
         this.nombre = n;
     }
     
+    // Obtener el nombre del objeto
     public String getNombre() {
         return nombre;
     }
 
+    // Obtener los atributos del objeto
     public LinkedList<Objeto> getAtributos() {
         return atributos;
     }
-
-    public String getValor() {
-        return valor;
-    }
     
+    // Obtener el tipo de la clase Objeto.. INT,DOUBLE,BOOL,DATE,DATETIME,TEXT
     public int getTipo() {
         return tipo;
     }

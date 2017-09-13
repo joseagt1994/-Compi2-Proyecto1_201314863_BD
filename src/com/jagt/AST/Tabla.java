@@ -16,6 +16,11 @@ public class Tabla {
     String nombre,ruta;
     LinkedList<Campo> campos;
     
+    public Tabla(String nombre){
+        this.nombre = nombre;
+        this.campos = new LinkedList<Campo>();
+    }
+    
     public Tabla(String nombre,String ruta){
         this.nombre = nombre;
         this.ruta = ruta;

@@ -15,6 +15,7 @@ public class NodoParser {
     
     private final String valor,nombre;
     public final int linea,columna;
+    public int inicio,fin; // Sirve solo para metodo y funcion!
     private final LinkedList<NodoParser> nodosHijos;
     public int id;
     

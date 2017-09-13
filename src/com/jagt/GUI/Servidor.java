@@ -32,9 +32,9 @@ public class Servidor extends javax.swing.JFrame {
     public Servidor() {
         initComponents();
         // Iniciar procesos
-        SistemaBaseDatos bd = SistemaBaseDatos.getInstance();
-        //bd.crearBD("Prueba", logueado.getCodigo());
-        bd.crearUsuario("Jose", "123");
+//        SistemaBaseDatos bd = SistemaBaseDatos.getInstance();
+//        //bd.crearBD("Prueba", logueado.getCodigo());
+//        bd.crearUsuario("Jose", "123");
     }
 
     /**
@@ -108,6 +108,7 @@ public class Servidor extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Compilar jajaja
+        SistemaBaseDatos.textoCompilado = txtConsola.getText();
         InputStream is = new ByteArrayInputStream(txtConsola.getText().getBytes());
         if(parser == null) parser = new Sintactico(is);   
         else parser.ReInit(is);

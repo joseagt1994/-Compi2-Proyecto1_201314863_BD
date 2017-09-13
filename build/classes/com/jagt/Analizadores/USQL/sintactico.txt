@@ -630,7 +630,12 @@ NodoParser crear_procedimiento():
         )?
         ")"
         "{"
-            sens = lista_sentencias()       {nodo.hijos().add(sens);}
+            sens = lista_sentencias()       {
+                                                nodo.hijos().add(sens);
+                                                if(sens.hijos().size() > 0){
+                                                    nodo.inicio = sens.getFirst().linea; nodo.fin = sens.getLast().linea;
+                                                }
+                                            }
         "}"
         {return nodo;}
 }
@@ -655,7 +660,12 @@ NodoParser crear_funcion():
         ")"
         ti = tipo()                     {nodo.hijos().add(ti);}
         "{"
-            sens = lista_sentencias()   {nodo.hijos().add(sens);}
+            sens = lista_sentencias()   {
+                                            nodo.hijos().add(sens);
+                                            if(sens.hijos().size() > 0){
+                                                nodo.inicio = sens.getFirst().linea; nodo.fin = sens.getLast().linea;
+                                            }
+                                        }
         "}"
         {return nodo;}
 }
