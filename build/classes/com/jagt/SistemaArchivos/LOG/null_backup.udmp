@@ -1,0 +1,14 @@
+SELECCIONA (  @a * 15 ){ 
+	CASO 10 :  
+		#< INSTRUCCIONES > 
+	CASO 15 :  
+		#< INSTRUCCIONES > 
+	DEFECTO : 
+		#< INSTRUCCIONES > 
+} 
+
+
+
+...
+
+

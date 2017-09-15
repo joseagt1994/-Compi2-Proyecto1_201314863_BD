@@ -24,9 +24,14 @@ public class Compilador {
     // Variables
     LinkedList<Hashtable<String,Objeto>> variables;
     
+    // Retorno e interrupciones
+    Objeto retorno = null;
+    boolean hayRetorno = false,interrumpir = false;
+    
     // Temporales
     Hashtable<String,Objeto> temporales; // -> Tabla,Columna
     int numeroTablas = 0;
+    boolean USAR = false;
     
     public Compilador(NodoParser nodo){
         this.variables = new LinkedList<Hashtable<String,Objeto>>();
@@ -42,22 +47,38 @@ public class Compilador {
                 for(NodoParser hijo : nodo.hijos()){
                     ejecutarSentencias(hijo);
                 }
+                if(!USAR){
+                    bd.backup_usqldump();
+                }
+                break;
+            case "SENTENCIAS":
+                for(NodoParser hijo : nodo.hijos()){
+                    ejecutarSentencias(hijo);
+                    if(hayRetorno || interrumpir){
+                        break;
+                    }
+                }
                 break;
             case "CREAR":
                 crear(nodo);
                 break;
             case "USAR":
-                Servidor.bd_actual = nodo.hijos().get(0).valor();
-                bd.usarBD(Servidor.bd_actual);
+                if(!Servidor.bd_actual.equals(nodo.hijos().get(0).valor())){
+                    Servidor.bd_actual = nodo.hijos().get(0).valor();
+                    bd.usarBD(Servidor.bd_actual);
+                    USAR = true;
+                }
                 break;
             case "ALTERAR":
             case "OTORGAR":
             case "DENEGAR":
             case "BACKUP":
                 // MINIMO!
+                // USQLDUMP o TOTAL
                 break;
             case "RESTAURAR":
                 // MINIMO!
+                // USQLDUMP o TOTAL
                 break;
             case "INSERTAR":
                 // MINIMO!
@@ -84,19 +105,32 @@ public class Compilador {
                 break;
             case "IMPRIMIR":
                 // MINIMO!
+                Objeto valor = evaluarExpresion(nodo.hijos().get(0));
+                if(valor != null){
+                    System.out.println(valor.texto);
+                }
                 break;
             case "LLAMADA":
+                llamadaProcedimiento(nodo.hijos().get(0));
+                break;
             case "RETORNO":
+                retorno = evaluarExpresion(nodo.hijos().get(0));
+                hayRetorno = true;
+                break;
             case "DETENER":
             case "SI":
                 // MINIMO!
+                evaluarSI(nodo);
                 break;
             case "SELECCIONA":
                 // MINIMO!
+                evaluarSELECCIONA(nodo);
                 break;
             case "PARA":
+                break;
             case "MIENTRAS":
                 // MINIMO!
+                evaluarMIENTRAS(nodo);
                 break;
             case "CONTAR":
         }
@@ -513,6 +547,78 @@ public class Compilador {
         }
     }
     
+    /*********************************************************
+     * SENTENCIAS DE CONTROL Y CICLOS
+     *********************************************************/
+    // SI o SI SINO
+    public void evaluarSI(NodoParser nodo){
+        // SI -> EXP SENTENCIAS (SENTENCIAS)?
+        Objeto cond = evaluarExpresion(nodo.hijos().get(0));
+        if(cond.tipo == SistemaBaseDatos.BOOL){
+            if(cond.bool){
+                ejecutarSentencias(nodo.hijos().get(1));
+            }else{
+                if(nodo.hijos().size() == 3){
+                    ejecutarSentencias(nodo.hijos().get(2));
+                }
+            }
+        }else{
+            // ERROR! La condicion no da valor Booleano
+        }
+    }
+    
+    // SELECCIONA
+    public void evaluarSELECCIONA(NodoParser nodo){
+        // SELECCIONA -> EXP CASOS (SENTENCIAS)?
+        Objeto dato = evaluarExpresion(nodo.hijos().get(0));
+        boolean encontrado = false;
+        if(dato != null){
+            for(NodoParser caso : nodo.hijos().get(1).hijos()){
+                // Recorrer cada caso
+                // CASO -> EXP SENTENCIAS
+                if(encontrado && !interrumpir){
+                    ejecutarSentencias(caso.hijos().get(1));
+                    continue;
+                }
+                Objeto valor = evaluarExpresion(caso.hijos().get(0));
+                Objeto cond = evaluarIGUAL(dato,valor);
+                if(cond != null){
+                    if(cond.bool){
+                        encontrado = true;
+                        ejecutarSentencias(caso.hijos().get(1));
+                    }
+                }
+            }
+            // DEFECTO!
+            if(nodo.hijos().size() == 3 && !encontrado){
+                ejecutarSentencias(nodo.hijos().get(2));
+            }
+            if(interrumpir){
+                interrumpir = false;
+            }
+        }
+    }
+    
+    // PARA
+    
+    // MIENTRAS
+    public void evaluarMIENTRAS(NodoParser nodo){
+        // MIENTRAS -> EXP SENTENCIAS
+        Objeto cond = evaluarExpresion(nodo.hijos().get(0));
+        if(cond.tipo == SistemaBaseDatos.BOOL){
+            while(cond.bool){
+                ejecutarSentencias(nodo.hijos().get(1));
+                if(interrumpir){
+                    interrumpir = false;
+                    break;
+                }
+                cond = evaluarExpresion(nodo.hijos().get(0));
+                if(cond.tipo != SistemaBaseDatos.BOOL){
+                    break;
+                }
+            }
+        }
+    }
     
     /*********************************************************
      * EVALUAR EXPRESION
@@ -559,7 +665,7 @@ public class Compilador {
                             return new Objeto(false);
                         }
                     case "LLAMADA":
-                        break;
+                        return llamadaProcedimiento(nodo.hijos().get(0));
                     case "ACCESO":
                         // ACCESO -> (ID | VAR)(. ID)*
                         return getAcceso(nodo.hijos().get(0));
@@ -578,6 +684,10 @@ public class Compilador {
         NodoParser hijo_1 = nodo.hijos().get(0);
         if(hijo_1.nombre().equals("VAR")){
             // buscar el nombre de la variable
+            Objeto var = buscarVariable(hijo_1.valor());
+            if(var != null){
+                return var;
+            }
         }else{
             String llave = hijo_1.valor();
             if(numeroTablas == 1){
@@ -606,6 +716,58 @@ public class Compilador {
             }
         }
         return new Objeto(0);
+    }
+    
+    /*
+        ************ LLAMADA ************
+    */
+    private Objeto llamadaProcedimiento(NodoParser nodo){
+        Metodo proc = bd.buscarMetodo(nodo.hijos().get(0).valor());
+        if(proc != null){
+            aumentarAmbito();
+            if(nodo.hijos().size() == 2){
+                // Con parametros!
+                if(nodo.hijos().get(1).hijos().size() == proc.getParametros().size()){
+                    // Guardamos los parametros en las variables
+                    NodoParser expresiones = nodo.hijos().get(1);
+                    LinkedList<String> par = new LinkedList<String>();
+                    for(int i = 0; i < proc.getParametros().size(); i++){
+                        Objeto dato = evaluarExpresion(expresiones.hijos().get(i));
+                        if(dato != null){
+                            Parametro p = proc.getParametros().get(i);
+                            if(dato.getTipo() == p.getTipo()){
+                                par.add(p.getNombre());
+                                declararVariables(par,dato);
+                            }else{
+                                // ERROR! El tipo de parametro y expresion no coincide
+                                return null;
+                            }
+                        }else{
+                            return null;
+                        }
+                    }
+                }else{
+                    // ERROR! Faltan parametros!
+                    return null;
+                }
+            }else{
+                // Sin parametros!
+                if(proc.getParametros().size() != 0){
+                    // ERROR! Se necesitan parametros!
+                    return null;
+                }
+            }
+            // Ejecutar las sentencias!
+            if(proc.getInstrucciones() != null){
+                ejecutarSentencias(proc.getInstrucciones());
+            }
+            disminuirAmbito();
+            hayRetorno = false;
+            return retorno;
+        }else{
+            // ERROR! El metodo no existe!
+            return null;
+        }
     }
     
     /*

@@ -7,6 +7,7 @@ package com.jagt.Logica;
 
 import com.jagt.AST.*;
 import com.jagt.GUI.Servidor;
+import java.io.File;
 import java.util.LinkedList;
 
 /**
@@ -267,6 +268,7 @@ public class SistemaBaseDatos {
             llenarTablas();
             llenarMetodos();
             llenarObjetos();
+            backup_usqldump();
             return true;
         }else{
             // Reiniciar los listados!
@@ -274,6 +276,20 @@ public class SistemaBaseDatos {
             objetos = new LinkedList<Objeto>();
             metodos = new LinkedList<Metodo>();
             return false;
+        }
+    }
+    
+    /**************************** BACKUPS *************************/
+    // Backup USQLDUMP
+    public void backup_usqldump(){
+        String ruta = Servidor.rutaLOGS+Servidor.bd_actual+"_backup.udmp";
+        File archivo = new File(ruta);
+        if(archivo.exists()){
+            // Ya existe!
+            master.modificar(ruta, textoCompilado+"\n\n...\n\n");
+        }else{
+            // No existe!
+            master.escribir(ruta, textoCompilado+"\n\n...\n\n");
         }
     }
     
@@ -484,6 +500,16 @@ public class SistemaBaseDatos {
         for(Objeto obj : objetos){
             if(obj.getNombre().equals(nombre)){
                 return obj;
+            }
+        }
+        return null;
+    }
+    
+    // Buscar Metodo existente
+    public Metodo buscarMetodo(String nombre){
+        for(Metodo m : metodos){
+            if(m.getNombre().equals(nombre)){
+                return m;
             }
         }
         return null;

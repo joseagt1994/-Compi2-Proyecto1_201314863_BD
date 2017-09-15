@@ -172,8 +172,8 @@ NodoParser sentencia():
     |   sen = declarar()        {return sen;}   
     |   sen = asignar()         {return sen;}   
     |   sen = imprimir()        {return sen;}
-    |   sen = llamada()         {return sen;}
-        ";"
+    |   sen = llamada()         
+        ";"                     {return sen;}
     |   sen = retorno()         {return sen;}
     |   sen = detener()         {return sen;}
     |   sen = control()         {return sen;}
@@ -486,13 +486,15 @@ NodoParser llamada():
 }
 
 NodoParser tipo_llamada():
-{NodoParser nodo = new NodoParser("ACCESO","",0,0); NodoParser lista; Token id;}
+{NodoParser nodo; NodoParser lista; Token id;}
 {
-        "("
-        lista = lista_expresiones() {nodo = new NodoParser("LLAMADA","",0,0); nodo.hijos().add(lista);}
+        "("                             {nodo = new NodoParser("LLAMADA","",0,0);}
+        (
+            lista = lista_expresiones() {nodo.hijos().add(lista);}
+        )?
         ")"
         {return nodo;}
-    |   "."
+    |   "."                             {nodo = new NodoParser("ACCESO","",0,0);}
         id = <ID>                       {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
         (
             "."

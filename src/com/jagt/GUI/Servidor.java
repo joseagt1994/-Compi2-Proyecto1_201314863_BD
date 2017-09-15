@@ -23,6 +23,7 @@ public class Servidor extends javax.swing.JFrame {
     public static String rutaMaestra = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\master.usac";
     public static String rutaUsuarios = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\usuarios.usac";
     public static String rutaBDS = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\BD\\";
+    public static String rutaLOGS = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\LOG\\";
     public static Usuario logueado = new Usuario(0,"","");
     
     public static Sintactico parser = null;
