@@ -135,61 +135,65 @@ public interface SintacticoConstants {
   /** RegularExpression Id. */
   int MIENTRAS = 68;
   /** RegularExpression Id. */
-  int INCREMENTO = 69;
+  int ABRE = 69;
   /** RegularExpression Id. */
-  int DECREMENTO = 70;
+  int CIERRA = 70;
   /** RegularExpression Id. */
-  int PUNTO = 71;
+  int INCREMENTO = 71;
   /** RegularExpression Id. */
-  int MAS = 72;
+  int DECREMENTO = 72;
   /** RegularExpression Id. */
-  int MENOS = 73;
+  int PUNTO = 73;
   /** RegularExpression Id. */
-  int POR = 74;
+  int MAS = 74;
   /** RegularExpression Id. */
-  int DIV = 75;
+  int MENOS = 75;
   /** RegularExpression Id. */
-  int POT = 76;
+  int POR = 76;
   /** RegularExpression Id. */
-  int MAYOR = 77;
+  int DIV = 77;
   /** RegularExpression Id. */
-  int MENOR = 78;
+  int POT = 78;
   /** RegularExpression Id. */
-  int IGUAL = 79;
+  int MAYOR = 79;
   /** RegularExpression Id. */
-  int DIFERENTE = 80;
+  int MENOR = 80;
   /** RegularExpression Id. */
-  int MENOR_IGUAL = 81;
+  int IGUAL = 81;
   /** RegularExpression Id. */
-  int MAYOR_IGUAL = 82;
+  int DIFERENTE = 82;
   /** RegularExpression Id. */
-  int ASIGNA = 83;
+  int MENOR_IGUAL = 83;
   /** RegularExpression Id. */
-  int RES_NO = 84;
+  int MAYOR_IGUAL = 84;
   /** RegularExpression Id. */
-  int RES_NULO = 85;
+  int ASIGNA = 85;
   /** RegularExpression Id. */
-  int RES_AUTOINC = 86;
+  int RES_NO = 86;
   /** RegularExpression Id. */
-  int RES_PRIMARIA = 87;
+  int RES_NULO = 87;
   /** RegularExpression Id. */
-  int RES_FORANEA = 88;
+  int RES_AUTOINC = 88;
   /** RegularExpression Id. */
-  int RES_UNICO = 89;
+  int RES_PRIMARIA = 89;
   /** RegularExpression Id. */
-  int OR = 90;
+  int RES_FORANEA = 90;
   /** RegularExpression Id. */
-  int AND = 91;
+  int RES_UNICO = 91;
   /** RegularExpression Id. */
-  int NOT = 92;
+  int OR = 92;
   /** RegularExpression Id. */
-  int ID = 93;
+  int AND = 93;
   /** RegularExpression Id. */
-  int VAR = 94;
+  int NOT = 94;
   /** RegularExpression Id. */
-  int DIGITO = 95;
+  int ID = 95;
   /** RegularExpression Id. */
-  int LETRA = 96;
+  int VAR = 96;
+  /** RegularExpression Id. */
+  int DIGITO = 97;
+  /** RegularExpression Id. */
+  int LETRA = 98;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -265,6 +269,8 @@ public interface SintacticoConstants {
     "\"Detener\"",
     "\"Para\"",
     "\"Mientras\"",
+    "\"{\"",
+    "\"}\"",
     "\"++\"",
     "\"--\"",
     "\".\"",
@@ -286,9 +292,9 @@ public interface SintacticoConstants {
     "\"Llave_Primaria\"",
     "\"Llave_Foranea\"",
     "\"Unico\"",
-    "\"||\"",
-    "\"&&\"",
-    "\"!\"",
+    "<OR>",
+    "<AND>",
+    "<NOT>",
     "<ID>",
     "<VAR>",
     "<DIGITO>",
@@ -297,8 +303,6 @@ public interface SintacticoConstants {
     "\"(\"",
     "\")\"",
     "\",\"",
-    "\"{\"",
-    "\"}\"",
     "\":\"",
   };
 

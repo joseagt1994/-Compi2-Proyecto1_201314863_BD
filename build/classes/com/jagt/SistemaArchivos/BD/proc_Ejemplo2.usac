@@ -1,0 +1,36 @@
+<Proc>
+	<nombre>llenarTablas</nombre>
+	<ret>objeto</ret>
+	<params>
+	</params>
+	<src>
+
+	DECLARAR @producto INTEGER = 0;   
+	#inserta 10 registros en la tabla proveedor   
+	#holis
+        PARA(DECLARAR @i INTEGER = 0; @i < 10; ++){     
+		INSERTAR EN TABLA Proveedor(id, nombre, direccion)
+		VALORES (@i, "Proveedor" + @i, "Dirección" + @i);   
+		#inserta 20 productos por proveedor       
+		PARA(DECLARAR @j INTEGER = 0; @j < 20; ++){         
+			DECLARAR @precio DOUBLE = generarPrecio(@producto);         
+			INSERTAR EN TABLA Producto VALORES (@producto, "Producto" + @producto, @precio, @i);         
+			@producto = @producto + 1;       
+		}   
+	} 
+
+	</src>
+</Proc>
+<Proc>
+	<nombre>generarPrecio</nombre>
+	<ret>double</ret>
+	<params>
+		<int>@a</int>
+	</params>
+	<src>
+
+	DECLARAR @retorno DOUBLE = 1.5;   
+	RETORNO @retorno * @a; 
+
+	</src>
+</Proc>

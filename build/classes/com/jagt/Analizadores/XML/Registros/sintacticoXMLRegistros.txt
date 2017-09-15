@@ -109,11 +109,11 @@ Objeto atributo():
 Objeto expresion():
 {Objeto atr; Token t;}
 {
-        t = <ENTERO>    {return new Objeto("",t.image,SistemaBaseDatos.ENTERO);}
-    |   t = <DOBLE>     {return new Objeto("",t.image,SistemaBaseDatos.DOBLE);}
-    |   t = <CADENA>    {return new Objeto("",t.image,SistemaBaseDatos.TEXTO);}
-    |   t = <FECHA>     {return new Objeto("",t.image,SistemaBaseDatos.DATE);}
-    |   t = <HORA>      {return new Objeto("",t.image,SistemaBaseDatos.DATETIME);}
-    |   t = <FALSO>     {return new Objeto("",t.image,SistemaBaseDatos.BOOL);}
-    |   t = <VERDADERO> {return new Objeto("",t.image,SistemaBaseDatos.BOOL);}
+        t = <ENTERO>    {return new Objeto(Integer.parseInt(t.image));}
+    |   t = <DOBLE>     {return new Objeto(Double.parseDouble(t.image));}
+    |   t = <CADENA>    {return new Objeto(t.image.replaceAll("\"",""));}
+    |   t = <FECHA>     {return new Objeto(SistemaBaseDatos.DATE,t.image);}
+    |   t = <HORA>      {return new Objeto(SistemaBaseDatos.DATETIME,t.image);}
+    |   t = <FALSO>     {return new Objeto(false);}
+    |   t = <VERDADERO> {return new Objeto(true);}
 }

@@ -39,7 +39,7 @@ public class SistemaBaseDatos {
     
     private SistemaBaseDatos(){
         llenarUsuarios();
-        basesDatos = new LinkedList<DataBase>();
+        llenarBases();
         tablas = new LinkedList<Tabla>();
         objetos = new LinkedList<Objeto>();
         metodos = new LinkedList<Metodo>();
@@ -65,7 +65,7 @@ public class SistemaBaseDatos {
             // Se escribe en el archivo usuarios.usac
             String nuevo = "<usuario id=\""+Servidor.codUsuario+"\">\n" +
                            "\t<nombre>"+nombre+"</nombre>\n" +
-                           "\t<password>"+password+"</password>\n" +
+                           "\t<password>\""+password+"\"</password>\n" +
                            "</usuario>\n";
             master.modificar(Servidor.rutaUsuarios, nuevo);
             llenarUsuarios();
@@ -90,7 +90,7 @@ public class SistemaBaseDatos {
             String rutaBD = Servidor.rutaBDS+nombreBD+".usac";
             String nueva = "<DB>\n"+
                            "\t<nombre>"+nombreBD+"</nombre>\n" +
-                           "\t<path>"+rutaBD+"</path>\n" +
+                           "\t<path>\""+rutaBD+"\"</path>\n" +
                            "\t<permisos>\n" +
                            "\t\t<usuario>"+Servidor.logueado.getCodigo()+"</usuario>\n" + 
                            "\t</permisos>\n" +
@@ -102,10 +102,10 @@ public class SistemaBaseDatos {
             master.escribir(rutaObj, "");
             master.escribir(rutaMetodo, "");
             String cuerpoBD = "<Procedure>\n"+
-                              "\t<path>"+rutaMetodo+"</path>\n" + 
+                              "\t<path>\""+rutaMetodo+"\"</path>\n" + 
                               "</Procedure>\n" + 
                               "<Object>\n" +
-                              "\t<path>"+rutaObj+"</path>\n" +
+                              "\t<path>\""+rutaObj+"\"</path>\n" +
                               "</Object>\n";
             master.escribir(rutaBD, cuerpoBD);
             llenarBases();
@@ -131,15 +131,43 @@ public class SistemaBaseDatos {
         if(!existeTabla(tabla.getNombre())){
             String nueva = "<Tabla>\n" +
                            "\t<nombre>"+tabla.getNombre()+"</nombre>\n" +
-                           "\t<path>"+rutaTabla+"</path>\n" +
-                           "\t<rows>";
+                           "\t<path>\""+rutaTabla+"\"</path>\n" +
+                           "\t<rows>\n";
             for(Campo c : tabla.getCampos()){
                 nueva += "\t\t<campo ";
                 // Agregar complementos
-                nueva += "complementos=\""+c.getComplementos()+"\" >\n";
+                // Nulo!
+                if(c.isNulo()){
+                    nueva += "nulo = \"true\" ";
+                }else{
+                    nueva += "nulo = \"false\" ";
+                }
+                // Autoincrementable!
+                if(c.isAutoincrementable()){
+                    nueva += "auto = \"true\" ";
+                }else{
+                    nueva += "auto = \"false\" ";
+                }
+                // Primaria!
+                if(c.isPrimaria()){
+                    nueva += "primaria = \"true\" ";
+                }else{
+                    nueva += "primaria = \"false\" ";
+                }
+                // Unica!
+                if(c.isUnica()){
+                    nueva += "unico = \"true\" ";
+                }else{
+                    nueva += "unico = \"false\" ";
+                }
+                nueva += ">\n";
                 // Agregar nombre del campo y tipo
                 String tipo = obtenerTipo(c.getTipo());
                 nueva += "\t\t\t<"+tipo+">"+c.getNombre()+"</"+tipo+">\n";
+                // Foranea!
+                if(c.isForanea()){
+                    nueva += "\t\t\t<foranea>"+c.getTforanea()+"</foranea>\n";
+                }
                 nueva += "\t\t</campo>\n";
             }
             nueva += "\t</rows>\n" +
@@ -192,7 +220,42 @@ public class SistemaBaseDatos {
     
     public void crearMetodo(Metodo metodo){
         // Se escribe en proc_bd.usac
-        
+        String rutaMetodo = Servidor.rutaBDS+"proc_"+Servidor.bd_actual+".usac";
+        if(!existeMetodo(metodo.getNombre())){
+            // No existe entonces se guarda en el XML
+            String nueva = "<Proc>\n" +
+                           "\t<nombre>"+metodo.getNombre()+"</nombre>\n";
+            // Si tiene retorno
+            if(!(metodo.getTipo() == -1)){
+                nueva += "\t<ret>"+obtenerTipo(metodo.getTipo())+"</ret>\n";
+            }
+            // Parametros
+            nueva += "\t<params>\n";
+            // Recorrer la lista de parametros
+            for(Parametro p : metodo.getParametros()){
+                String tipo = obtenerTipo(p.getTipo());
+                nueva += "\t\t<"+tipo+">"+p.getNombre()+"</"+tipo+">\n";
+            }
+            nueva += "\t</params>\n";
+            // Listado de expresiones
+            nueva += "\t<src>\n\n";
+            nueva += metodo.getTextoInstrucciones();
+            nueva += "\n\t</src>\n";
+            nueva += "</Proc>\n";
+            master.modificar(rutaMetodo, nueva);
+            llenarMetodos();
+        }else{
+            // Ya existe!
+        }
+    }
+    
+    public boolean existeMetodo(String nombre){
+        for(Metodo metodo : metodos){
+            if(metodo.getNombre().equals(nombre)){
+                return true;
+            }
+        }
+        return false;
     }
     
     /**************************** USAR *************************/
@@ -223,12 +286,230 @@ public class SistemaBaseDatos {
     /************************************************************/
     
     /**************************** INSERTAR *************************/
+    // Insertar de forma normal
+    public String insertarEnTabla(String nombre,Registro nuevo){
+        Tabla tabla = buscarTabla(nombre);
+        if(tabla != null){
+            // Insertar el registro en esa tabla
+            if(tabla.getNumeroCampos() == nuevo.getColumnas().size()){
+                // Verificar tipos y verificar que se pueda insertar
+                if(tabla.comprobarTipos(nuevo.getColumnas())){
+                    String nueva = "<Row>\n"; // cadena para escribir en el archivo de registro
+                    LinkedList<Registro> registros = getRegistro(tabla.getNombre());
+                    int idato = 0;
+                    for(int i = 0; i < tabla.getCampos().size(); i++){
+                        Campo campo = tabla.getCampos().get(i);
+                        String nc = campo.getNombre();
+                        Objeto objeto = nuevo.getColumnas().get(idato);
+                        if(objeto.getTipo() == OBJETO){
+                            // Es objeto!
+                            nueva += "\t<"+nc+">\n";
+                            // Recorrer atributos!
+                            for(Objeto a : objeto.getAtributos()){
+                                String na = a.getNombre();
+                                nueva += "\t\t<"+na+">"+a.texto+"</"+na+">\n";
+                            }
+                            nueva += "</"+nc+">\n";
+                        }else{
+                            // No es objeto!
+                            if(campo.isAutoincrementable()){
+                                if(campo.getTipo() == ENTERO){
+                                    nueva += "\t<"+nc+">"+(getSiguiente(registros,i).numero+1)+"</"+nc+">\n";
+                                }
+                            }else if(campo.isPrimaria() || campo.isUnica()){
+                                if(!datoExistente(registros,i,objeto)){
+                                    nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                                }else{
+                                    // Error! El dato a ingresar no es unico.. ya existe en el registro
+                                }
+                                idato++;
+                            }else if(campo.isForanea()){
+                                if(getForanea(campo.getTforanea(),nuevo.getColumnas().get(idato))){
+                                    nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                                }
+                                idato++;
+                            }else{
+                                if(campo.getTipo() == TEXTO){
+                                    nueva += "\t<"+nc+">\""+objeto.texto+"\"</"+nc+">\n";
+                                }else{
+                                    nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                                }
+                                idato++;
+                            }
+                        }
+                    }
+                    nueva += "</Row>\n";
+                    String ruta = Servidor.rutaBDS+tabla.getNombre()+"_"+Servidor.bd_actual+".usac";
+                    master.modificar(ruta, nueva);
+                    return "";
+                }else{
+                    // Error! Los tipos no coinciden! -> 2
+                }
+            }else{
+                // Error! Faltan campos! -> 1
+            }
+        }else{
+            // Error! La tabla a la que se quiere insertar no existe! -> 0
+        }
+        return "";
+    }
+    
+    // Insertar de forma especial
+    public String insertarEnTablaEspecial(String nombre,LinkedList<String> campos,Registro nuevo){
+        Tabla tabla = buscarTabla(nombre);
+        if(tabla != null){
+            // Insertar el registro en esa tabla
+            if(campos.size() == nuevo.getColumnas().size()){
+                // Verificar tipos y verificar que se pueda insertar
+                if(tabla.verificarCampos(campos, nuevo)){
+                    String nueva = "<Row>\n"; // cadena para escribir en el archivo de registro
+                    LinkedList<Registro> registros = getRegistro(tabla.getNombre());
+                    for(int i = 0; i < tabla.getCampos().size(); i++){
+                        Campo campo = tabla.getCampos().get(i);
+                        String nc = campo.getNombre();
+                        if(tabla.esFaltante(nc, campos)){
+                            if(campo.getTipo() == OBJETO){
+                                nueva += "\t<"+nc+">\n";
+                                nueva += "\t\t<"+nc+">\" \"</"+nc+">\n";
+                                nueva += "\t</"+nc+">\n";
+                            }else{
+                                if(campo.isAutoincrementable()){
+                                    if(campo.getTipo() == ENTERO){
+                                        nueva += "\t<"+nc+">"+(getSiguiente(registros,i).numero+1)+"</"+nc+">\n";
+                                    }
+                                }else{
+                                    nueva += "\t\t<"+nc+">\" \"</"+nc+">\n";
+                                }
+                            }
+                        }else{
+                            // No es faltante, esta en columnas
+                            int idato = tabla.buscarIndice(nc, campos);
+                            if(idato >= 0){
+                                Objeto objeto = nuevo.getColumnas().get(idato);
+                                if(objeto.getTipo() == OBJETO){
+                                    // Es objeto!
+                                    nueva += "\t<"+nc+">\n";
+                                    // Recorrer atributos!
+                                    for(Objeto a : objeto.getAtributos()){
+                                        String na = a.getNombre();
+                                        nueva += "\t\t<"+na+">"+a.texto+"</"+na+">\n";
+                                    }
+                                    nueva += "</"+nc+">\n";
+                                }else{
+                                    // No es objeto!
+                                    if(campo.isPrimaria() || campo.isUnica()){
+                                        if(!datoExistente(registros,i,objeto)){
+                                            nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                                        }else{
+                                            // Error! El dato a ingresar no es unico.. ya existe en el registro
+                                        }
+                                    }else if(campo.isForanea()){
+                                        if(getForanea(campo.getTforanea(),nuevo.getColumnas().get(idato))){
+                                            nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                                        }
+                                    }else{
+                                        if(campo.getTipo() == TEXTO){
+                                            nueva += "\t<"+nc+">\""+objeto.texto+"\"</"+nc+">\n";
+                                        }else{
+                                            nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    nueva += "</Row>\n";
+                    String ruta = Servidor.rutaBDS+tabla.getNombre()+"_"+Servidor.bd_actual+".usac";
+                    master.modificar(ruta, nueva);
+                    return "";
+                }else{
+                    // Error! Los tipos no coinciden! -> 2
+                }
+            }else{
+                // Error! Faltan campos! -> 1
+            }
+        }else{
+            // Error! La tabla a la que se quiere insertar no existe! -> 0
+        }
+        return "";
+    }
+    
+    // Buscar tabla existente
+    public Tabla buscarTabla(String nombre){
+        for(Tabla t : tablas){
+            if(t.getNombre().equals(nombre)){
+                return t;
+            }
+        }
+        return null;
+    }
+    
+    // Obtener siguiente numero (autoincremental)
+    public Objeto getSiguiente(LinkedList<Registro> registros,int indice){
+        if(registros.size() > 0){
+            Registro ultimo = registros.getLast();
+            return ultimo.getColumnas().get(indice);
+        }else{
+            return new Objeto(0);
+        }
+    }
+    
+    // Ver si el dato ya existe
+    public boolean datoExistente(LinkedList<Registro> registros,int indice,Objeto dato){
+        if(registros.size() > 0){
+            for(Registro r : registros){
+                if(Compilador.evaluarIGUAL(r.getColumnas().get(indice), dato).bool){
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    // Ver si la foranea existe
+    public boolean getForanea(String nombre,Objeto dato){
+        Tabla tabla = buscarTabla(nombre);
+        if(tabla != null){
+            int indice = tabla.getIndicePrimaria();
+            if(indice >= 0){
+                LinkedList<Registro> registros = getRegistro(tabla.getNombre());
+                return datoExistente(registros,indice,dato);
+            }
+        }
+        return false;
+    }
     
     /**************************** ACTUALIZAR *************************/
     
     /**************************** BORRAR *************************/
     
     /**************************** SELECCIONAR *************************/
+    
+    // Realizar el producto cartesiano
+    public LinkedList<Registro> realizarProductoCartesiano(LinkedList<String> tablas){
+        LinkedList<Registro> registros = getRegistro(tablas.get(0));
+        for(int i = 1; i < tablas.size(); i++){
+            // Obtener el registro auxiliar que tendra el producto cartesiano
+            LinkedList<Registro> auxiliar = new LinkedList<Registro>();
+            LinkedList<Registro> otras = getRegistro(tablas.get(i));
+            for(Registro r1 : registros){
+                for(Registro r2 : otras){
+                    Registro nuevo = new Registro();
+                    // Llenar los objetos del registro de la tabla registros
+                    for(Objeto ob : r1.getColumnas()){
+                        nuevo.agregarColumna(ob);
+                    }
+                    // Llenar los objetos del registro de la tabla otras
+                    for(Objeto obj : r2.getColumnas()){
+                        nuevo.agregarColumna(obj);
+                    }
+                    auxiliar.add(nuevo);
+                }
+            }
+            registros = auxiliar;
+        }
+        return registros;
+    }
     
     /************************************************************/
     /***************************** DCL **************************/
@@ -264,8 +545,14 @@ public class SistemaBaseDatos {
     
     // Se usa cuando se hace un Seleccionar
     public final LinkedList<Registro> getRegistro(String tabla){
-        String registros = master.leer(Servidor.rutaBDS+tabla+"_"+Servidor.bd_actual+".usac");
-        return XML.getRegistros(registros);
+        String tregistros = master.leer(Servidor.rutaBDS+tabla+"_"+Servidor.bd_actual+".usac");
+        LinkedList<Registro> registros = XML.getRegistros(tregistros);
+        for(Registro r : registros){
+            for(Objeto obj : r.getColumnas()){
+                obj.tabla = tabla;
+            }
+        }
+        return registros;
     }
     
     public final void llenarMetodos(){

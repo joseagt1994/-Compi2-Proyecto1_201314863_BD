@@ -39,6 +39,8 @@ public class Campo {
 
     public void setPrimaria(boolean primaria) {
         this.primaria = primaria;
+        this.nulo = false;
+        this.unica = true;
     }
 
     public void setForanea(String tabla) {

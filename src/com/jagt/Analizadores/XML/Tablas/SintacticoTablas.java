@@ -18,12 +18,12 @@ public class SintacticoTablas implements SintacticoTablasConstants {
  LinkedList<Tabla> tablas = new LinkedList<Tabla>(); Tabla t;
     jj_consume_token(INICIO_PROC);
     jj_consume_token(INICIO_RUTA);
-    jj_consume_token(RUTA);
+    jj_consume_token(CADENA);
     jj_consume_token(FIN_RUTA);
     jj_consume_token(FIN_PROC);
     jj_consume_token(INICIO_OBJ);
     jj_consume_token(INICIO_RUTA);
-    jj_consume_token(RUTA);
+    jj_consume_token(CADENA);
     jj_consume_token(FIN_RUTA);
     jj_consume_token(FIN_OBJ);
     label_1:
@@ -51,8 +51,8 @@ public class SintacticoTablas implements SintacticoTablasConstants {
     id = jj_consume_token(ID);
     jj_consume_token(FIN_NOMBRE);
     jj_consume_token(INICIO_RUTA);
-    ruta = jj_consume_token(RUTA);
-                                 t = new Tabla(id.image,ruta.image);
+    ruta = jj_consume_token(CADENA);
+                                   t = new Tabla(id.image,ruta.image.replaceAll("\u005c"",""));
     jj_consume_token(FIN_RUTA);
     jj_consume_token(INICIO_ROWS);
     label_2:

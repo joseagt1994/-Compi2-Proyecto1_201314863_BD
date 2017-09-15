@@ -118,31 +118,31 @@ public class SintacticoRegistros implements SintacticoRegistrosConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ENTERO:
       t = jj_consume_token(ENTERO);
-                         {if (true) return new Objeto("",t.image,SistemaBaseDatos.ENTERO);}
+                         {if (true) return new Objeto(Integer.parseInt(t.image));}
       break;
     case DOBLE:
       t = jj_consume_token(DOBLE);
-                         {if (true) return new Objeto("",t.image,SistemaBaseDatos.DOBLE);}
+                         {if (true) return new Objeto(Double.parseDouble(t.image));}
       break;
     case CADENA:
       t = jj_consume_token(CADENA);
-                         {if (true) return new Objeto("",t.image,SistemaBaseDatos.TEXTO);}
+                         {if (true) return new Objeto(t.image.replaceAll("\u005c"",""));}
       break;
     case FECHA:
       t = jj_consume_token(FECHA);
-                         {if (true) return new Objeto("",t.image,SistemaBaseDatos.DATE);}
+                         {if (true) return new Objeto(SistemaBaseDatos.DATE,t.image);}
       break;
     case HORA:
       t = jj_consume_token(HORA);
-                         {if (true) return new Objeto("",t.image,SistemaBaseDatos.DATETIME);}
+                         {if (true) return new Objeto(SistemaBaseDatos.DATETIME,t.image);}
       break;
     case FALSO:
       t = jj_consume_token(FALSO);
-                         {if (true) return new Objeto("",t.image,SistemaBaseDatos.BOOL);}
+                         {if (true) return new Objeto(false);}
       break;
     case VERDADERO:
       t = jj_consume_token(VERDADERO);
-                         {if (true) return new Objeto("",t.image,SistemaBaseDatos.BOOL);}
+                         {if (true) return new Objeto(true);}
       break;
     default:
       jj_la1[4] = jj_gen;

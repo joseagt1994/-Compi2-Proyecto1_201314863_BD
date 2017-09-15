@@ -2,6 +2,7 @@
 package com.jagt.Analizadores.XML.Metodos;
 import com.jagt.AST.*;
 import java.util.LinkedList;
+
 public class SintacticoMetodos implements SintacticoMetodosConstants {
 
         public static void main(String args[]) throws ParseException{
@@ -54,8 +55,8 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                  nuevo.setParametros(params);
     jj_consume_token(FIN_PARAMS);
     jj_consume_token(INICIO_SRC);
-    ins = instrucciones();
-                                 nuevo.setInstrucciones(ins);
+    ins = lista_sentencias();
+                                    nuevo.setInstrucciones(ins);
     jj_consume_token(FIN_SRC);
     jj_consume_token(FIN_PROC);
          {if (true) return nuevo;}
@@ -86,8 +87,8 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     jj_consume_token(MENOR);
     nodo = tipo();
     jj_consume_token(MAYOR);
-    t = jj_consume_token(ID);
-                         p = new Parametro(t.image); p.guardarTipo(nodo);
+    t = jj_consume_token(VAR);
+                          p = new Parametro(t.image); p.guardarTipo(nodo);
     jj_consume_token(MENOR);
     jj_consume_token(DIV);
     tipo();
@@ -98,13 +99,6 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
 
   final public void Empty() throws ParseException {
      System.out.println("epsilon");
-  }
-
-  final public NodoParser instrucciones() throws ParseException {
- NodoParser ins;
-    ins = sentencia();
-                                 {if (true) return ins;}
-    throw new Error("Missing return statement in function");
   }
 
   final public NodoParser sentencia() throws ParseException {

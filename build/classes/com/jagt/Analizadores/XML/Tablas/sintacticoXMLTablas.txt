@@ -66,8 +66,8 @@ TOKEN:{
     |   <DATE: "date" >
     |   <DATETIME: "datetime" >
     |   <TEXT: "text" >
+    |   <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" > 
     |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
-    |   <RUTA: (<LETRA>)"://"(<ID>"//")*(<ID>)".usac" >
     |   <DIGITO: ["0"-"9"] >
     |   <LETRA: ["a"-"z","A"-"Z"] >
  
@@ -78,12 +78,12 @@ LinkedList<Tabla> inicio():
 {
         <INICIO_PROC>
         <INICIO_RUTA>
-        <RUTA>
+        <CADENA>
         <FIN_RUTA>
         <FIN_PROC>
         <INICIO_OBJ>
         <INICIO_RUTA>
-        <RUTA>
+        <CADENA>
         <FIN_RUTA>
         <FIN_OBJ>
         (
@@ -101,7 +101,7 @@ Tabla tabla():
         id = <ID>           
         <FIN_NOMBRE>
         <INICIO_RUTA>
-        ruta = <RUTA>           {t = new Tabla(id.image,ruta.image);}
+        ruta = <CADENA>           {t = new Tabla(id.image,ruta.image.replaceAll("\"",""));}
         <FIN_RUTA>
         <INICIO_ROWS>
         (

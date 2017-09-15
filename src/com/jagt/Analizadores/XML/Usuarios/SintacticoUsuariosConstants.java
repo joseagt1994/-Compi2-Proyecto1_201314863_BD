@@ -42,8 +42,6 @@ public interface SintacticoUsuariosConstants {
   int FIN = 21;
   /** RegularExpression Id. */
   int IGUAL = 22;
-  /** RegularExpression Id. */
-  int TODOS = 23;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -73,7 +71,6 @@ public interface SintacticoUsuariosConstants {
     "<LETRA>",
     "\">\"",
     "\"=\"",
-    "<TODOS>",
   };
 
 }

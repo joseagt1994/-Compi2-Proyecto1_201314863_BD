@@ -23,37 +23,48 @@ public class Objeto {
     public double decimal;
     public boolean bool;
     public String texto;
-    private Date fecha;
+    protected Date fecha;
     
     // Atributos para el manejo de objetos!
     String nombre;
     LinkedList<Objeto> atributos;
+    
+    public String tabla = "";
 
     // Constructor para numeros enteros
     public Objeto(int numero){
         this.numero = numero;
+        this.texto = Integer.toString(numero);
         this.tipo = SistemaBaseDatos.ENTERO;
     }
 
     // Constructor para numeros decimales
     public Objeto(double decimal){
         this.decimal = decimal;
+        this.texto = Double.toString(decimal);
         this.tipo = SistemaBaseDatos.DOBLE;
     }
     
     // Constructor para booleanos
     public Objeto(boolean bool){
         this.bool = bool;
+        if(bool){
+            this.texto = "true";
+        }else{
+            this.texto = "false";
+        }
         this.tipo = SistemaBaseDatos.BOOL;
     }
     
     // Constructor para cadenas
     public Objeto(String texto){
         this.texto = texto;
+        this.tipo = SistemaBaseDatos.TEXTO;
     }
     
     // Constructor para fechas (date,datetime)
     public Objeto(int tipo,String fecha){
+        this.texto = fecha;
         SimpleDateFormat ft;
         if(tipo == SistemaBaseDatos.DATE){
             ft = new SimpleDateFormat ("dd-MM-yyyy");

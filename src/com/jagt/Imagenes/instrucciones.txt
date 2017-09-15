@@ -1,540 +1,120 @@
 digraph grafica {
 nodo0[label="CUERPOS"];
-nodo1[label="CREAR"];
-nodo2[label="BD BASE_DATOS"];
-nodo3[label="ID Ejemplo2"];
-nodo4[label="USAR USAR"];
-nodo5[label="ID Ejemplo2"];
-nodo6[label="CREAR"];
-nodo7[label="TABLA TABLA"];
-nodo8[label="ID Proveedor"];
-nodo9[label="CAMPOS"];
-nodo10[label="CAMPO"];
-nodo11[label="TIPO entero"];
-nodo12[label="ID id"];
-nodo13[label="COMPLEMENTOS"];
-nodo14[label="COMPLEMENTO"];
-nodo15[label="PRIMARIA"];
-nodo16[label="COMPLEMENTO"];
-nodo17[label="AUTOINC"];
-nodo18[label="CAMPO"];
-nodo19[label="TIPO cadena"];
-nodo20[label="ID nombre"];
-nodo21[label="COMPLEMENTOS"];
-nodo22[label="COMPLEMENTO"];
-nodo23[label="NO NULO"];
-nodo24[label="CAMPO"];
-nodo25[label="TIPO cadena"];
-nodo26[label="ID direccion"];
-nodo27[label="COMPLEMENTOS"];
-nodo28[label="COMPLEMENTO"];
-nodo29[label="NO NULO"];
-nodo30[label="CREAR"];
-nodo31[label="TABLA TABLA"];
-nodo32[label="ID Producto"];
-nodo33[label="CAMPOS"];
-nodo34[label="CAMPO"];
-nodo35[label="TIPO entero"];
-nodo36[label="ID id"];
-nodo37[label="COMPLEMENTOS"];
-nodo38[label="COMPLEMENTO"];
-nodo39[label="PRIMARIA"];
-nodo40[label="COMPLEMENTO"];
-nodo41[label="AUTOINC"];
-nodo42[label="CAMPO"];
-nodo43[label="TIPO cadena"];
-nodo44[label="ID nombre"];
-nodo45[label="COMPLEMENTOS"];
-nodo46[label="COMPLEMENTO"];
-nodo47[label="NO NULO"];
-nodo48[label="CAMPO"];
-nodo49[label="TIPO doble"];
-nodo50[label="ID precio"];
-nodo51[label="COMPLEMENTOS"];
-nodo52[label="COMPLEMENTO"];
-nodo53[label="NO NULO"];
-nodo54[label="CAMPO"];
-nodo55[label="TIPO entero"];
-nodo56[label="ID id_proveedor"];
-nodo57[label="COMPLEMENTOS"];
-nodo58[label="COMPLEMENTO"];
-nodo59[label="FORANEA"];
-nodo60[label="ID Proveedor"];
-nodo61[label="CREAR"];
-nodo62[label="PROCEDIMIENTO PROCEDIMIENTO"];
-nodo63[label="ID llenarTablas"];
-nodo64[label="SENTENCIAS"];
-nodo65[label="DECLARAR"];
-nodo66[label="VARIABLES"];
-nodo67[label="VAR @producto"];
-nodo68[label="TIPO entero"];
-nodo69[label="EXP"];
-nodo70[label="entero 0"];
-nodo71[label="PARA"];
-nodo72[label="DECLARAR"];
-nodo73[label="VARIABLES"];
-nodo74[label="VAR @i"];
-nodo75[label="TIPO entero"];
-nodo76[label="EXP"];
-nodo77[label="entero 0"];
-nodo78[label="EXP"];
-nodo79[label="EXP"];
-nodo80[label="EXP"];
-nodo81[label="VAR @i"];
-nodo82[label="OPELOGICA <"];
-nodo83[label="EXP"];
-nodo84[label="entero 10"];
-nodo85[label="INCREMENTO ++"];
-nodo86[label="SENTENCIAS"];
-nodo87[label="INSERTAR INSERTAR"];
-nodo88[label="ID Proveedor"];
-nodo89[label="IDS"];
-nodo90[label="ID id"];
-nodo91[label="ID nombre"];
-nodo92[label="ID direccion"];
-nodo93[label="EXPRESIONES"];
-nodo94[label="EXP"];
-nodo95[label="VAR @i"];
-nodo96[label="EXP"];
-nodo97[label="EXP"];
-nodo98[label="cadena Proveedor"];
-nodo99[label="OPEARIT +"];
-nodo100[label="EXP"];
-nodo101[label="VAR @i"];
-nodo102[label="EXP"];
-nodo103[label="EXP"];
-nodo104[label="cadena Dirección"];
-nodo105[label="OPEARIT +"];
-nodo106[label="EXP"];
-nodo107[label="VAR @i"];
-nodo108[label="PARA"];
-nodo109[label="DECLARAR"];
-nodo110[label="VARIABLES"];
-nodo111[label="VAR @j"];
-nodo112[label="TIPO entero"];
-nodo113[label="EXP"];
-nodo114[label="entero 0"];
-nodo115[label="EXP"];
-nodo116[label="EXP"];
-nodo117[label="EXP"];
-nodo118[label="VAR @j"];
-nodo119[label="OPELOGICA <"];
-nodo120[label="EXP"];
-nodo121[label="entero 20"];
-nodo122[label="INCREMENTO ++"];
-nodo123[label="SENTENCIAS"];
-nodo124[label="DECLARAR"];
-nodo125[label="VARIABLES"];
-nodo126[label="VAR @precio"];
-nodo127[label="TIPO doble"];
-nodo128[label="EXP"];
-nodo129[label="LLAMADA"];
-nodo130[label="ID generarPrecio"];
-nodo131[label="EXPRESIONES"];
-nodo132[label="EXP"];
-nodo133[label="VAR @producto"];
-nodo134[label="INSERTAR INSERTAR"];
-nodo135[label="ID Producto"];
-nodo136[label="EXPRESIONES"];
-nodo137[label="EXP"];
-nodo138[label="VAR @producto"];
-nodo139[label="EXP"];
-nodo140[label="EXP"];
-nodo141[label="cadena Producto"];
-nodo142[label="OPEARIT +"];
-nodo143[label="EXP"];
-nodo144[label="VAR @producto"];
-nodo145[label="EXP"];
-nodo146[label="VAR @precio"];
-nodo147[label="EXP"];
-nodo148[label="VAR @i"];
-nodo149[label="ASIGNAR"];
-nodo150[label="VAR @producto"];
-nodo151[label="ACCESO"];
-nodo152[label="EXP"];
-nodo153[label="EXP"];
-nodo154[label="VAR @producto"];
-nodo155[label="OPEARIT +"];
-nodo156[label="EXP"];
-nodo157[label="entero 1"];
-nodo158[label="CREAR"];
-nodo159[label="FUNCION FUNCION"];
-nodo160[label="ID generarPrecio"];
-nodo161[label="PARAMS"];
-nodo162[label="PARAMETRO"];
-nodo163[label="TIPO entero"];
-nodo164[label="VAR @a"];
-nodo165[label="TIPO doble"];
-nodo166[label="SENTENCIAS"];
-nodo167[label="DECLARAR"];
-nodo168[label="VARIABLES"];
-nodo169[label="VAR @retorno"];
-nodo170[label="TIPO doble"];
-nodo171[label="EXP"];
-nodo172[label="doble 1.5"];
-nodo173[label="RETORNAR"];
-nodo174[label="EXP"];
-nodo175[label="EXP"];
-nodo176[label="VAR @retorno"];
-nodo177[label="OPEARIT *"];
-nodo178[label="EXP"];
-nodo179[label="VAR @a"];
+nodo1[label="USAR USAR"];
+nodo2[label="ID Ejemplo2"];
+nodo3[label="SELECCIONAR SELECCIONAR"];
+nodo4[label="LISTA_ACCESO"];
+nodo5[label="ACCESO"];
+nodo6[label="ID Producto"];
+nodo7[label="ID nombre"];
+nodo8[label="ACCESO"];
+nodo9[label="ID Proveedor"];
+nodo10[label="ID nombre"];
+nodo11[label="IDS"];
+nodo12[label="ID Producto"];
+nodo13[label="ID Proveedor"];
+nodo14[label="EXP"];
+nodo15[label="EXP"];
+nodo16[label="EXP"];
+nodo17[label="EXP"];
+nodo18[label="ACCESO"];
+nodo19[label="ID Producto"];
+nodo20[label="ID id_proveedor"];
+nodo21[label="OPELOGICA =="];
+nodo22[label="EXP"];
+nodo23[label="ACCESO"];
+nodo24[label="ID Proveedor"];
+nodo25[label="ID id"];
+nodo26[label="OPELOGICA AND"];
+nodo27[label="EXP"];
+nodo28[label="EXP"];
+nodo29[label="ACCESO"];
+nodo30[label="ID Producto"];
+nodo31[label="ID precio"];
+nodo32[label="OPELOGICA >"];
+nodo33[label="EXP"];
+nodo34[label="doble 50.00"];
+nodo35[label="ORDENAR Ordenar_Por"];
+nodo36[label="ACCESO"];
+nodo37[label="ID Producto"];
+nodo38[label="ID precio"];
+nodo39[label="ASC ASC"];
 nodo0->nodo1;
 
 nodo1->nodo2;
 
-nodo1->nodo3;
+nodo0->nodo3;
 
-nodo0->nodo4;
+nodo3->nodo4;
 
 nodo4->nodo5;
 
-nodo0->nodo6;
+nodo5->nodo6;
 
-nodo6->nodo7;
+nodo5->nodo7;
 
-nodo6->nodo8;
+nodo4->nodo8;
 
-nodo6->nodo9;
+nodo8->nodo9;
 
-nodo9->nodo10;
+nodo8->nodo10;
 
-nodo10->nodo11;
+nodo3->nodo11;
 
-nodo10->nodo12;
+nodo11->nodo12;
 
-nodo10->nodo13;
+nodo11->nodo13;
 
-nodo13->nodo14;
+nodo3->nodo14;
 
 nodo14->nodo15;
 
-nodo13->nodo16;
+nodo15->nodo16;
 
 nodo16->nodo17;
 
-nodo9->nodo18;
+nodo17->nodo18;
 
 nodo18->nodo19;
 
 nodo18->nodo20;
 
-nodo18->nodo21;
+nodo16->nodo21;
 
-nodo21->nodo22;
+nodo16->nodo22;
 
 nodo22->nodo23;
 
-nodo9->nodo24;
+nodo23->nodo24;
 
-nodo24->nodo25;
+nodo23->nodo25;
 
-nodo24->nodo26;
+nodo15->nodo26;
 
-nodo24->nodo27;
+nodo15->nodo27;
 
 nodo27->nodo28;
 
 nodo28->nodo29;
 
-nodo0->nodo30;
+nodo29->nodo30;
 
-nodo30->nodo31;
+nodo29->nodo31;
 
-nodo30->nodo32;
+nodo27->nodo32;
 
-nodo30->nodo33;
+nodo27->nodo33;
 
 nodo33->nodo34;
 
-nodo34->nodo35;
+nodo3->nodo35;
 
-nodo34->nodo36;
+nodo35->nodo36;
 
-nodo34->nodo37;
+nodo36->nodo37;
 
-nodo37->nodo38;
+nodo36->nodo38;
 
-nodo38->nodo39;
-
-nodo37->nodo40;
-
-nodo40->nodo41;
-
-nodo33->nodo42;
-
-nodo42->nodo43;
-
-nodo42->nodo44;
-
-nodo42->nodo45;
-
-nodo45->nodo46;
-
-nodo46->nodo47;
-
-nodo33->nodo48;
-
-nodo48->nodo49;
-
-nodo48->nodo50;
-
-nodo48->nodo51;
-
-nodo51->nodo52;
-
-nodo52->nodo53;
-
-nodo33->nodo54;
-
-nodo54->nodo55;
-
-nodo54->nodo56;
-
-nodo54->nodo57;
-
-nodo57->nodo58;
-
-nodo58->nodo59;
-
-nodo58->nodo60;
-
-nodo0->nodo61;
-
-nodo61->nodo62;
-
-nodo61->nodo63;
-
-nodo61->nodo64;
-
-nodo64->nodo65;
-
-nodo65->nodo66;
-
-nodo66->nodo67;
-
-nodo65->nodo68;
-
-nodo65->nodo69;
-
-nodo69->nodo70;
-
-nodo64->nodo71;
-
-nodo71->nodo72;
-
-nodo72->nodo73;
-
-nodo73->nodo74;
-
-nodo72->nodo75;
-
-nodo72->nodo76;
-
-nodo76->nodo77;
-
-nodo71->nodo78;
-
-nodo78->nodo79;
-
-nodo79->nodo80;
-
-nodo80->nodo81;
-
-nodo79->nodo82;
-
-nodo79->nodo83;
-
-nodo83->nodo84;
-
-nodo71->nodo85;
-
-nodo71->nodo86;
-
-nodo86->nodo87;
-
-nodo87->nodo88;
-
-nodo87->nodo89;
-
-nodo89->nodo90;
-
-nodo89->nodo91;
-
-nodo89->nodo92;
-
-nodo87->nodo93;
-
-nodo93->nodo94;
-
-nodo94->nodo95;
-
-nodo93->nodo96;
-
-nodo96->nodo97;
-
-nodo97->nodo98;
-
-nodo96->nodo99;
-
-nodo96->nodo100;
-
-nodo100->nodo101;
-
-nodo93->nodo102;
-
-nodo102->nodo103;
-
-nodo103->nodo104;
-
-nodo102->nodo105;
-
-nodo102->nodo106;
-
-nodo106->nodo107;
-
-nodo86->nodo108;
-
-nodo108->nodo109;
-
-nodo109->nodo110;
-
-nodo110->nodo111;
-
-nodo109->nodo112;
-
-nodo109->nodo113;
-
-nodo113->nodo114;
-
-nodo108->nodo115;
-
-nodo115->nodo116;
-
-nodo116->nodo117;
-
-nodo117->nodo118;
-
-nodo116->nodo119;
-
-nodo116->nodo120;
-
-nodo120->nodo121;
-
-nodo108->nodo122;
-
-nodo108->nodo123;
-
-nodo123->nodo124;
-
-nodo124->nodo125;
-
-nodo125->nodo126;
-
-nodo124->nodo127;
-
-nodo124->nodo128;
-
-nodo128->nodo129;
-
-nodo129->nodo130;
-
-nodo129->nodo131;
-
-nodo131->nodo132;
-
-nodo132->nodo133;
-
-nodo123->nodo134;
-
-nodo134->nodo135;
-
-nodo134->nodo136;
-
-nodo136->nodo137;
-
-nodo137->nodo138;
-
-nodo136->nodo139;
-
-nodo139->nodo140;
-
-nodo140->nodo141;
-
-nodo139->nodo142;
-
-nodo139->nodo143;
-
-nodo143->nodo144;
-
-nodo136->nodo145;
-
-nodo145->nodo146;
-
-nodo136->nodo147;
-
-nodo147->nodo148;
-
-nodo123->nodo149;
-
-nodo149->nodo150;
-
-nodo149->nodo151;
-
-nodo149->nodo152;
-
-nodo152->nodo153;
-
-nodo153->nodo154;
-
-nodo152->nodo155;
-
-nodo152->nodo156;
-
-nodo156->nodo157;
-
-nodo0->nodo158;
-
-nodo158->nodo159;
-
-nodo158->nodo160;
-
-nodo158->nodo161;
-
-nodo161->nodo162;
-
-nodo162->nodo163;
-
-nodo162->nodo164;
-
-nodo158->nodo165;
-
-nodo158->nodo166;
-
-nodo166->nodo167;
-
-nodo167->nodo168;
-
-nodo168->nodo169;
-
-nodo167->nodo170;
-
-nodo167->nodo171;
-
-nodo171->nodo172;
-
-nodo166->nodo173;
-
-nodo173->nodo174;
-
-nodo174->nodo175;
-
-nodo175->nodo176;
-
-nodo174->nodo177;
-
-nodo174->nodo178;
-
-nodo178->nodo179;
+nodo35->nodo39;
 
 }

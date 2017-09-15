@@ -67,9 +67,9 @@ public interface SintacticoTablasConstants {
   /** RegularExpression Id. */
   int TEXT = 34;
   /** RegularExpression Id. */
-  int ID = 35;
+  int CADENA = 35;
   /** RegularExpression Id. */
-  int RUTA = 36;
+  int ID = 36;
   /** RegularExpression Id. */
   int DIGITO = 37;
   /** RegularExpression Id. */
@@ -115,8 +115,8 @@ public interface SintacticoTablasConstants {
     "\"date\"",
     "\"datetime\"",
     "\"text\"",
+    "<CADENA>",
     "<ID>",
-    "<RUTA>",
     "<DIGITO>",
     "<LETRA>",
     "\"=\"",

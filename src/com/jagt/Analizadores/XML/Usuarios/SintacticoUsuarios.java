@@ -52,9 +52,9 @@ public class SintacticoUsuarios implements SintacticoUsuariosConstants {
     id = jj_consume_token(ID);
     jj_consume_token(FIN_NOMBRE);
     jj_consume_token(INICIO_PASS);
-    pass = jj_consume_token(TODOS);
+    pass = jj_consume_token(CADENA);
     jj_consume_token(FIN_PASS);
-                             u = new Usuario(id.image,pass.image);
+                             u = new Usuario(id.image,pass.image.replaceAll("\u005c"",""));
          {if (true) return u;}
     throw new Error("Missing return statement in function");
   }
@@ -191,7 +191,7 @@ public class SintacticoUsuarios implements SintacticoUsuariosConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[24];
+    boolean[] la1tokens = new boolean[23];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -205,7 +205,7 @@ public class SintacticoUsuarios implements SintacticoUsuariosConstants {
         }
       }
     }
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 23; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

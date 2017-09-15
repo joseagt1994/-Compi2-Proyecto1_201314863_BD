@@ -52,7 +52,6 @@ TOKEN:{
     |   <LETRA: ["a"-"z","A"-"Z"] >
     |   <FIN: ">" >
     |   <IGUAL: "=" >
-    |   <TODOS: ~[] >
  
 }
 
@@ -86,7 +85,7 @@ Usuario cuerpo():
         id = <ID>               
         <FIN_NOMBRE>
         <INICIO_PASS>
-        pass = <TODOS>           
-        <FIN_PASS>          {u = new Usuario(id.image,pass.image);}
+        pass = <CADENA>         
+        <FIN_PASS>          {u = new Usuario(id.image,pass.image.replaceAll("\"",""));}
         {return u;}
 }

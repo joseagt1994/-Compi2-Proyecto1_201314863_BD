@@ -1,0 +1,20 @@
+<Row>
+	<id>1</id>
+	<nombre>"USAC"</nombre>
+	<direccion>"9 ave."</direccion>
+</Row>
+<Row>
+	<id>2</id>
+	<nombre>"USAC"</nombre>
+	<direccion>"9 ave."</direccion>
+</Row>
+<Row>
+	<id>3</id>
+	<nombre>"Proveedor 2"</nombre>
+	<direccion>"14 ave."</direccion>
+</Row>
+<Row>
+	<id>4</id>
+	<nombre>"Proveedor 2"</nombre>
+	<direccion>"9 ave."</direccion>
+</Row>

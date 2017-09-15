@@ -1,6 +1,12 @@
 <DB>
 	<nombre>Prueba</nombre>
-	<path>C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\Prueba.usac</path>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\Prueba.usac"</path>
+	<permisos>
+		<usuario>0</usuario>
+	</permisos>
+</DB><DB>
+	<nombre>Ejemplo2</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\Ejemplo2.usac"</path>
 	<permisos>
 		<usuario>0</usuario>
 	</permisos>

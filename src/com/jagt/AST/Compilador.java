@@ -6,7 +6,9 @@
 package com.jagt.AST;
 
 import com.jagt.GUI.Servidor;
+import com.jagt.Logica.Registro;
 import com.jagt.Logica.SistemaBaseDatos;
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 /**
@@ -19,13 +21,26 @@ public class Compilador {
     SistemaBaseDatos bd = SistemaBaseDatos.getInstance();
     String[] lineas;
     
+    // Variables
+    LinkedList<Hashtable<String,Objeto>> variables;
+    
+    // Temporales
+    Hashtable<String,Objeto> temporales; // -> Tabla,Columna
+    int numeroTablas = 0;
+    
     public Compilador(NodoParser nodo){
-        ejecutarSentencias(nodo);
+        this.variables = new LinkedList<Hashtable<String,Objeto>>();
         lineas = SistemaBaseDatos.textoCompilado.split("\n");
+        ejecutarSentencias(nodo);
     }
     
     private void ejecutarSentencias(NodoParser nodo){
         switch(nodo.nombre()){
+            case "CUERPOS":
+                for(NodoParser hijo : nodo.hijos()){
+                    ejecutarSentencias(hijo);
+                }
+                break;
             case "CREAR":
                 crear(nodo);
                 break;
@@ -37,22 +52,46 @@ public class Compilador {
             case "OTORGAR":
             case "DENEGAR":
             case "BACKUP":
+                // MINIMO!
+                break;
             case "RESTAURAR":
+                // MINIMO!
+                break;
             case "INSERTAR":
+                // MINIMO!
+                insertar(nodo);
+                break;
             case "ELIMINAR":
             case "SELECCIONAR":
+                // MINIMO!
+                evaluarSeleccionar(nodo);
+                break;
             case "ACTUALIZAR":
+                // MINIMO!
+                break;
             case "BORRAR":
             case "DECLARAR":
+                // MINIMO!
+                break;
             case "ASIGNAR":
+                // MINIMO!
+                break;
             case "IMPRIMIR":
+                // MINIMO!
+                break;
             case "LLAMADA":
             case "RETORNO":
             case "DETENER":
             case "SI":
+                // MINIMO!
+                break;
             case "SELECCIONA":
+                // MINIMO!
+                break;
             case "PARA":
             case "MIENTRAS":
+                // MINIMO!
+                break;
             case "CONTAR":
         }
     }
@@ -102,6 +141,7 @@ public class Compilador {
             // Guardar parametros si tiene
             nuevo.setParametros(getParametros(nodo.hijos().get(2)));
         }else{
+            nuevo.setParametros(new LinkedList<Parametro>());
             i_tipo = 2;
         }
         if(nodo.hijos().get(0).nombre().equals("FUNCION")){
@@ -110,6 +150,8 @@ public class Compilador {
             if(nodo.hijos().get(i_tipo).nombre().equals("ID")){
                 nuevo.setObjeto(nodo.hijos().get(i_tipo).valor());
             }
+        }else{
+            nuevo.setTipo(-1);
         }
         return nuevo;
     }
@@ -117,7 +159,7 @@ public class Compilador {
     // Guardar sentencias
     private String getSentencias(int inicio,int fin){
         String sentencias = "";
-        for(int i = inicio+1; i < fin+1; i++){
+        for(int i = inicio; i < fin-1; i++){
             sentencias += lineas[i]+"\n";
         }
         return sentencias;
@@ -215,13 +257,100 @@ public class Compilador {
         ************ RESTAURAR ************
     */
     
+    /*
+        ************ INSERTAR ************
+    */
+    private void insertar(NodoParser nodo){
+        if(nodo.hijos().size() == 2){
+            // Normal!
+            insertarNormal(nodo.hijos().get(0).valor(),nodo.hijos().get(1));
+        }else{
+            // Especial!
+            insertarEspecial(nodo.hijos().get(0).valor(),nodo.hijos().get(1),nodo.hijos().get(2));
+        }
+    }
     
+    // Insertar de forma normal
+    private void insertarNormal(String nombre,NodoParser exps){
+        // INSERTAR -> ID EXPRESIONES
+        Registro nuevo = new Registro();
+        for(NodoParser exp : exps.hijos()){
+            nuevo.agregarColumna(evaluarExpresion(exp));
+        }
+        bd.insertarEnTabla(nombre, nuevo);
+    }
     
+    // Insertar de forma especial
+    private void insertarEspecial(String nombre,NodoParser lista,NodoParser exps){
+        // INSERTAR -> ID LISTA_IDS EXPRESIONES
+        // Llenar lista de IDS
+        LinkedList<String> ids = new LinkedList<String>();
+        for(NodoParser id : lista.hijos()){
+            ids.add(id.valor());
+        }
+        // Llenar registro
+        Registro nuevo = new Registro();
+        for(NodoParser exp : exps.hijos()){
+            nuevo.agregarColumna(evaluarExpresion(exp));
+        }
+        bd.insertarEnTablaEspecial(nombre, ids, nuevo);
+    }
     
+    /*
+        ************ SELECCIONAR ************
+    */
+    public void evaluarSeleccionar(NodoParser nodo){
+        // SELECCIONAR -> (TODO | LISTA_ACCESO) IDS (EXP)? (ORDENAR)?
+        // Llenar lista de IDS
+        LinkedList<String> ids = new LinkedList<String>();
+        for(NodoParser id : nodo.hijos().get(1).hijos()){
+            ids.add(id.valor());
+        }
+        numeroTablas = ids.size();
+        LinkedList<Registro> registros = bd.realizarProductoCartesiano(ids);
+        imprimirColumnas(registros);
+        if(nodo.hijos().size() > 2){
+            // DONDE
+            LinkedList<Registro> registrosDonde = new LinkedList<Registro>();
+            for(Registro r : registros){
+                // Guardar en temporales
+                temporales = new Hashtable<String,Objeto>();
+                guardarTemporales(r);
+                // Evaluar expresion
+                if(evaluarExpresion(nodo.hijos().get(2)).bool){
+                    registrosDonde.add(r);
+                }
+            }
+            System.out.println();
+            System.out.println("************ SELECCIONAR CON DONDE ************");
+            imprimirColumnas(registrosDonde);
+            if(nodo.hijos().size() == 4){
+                // ORDENAR
+            }
+        }
+    }
     
+    // Guardar temporales
+    private void guardarTemporales(Registro r){
+        for(Objeto obj : r.getColumnas()){
+            if(numeroTablas == 1){
+                temporales.put(obj.getNombre(), obj);
+            }else{
+                temporales.put(obj.tabla+","+obj.getNombre(), obj);
+            }
+        }
+    }
     
-    
-    
+    // Imprimir el Seleccionar
+    public void imprimirColumnas(LinkedList<Registro> registros){
+        System.out.println("******** SELECCIONAR *******");
+        for(Registro r : registros){
+            for(Objeto obj : r.getColumnas()){
+                System.out.print(obj.tabla+"."+obj.texto+" ");
+            }
+            System.out.println();
+        }
+    }
     
     /*********************************************************
      * EVALUAR EXPRESION
@@ -256,7 +385,7 @@ public class Compilador {
                     case "doble":
                         return new Objeto(Double.parseDouble(nodo.hijos().get(0).valor()));
                     case "cadena":
-                        return new Objeto(nodo.hijos().get(0).valor());
+                        return new Objeto(nodo.hijos().get(0).valor().replaceAll("\"", ""));
                     case "fecha":
                         return new Objeto(SistemaBaseDatos.DATE,nodo.hijos().get(0).valor());
                     case "fechahora":
@@ -270,14 +399,51 @@ public class Compilador {
                     case "LLAMADA":
                         break;
                     case "ACCESO":
-                        break;
-                    case "ID":
-                        break;
+                        // ACCESO -> (ID | VAR)(. ID)*
+                        return getAcceso(nodo.hijos().get(0));
                     default:
                         return evaluarExpresion(nodo.hijos().get(0));
                 }
         }
         return null;
+    }
+    
+    /*
+        ************ ACCESO ************
+    */
+    private Objeto getAcceso(NodoParser nodo){
+        // Al menos 1, puede ser VAR o ID
+        NodoParser hijo_1 = nodo.hijos().get(0);
+        if(hijo_1.nombre().equals("VAR")){
+            // buscar el nombre de la variable
+        }else{
+            String llave = hijo_1.valor();
+            if(numeroTablas == 1){
+                if(nodo.hijos().size() > 1){
+                    llave += ","+nodo.hijos().get(1).valor();
+                }
+                return temporales.get(llave);
+            }else{
+                llave += ","+nodo.hijos().get(1).valor();
+                if(nodo.hijos().size() == 3){
+                    // Buscar tabla.columna.atributo
+                    return buscarAtributo(temporales.get(llave),nodo.hijos().get(2).valor());
+                }else{
+                    return temporales.get(llave);
+                }
+            }
+        }
+        return new Objeto(0);
+    }
+    
+    // Buscar atributo
+    private Objeto buscarAtributo(Objeto objeto,String nombre){
+        for(Objeto atributo : objeto.getAtributos()){
+            if(atributo.getNombre().equals(nombre)){
+                return atributo;
+            }
+        }
+        return new Objeto(0);
     }
     
     /*
@@ -369,13 +535,13 @@ public class Compilador {
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATE:
-                    if(izq.getFecha().compareTo(der.getFecha()) > 0){
+                    if(izq.fecha.compareTo(der.fecha) > 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATETIME:
-                    if(izq.getFecha().compareTo(der.getFecha()) > 0){
+                    if(izq.fecha.compareTo(der.fecha) > 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
@@ -419,7 +585,7 @@ public class Compilador {
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATE:
-                    if(izq.getFecha().compareTo(der.getFecha()) >= 0){
+                    if(izq.fecha.compareTo(der.fecha) >= 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
@@ -469,7 +635,7 @@ public class Compilador {
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATE:
-                    if(izq.getFecha().compareTo(der.getFecha()) < 0){
+                    if(izq.fecha.compareTo(der.fecha) < 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
@@ -519,13 +685,13 @@ public class Compilador {
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATE:
-                    if(izq.getFecha().compareTo(der.getFecha()) <= 0){
+                    if(izq.fecha.compareTo(der.fecha) <= 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATETIME:
-                    if(izq.getFecha().compareTo(der.getFecha()) <= 0){
+                    if(izq.fecha.compareTo(der.fecha) <= 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
@@ -535,7 +701,7 @@ public class Compilador {
         return null;
     }
     
-    private Objeto evaluarIGUAL(Objeto izq,Objeto der){
+    public static Objeto evaluarIGUAL(Objeto izq,Objeto der){
         int tizq = izq.getTipo();
         int tder = der.getTipo();
         if(tizq == tder){
@@ -579,7 +745,7 @@ public class Compilador {
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATETIME:
-                    if(izq.getFecha().compareTo(der.getFecha()) == 0){
+                    if(izq.fecha.compareTo(der.fecha) == 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
@@ -627,13 +793,13 @@ public class Compilador {
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATE:
-                    if(izq.getFecha().compareTo(der.getFecha()) != 0){
+                    if(izq.fecha.compareTo(der.fecha) != 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);
                     }
                 case SistemaBaseDatos.DATETIME:
-                    if(izq.getFecha().compareTo(der.getFecha()) != 0){
+                    if(izq.fecha.compareTo(der.fecha) != 0){
                         return new Objeto(true);
                     }else{
                         return new Objeto(false);

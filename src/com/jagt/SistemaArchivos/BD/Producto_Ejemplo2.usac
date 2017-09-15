@@ -1,0 +1,12 @@
+<Row>
+	<id>1</id>
+	<nombre>"Producto 1"</nombre>
+	<precio>14.56</precio>
+	<id_proveedor>1</id_proveedor>
+</Row>
+<Row>
+	<id>2</id>
+	<nombre>"Producto 2"</nombre>
+	<precio>100.0</precio>
+	<id_proveedor>2</id_proveedor>
+</Row>

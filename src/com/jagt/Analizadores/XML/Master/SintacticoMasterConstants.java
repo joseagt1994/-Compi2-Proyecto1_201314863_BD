@@ -33,15 +33,13 @@ public interface SintacticoMasterConstants {
   /** RegularExpression Id. */
   int FIN_USUARIO = 17;
   /** RegularExpression Id. */
-  int RUTA = 18;
+  int ID = 18;
   /** RegularExpression Id. */
-  int ID = 19;
+  int NUMERO = 19;
   /** RegularExpression Id. */
-  int NUMERO = 20;
+  int DIGITO = 20;
   /** RegularExpression Id. */
-  int DIGITO = 21;
-  /** RegularExpression Id. */
-  int LETRA = 22;
+  int LETRA = 21;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -56,8 +54,8 @@ public interface SintacticoMasterConstants {
     "\"\\f\"",
     "\"\\b\"",
     "<CADENA>",
-    "\"<BD>\"",
-    "\"</BD>\"",
+    "\"<DB>\"",
+    "\"</DB>\"",
     "\"<nombre>\"",
     "\"</nombre>\"",
     "\"<path>\"",
@@ -66,7 +64,6 @@ public interface SintacticoMasterConstants {
     "\"</permisos>\"",
     "\"<usuario>\"",
     "\"</usuario>\"",
-    "<RUTA>",
     "<ID>",
     "<NUMERO>",
     "<DIGITO>",

@@ -145,7 +145,7 @@ Metodo procedimiento():
         params = parametros()   {nuevo.setParametros(params);}
         <FIN_PARAMS>
         <INICIO_SRC>
-        ins = instrucciones()   {nuevo.setInstrucciones(ins);}
+        ins = lista_sentencias()   {nuevo.setInstrucciones(ins);}
         <FIN_SRC>
         <FIN_PROC>
         {return nuevo;}
@@ -166,7 +166,7 @@ Parametro parametro():
         <MENOR>
         nodo = tipo()
         <MAYOR>
-        t = <ID>        {p = new Parametro(t.image); p.guardarTipo(nodo);}
+        t = <VAR>        {p = new Parametro(t.image); p.guardarTipo(nodo);}
         <MENOR>
         "/"
         tipo()
@@ -178,12 +178,6 @@ void Empty():
 {}
 {
     {System.out.println("epsilon");}
-}
-
-NodoParser instrucciones():
-{NodoParser ins;}
-{
-        ins = sentencia()       {return ins;}
 }
 
 NodoParser sentencia():

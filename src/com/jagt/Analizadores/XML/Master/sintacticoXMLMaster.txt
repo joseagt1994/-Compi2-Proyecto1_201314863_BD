@@ -37,8 +37,8 @@ SKIP:{
 TOKEN:{
     
         <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    
-    |   <INICIO_BD : "<BD>" >
-    |   <FIN_BD: "</BD>" >
+    |   <INICIO_BD : "<DB>" >
+    |   <FIN_BD: "</DB>" >
     |   <INICIO_NOMBRE : "<nombre>" >
     |   <FIN_NOMBRE: "</nombre>" >
     |   <INICIO_RUTA : "<path>" >
@@ -47,7 +47,6 @@ TOKEN:{
     |   <FIN_PERMISOS: "</permisos>" >
     |   <INICIO_USUARIO : "<usuario>" >
     |   <FIN_USUARIO: "</usuario>" >
-    |   <RUTA: (<LETRA>)"://"(<ID>"//")*(<ID>)".usac" >
     |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
     |   <NUMERO: (<DIGITO>)+ >
     |   <DIGITO: ["0"-"9"] >
@@ -81,7 +80,7 @@ DataBase cuerpo():
         id = <ID>               {bd.setNombre(id.image);}
         <FIN_NOMBRE>
         <INICIO_RUTA>
-        ruta = <RUTA>           {bd.setRuta(ruta.image);}
+        ruta = <CADENA>           {bd.setRuta(ruta.image);}
         <FIN_RUTA>
         <INICIO_PERMISOS>
         usuarios = permisos()   {bd.setPermisos(usuarios);}
