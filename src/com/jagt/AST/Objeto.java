@@ -17,7 +17,7 @@ import java.util.LinkedList;
  */
 public class Objeto {
     
-    int tipo;
+    public int tipo;
     // Atributos para el manejo de expresiones!
     public int numero;
     public double decimal;

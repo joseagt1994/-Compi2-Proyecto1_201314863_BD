@@ -378,7 +378,7 @@ public class SistemaBaseDatos {
                                         nueva += "\t<"+nc+">"+(getSiguiente(registros,i).numero+1)+"</"+nc+">\n";
                                     }
                                 }else{
-                                    nueva += "\t\t<"+nc+">\" \"</"+nc+">\n";
+                                    nueva += "\t<"+nc+">\" \"</"+nc+">\n";
                                 }
                             }
                         }else{
@@ -480,6 +480,75 @@ public class SistemaBaseDatos {
     }
     
     /**************************** ACTUALIZAR *************************/
+    public String verificarCampos(String nombre,LinkedList<String> campos,Registro nuevo){
+        Tabla tabla = buscarTabla(nombre);
+        if(tabla != null){
+            // Insertar el registro en esa tabla
+            if(campos.size() == nuevo.getColumnas().size()){
+                // Verificar tipos y verificar que se pueda insertar
+                if(tabla.verificarCampos(campos, nuevo)){
+                    return "correcto";
+                }else{
+                    return "error";
+                }
+            }else{
+                return "error";
+            }
+        }else{
+            return "error";
+        }
+    }
+    
+    // Reescribir los registros!
+    public void modificarRegistro(Tabla tabla,LinkedList<Registro> nuevos){
+        String text = "";
+        String ruta = Servidor.rutaBDS+tabla.getNombre()+"_"+Servidor.bd_actual+".usac";
+        master.escribir(ruta, text);
+        for(Registro nuevo : nuevos){
+            String nueva = "<Row>\n"; // cadena para escribir en el archivo de registro
+            LinkedList<Registro> registros = getRegistro(tabla.getNombre());
+            for(int i = 0; i < tabla.getCampos().size(); i++){
+                Campo campo = tabla.getCampos().get(i);
+                String nc = campo.getNombre();
+                Objeto objeto = nuevo.getColumnas().get(i);
+                if(objeto.getTipo() == OBJETO){
+                    // Es objeto!
+                    nueva += "\t<"+nc+">\n";
+                    // Recorrer atributos!
+                    for(Objeto a : objeto.getAtributos()){
+                        String na = a.getNombre();
+                        nueva += "\t\t<"+na+">"+a.texto+"</"+na+">\n";
+                    }
+                    nueva += "</"+nc+">\n";
+                }else{
+                    // No es objeto!
+                    if(campo.isAutoincrementable()){
+                        if(campo.getTipo() == ENTERO){
+                            nueva += "\t<"+nc+">"+(getSiguiente(registros,i).numero+1)+"</"+nc+">\n";
+                        }
+                    }else if(campo.isPrimaria() || campo.isUnica()){
+                        if(!datoExistente(registros,i,objeto)){
+                            nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                        }else{
+                            // Error! El dato a ingresar no es unico.. ya existe en el registro
+                        }
+                    }else if(campo.isForanea()){
+                        if(getForanea(campo.getTforanea(),nuevo.getColumnas().get(i))){
+                            nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                        }
+                    }else{
+                        if(campo.getTipo() == TEXTO){
+                            nueva += "\t<"+nc+">\""+objeto.texto+"\"</"+nc+">\n";
+                        }else{
+                            nueva += "\t<"+nc+">"+objeto.texto+"</"+nc+">\n";
+                        }
+                    }
+                }
+            }
+            nueva += "</Row>\n";
+            master.modificar(ruta, nueva);
+        }
+    }
     
     /**************************** BORRAR *************************/
     

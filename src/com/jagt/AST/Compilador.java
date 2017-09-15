@@ -31,7 +31,9 @@ public class Compilador {
     public Compilador(NodoParser nodo){
         this.variables = new LinkedList<Hashtable<String,Objeto>>();
         lineas = SistemaBaseDatos.textoCompilado.split("\n");
+        aumentarAmbito();
         ejecutarSentencias(nodo);
+        disminuirAmbito();
     }
     
     private void ejecutarSentencias(NodoParser nodo){
@@ -68,10 +70,12 @@ public class Compilador {
                 break;
             case "ACTUALIZAR":
                 // MINIMO!
+                actualizar(nodo);
                 break;
             case "BORRAR":
             case "DECLARAR":
                 // MINIMO!
+                declarar(nodo);
                 break;
             case "ASIGNAR":
                 // MINIMO!
@@ -94,6 +98,58 @@ public class Compilador {
                 break;
             case "CONTAR":
         }
+    }
+    
+    /*********************************************************
+     * MANEJO DE VARIABLES Y AMBITOS
+     *********************************************************/
+    private void aumentarAmbito(){
+        this.variables.addFirst(new Hashtable<String,Objeto>());
+    }
+    
+    private void disminuirAmbito(){
+        this.variables.removeFirst();
+    }
+    
+    // Declarar una lista de variables y asignarle un objeto
+    private void declararVariables(LinkedList<String> nombres,Objeto dato){
+        for(String nombre : nombres){
+            if(buscarVariable(nombre) == null){
+                this.variables.getFirst().put(nombre, dato);
+            }else{
+                // ERROR! La variable ya existe!
+            }
+        }
+    }
+    
+    // Modificar el valor de una variable
+    private void modificarVariable(NodoParser nodo,Objeto dato){
+        // ACCESO -> VAR (.ID)?
+        String nombre = nodo.hijos().get(0).valor();
+        Objeto var = buscarVariable(nombre);
+        if(var != null){
+            if(var.getTipo() == dato.getTipo()){
+                for(Hashtable<String,Objeto> ambito : variables){
+                    if(ambito.containsKey(nombre)){
+                        ambito.put(nombre, dato);
+                    }
+                }
+            }else{
+                // ERROR! No coincide con el tipo!
+            }
+        }else{
+            // ERROR! La variable no existe!
+        }
+    }
+    
+    // Buscar variable
+    private Objeto buscarVariable(String nombre){
+        for(Hashtable<String,Objeto> ambito : variables){
+            if(ambito.containsKey(nombre)){
+                return ambito.get(nombre);
+            }
+        }
+        return null;
     }
     
     /*********************************************************
@@ -299,7 +355,7 @@ public class Compilador {
     /*
         ************ SELECCIONAR ************
     */
-    public void evaluarSeleccionar(NodoParser nodo){
+    private void evaluarSeleccionar(NodoParser nodo){
         // SELECCIONAR -> (TODO | LISTA_ACCESO) IDS (EXP)? (ORDENAR)?
         // Llenar lista de IDS
         LinkedList<String> ids = new LinkedList<String>();
@@ -352,10 +408,91 @@ public class Compilador {
         }
     }
     
+    /*
+        ************ ACTUALIZAR ************
+    */
+    private void actualizar(NodoParser nodo){
+        // ACTUALIZAR -> ID LISTA_IDS EXPRESIONES (EXP_DONDE)?
+        // Llenar lista de IDS
+        String tabla = nodo.hijos().get(0).valor();
+        LinkedList<String> ids = new LinkedList<String>();
+        for(NodoParser id : nodo.hijos().get(1).hijos()){
+            ids.add(id.valor());
+        }
+        // Llenar registro
+        Registro nuevo = new Registro();
+        for(NodoParser exp : nodo.hijos().get(2).hijos()){
+            nuevo.agregarColumna(evaluarExpresion(exp));
+        }
+        String mensaje = bd.verificarCampos(tabla, ids, nuevo);
+        if(mensaje.equals("correcto")){
+            // Todo bien!
+            LinkedList<Registro> registros = bd.getRegistro(tabla);
+            numeroTablas = 1;
+            for(Registro r : registros){
+                temporales = new Hashtable<String,Objeto>();
+                guardarTemporales(r);
+                for(int i = 0; i < ids.size(); i++){
+                    if(nodo.hijos().size() == 4){
+                        if(evaluarExpresion(nodo.hijos().get(3)).bool){
+                            r.modificarColumna(ids.get(i), nuevo.getColumnas().get(i));
+                        }
+                    }else{
+                        r.modificarColumna(ids.get(i), nuevo.getColumnas().get(i));
+                    }
+                }
+            }
+            Tabla t = bd.buscarTabla(tabla);
+            bd.modificarRegistro(t, registros);
+        }else{
+            // Error!
+        }
+    }
+    
+    /*********************************************************
+     * HERRAMIENTAS DEL COMPILADOR
+     *********************************************************/
+    // Declarar
+    private void declarar(NodoParser nodo){
+        // DECLARAR -> LISTA_IDS TIPO (EXP)?
+        // Llenar listado de variables
+        LinkedList<String> nombres = new LinkedList<String>();
+        for(NodoParser var : nodo.hijos().get(0).hijos()){
+            nombres.add(var.valor());
+        }
+        int tipo = bd.obtenerTipo(nodo.hijos().get(1).valor());
+        Objeto obj = new Objeto(0);
+        obj.tipo = tipo;
+        if(nodo.hijos().size() == 2){
+            if(tipo == SistemaBaseDatos.OBJETO){
+                // Instancia!
+                
+            }else{
+                // Normal!
+                declararVariables(nombres,obj);
+            }
+        }else{
+            // Tiene expresion!
+            if(tipo != SistemaBaseDatos.OBJETO){
+                // No es una instancia
+                Objeto exp = evaluarExpresion(nodo.hijos().get(2));
+                if(exp.getTipo() == tipo){
+                    declararVariables(nombres,exp);
+                }else{
+                    // No son del mismo tipo
+                }
+            }else{
+                // ERROR! No se puede declarar y asignar una instancia
+            }
+        }
+    }
+    
+    // Asignar
+    
     /*********************************************************
      * EVALUAR EXPRESION
      *********************************************************/
-    private Objeto evaluarExpresion(NodoParser nodo){
+    protected Objeto evaluarExpresion(NodoParser nodo){
         switch(nodo.hijos().size()){
             case 3:
                 // 3 hijos

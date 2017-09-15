@@ -169,8 +169,8 @@ NodoParser sentencia():
         ";"                     {return sen;}
     |   sen = actualizar()      {return sen;}
     |   sen = borrar()          {return sen;}
-    |   sen = declarar()        {return sen;}
-    |   sen = asignar()         {return sen;}       
+    |   sen = declarar()        {return sen;}   
+    |   sen = asignar()         {return sen;}   
     |   sen = imprimir()        {return sen;}
     |   sen = llamada()         {return sen;}
         ";"
@@ -262,17 +262,15 @@ NodoParser imprimir():
 }
 
 NodoParser asignar():
-{Token v,id; NodoParser nodo = new NodoParser("ASIGNAR","",0,0); NodoParser acceso,exp;}
+{NodoParser nodo = new NodoParser("ASIGNAR","",0,0); NodoParser acceso,exp; Token id,id2;}
 {
-        v = <VAR>               {nodo.hijos().add(new NodoParser("VAR",v.image,v.beginLine,v.beginColumn));}
-        {acceso = new NodoParser("ACCESO","",0,0);}
+        id = <VAR>                  {acceso = new NodoParser("ACCESO","",0,0); acceso.hijos().add(new NodoParser("VAR",id.image,id.beginLine,id.beginColumn));}
         (
-            <PUNTO>
-            id = <ID>           {acceso.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+            "."
+            id2 = <ID>              {acceso.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));}
         )?
-        {nodo.hijos().add(acceso);}
         <ASIGNA>
-        exp = expresion()       {nodo.hijos().add(exp);}
+        exp = expresion()           {nodo.hijos().add(acceso); nodo.hijos().add(exp);}
         ";"
         {return nodo;}
 }
@@ -463,8 +461,19 @@ NodoParser tipo_eliminar():
         id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return tipo;}
 }
 
+NodoParser accesar():
+{NodoParser nodo; Token id,id2;}
+{
+        id = <VAR>                      {nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("VAR",id.image,id.beginLine,id.beginColumn));}
+        (
+            "."
+            id2 = <ID>                  {nodo.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));}
+        )?
+        {return nodo;}
+}
+
 NodoParser llamada():
-{NodoParser nodo,temp,lista; Token id;}
+{NodoParser nodo,temp,exp,lista; Token id,id2;}
 {
         id = <ID>                       {nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
         (
@@ -473,12 +482,6 @@ NodoParser llamada():
                                             nodo.hijos().addFirst(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
                                         }
         )?                              
-        {return nodo;}
-    |   id = <VAR>                      {nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
-        (
-            "."
-            id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
-        )?
         {return nodo;}
 }
 
@@ -814,6 +817,7 @@ NodoParser tipoValor():
     |   t = <VERDADERO>     {tipo = new NodoParser("boolean","1",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   t = <FALSO>         {tipo = new NodoParser("boolean","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   tipoL = llamada()   {nodo.hijos().add(tipoL); return nodo;}
+    |   tipoL = accesar()   {nodo.hijos().add(tipoL); return nodo;}
 }
 
 NodoParser control():

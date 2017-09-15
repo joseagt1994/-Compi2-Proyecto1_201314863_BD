@@ -41,4 +41,15 @@ public class Registro {
         this.columnas = columnas;
     }
     
+    public void modificarColumna(String nombre,Objeto objeto){
+        objeto.setNombre(nombre);
+        for(int i = 0; i < columnas.size(); i++){
+            if(columnas.get(i).getNombre().equals(nombre)){
+                columnas.remove(i);
+                columnas.add(i, objeto);
+                break;
+            }
+        }
+    }
+    
 }

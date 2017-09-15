@@ -13,32 +13,6 @@ nodo10[label="ID nombre"];
 nodo11[label="IDS"];
 nodo12[label="ID Producto"];
 nodo13[label="ID Proveedor"];
-nodo14[label="EXP"];
-nodo15[label="EXP"];
-nodo16[label="EXP"];
-nodo17[label="EXP"];
-nodo18[label="ACCESO"];
-nodo19[label="ID Producto"];
-nodo20[label="ID id_proveedor"];
-nodo21[label="OPELOGICA =="];
-nodo22[label="EXP"];
-nodo23[label="ACCESO"];
-nodo24[label="ID Proveedor"];
-nodo25[label="ID id"];
-nodo26[label="OPELOGICA AND"];
-nodo27[label="EXP"];
-nodo28[label="EXP"];
-nodo29[label="ACCESO"];
-nodo30[label="ID Producto"];
-nodo31[label="ID precio"];
-nodo32[label="OPELOGICA >"];
-nodo33[label="EXP"];
-nodo34[label="doble 50.00"];
-nodo35[label="ORDENAR Ordenar_Por"];
-nodo36[label="ACCESO"];
-nodo37[label="ID Producto"];
-nodo38[label="ID precio"];
-nodo39[label="ASC ASC"];
 nodo0->nodo1;
 
 nodo1->nodo2;
@@ -64,57 +38,5 @@ nodo3->nodo11;
 nodo11->nodo12;
 
 nodo11->nodo13;
-
-nodo3->nodo14;
-
-nodo14->nodo15;
-
-nodo15->nodo16;
-
-nodo16->nodo17;
-
-nodo17->nodo18;
-
-nodo18->nodo19;
-
-nodo18->nodo20;
-
-nodo16->nodo21;
-
-nodo16->nodo22;
-
-nodo22->nodo23;
-
-nodo23->nodo24;
-
-nodo23->nodo25;
-
-nodo15->nodo26;
-
-nodo15->nodo27;
-
-nodo27->nodo28;
-
-nodo28->nodo29;
-
-nodo29->nodo30;
-
-nodo29->nodo31;
-
-nodo27->nodo32;
-
-nodo27->nodo33;
-
-nodo33->nodo34;
-
-nodo3->nodo35;
-
-nodo35->nodo36;
-
-nodo36->nodo37;
-
-nodo36->nodo38;
-
-nodo35->nodo39;
 
 }
