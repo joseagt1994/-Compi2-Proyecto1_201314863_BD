@@ -2,17 +2,34 @@ digraph grafica {
 nodo0[label="CUERPOS"];
 nodo1[label="USAR USAR"];
 nodo2[label="ID Ejemplo2"];
-nodo3[label="SELECCIONAR SELECCIONAR"];
-nodo4[label="LISTA_ACCESO"];
-nodo5[label="ACCESO"];
-nodo6[label="ID Producto"];
-nodo7[label="ID nombre"];
+nodo3[label="DECLARAR"];
+nodo4[label="VARIABLES"];
+nodo5[label="VAR @d"];
+nodo6[label="ID Direccion"];
+nodo7[label="ASIGNAR"];
 nodo8[label="ACCESO"];
-nodo9[label="ID Proveedor"];
-nodo10[label="ID nombre"];
-nodo11[label="IDS"];
-nodo12[label="ID Producto"];
-nodo13[label="ID Proveedor"];
+nodo9[label="VAR @d"];
+nodo10[label="ID avenida"];
+nodo11[label="EXP"];
+nodo12[label="entero 9"];
+nodo13[label="ASIGNAR"];
+nodo14[label="ACCESO"];
+nodo15[label="VAR @d"];
+nodo16[label="ID calle"];
+nodo17[label="EXP"];
+nodo18[label="entero 19"];
+nodo19[label="ASIGNAR"];
+nodo20[label="ACCESO"];
+nodo21[label="VAR @d"];
+nodo22[label="ID nombre"];
+nodo23[label="EXP"];
+nodo24[label="cadena 1-72 Res. Las Orquideas"];
+nodo25[label="ASIGNAR"];
+nodo26[label="ACCESO"];
+nodo27[label="VAR @d"];
+nodo28[label="ID descripcion"];
+nodo29[label="EXP"];
+nodo30[label="cadena Zona 8 de Mixco"];
 nodo0->nodo1;
 
 nodo1->nodo2;
@@ -23,20 +40,54 @@ nodo3->nodo4;
 
 nodo4->nodo5;
 
-nodo5->nodo6;
+nodo3->nodo6;
 
-nodo5->nodo7;
+nodo0->nodo7;
 
-nodo4->nodo8;
+nodo7->nodo8;
 
 nodo8->nodo9;
 
 nodo8->nodo10;
 
-nodo3->nodo11;
+nodo7->nodo11;
 
 nodo11->nodo12;
 
-nodo11->nodo13;
+nodo0->nodo13;
+
+nodo13->nodo14;
+
+nodo14->nodo15;
+
+nodo14->nodo16;
+
+nodo13->nodo17;
+
+nodo17->nodo18;
+
+nodo0->nodo19;
+
+nodo19->nodo20;
+
+nodo20->nodo21;
+
+nodo20->nodo22;
+
+nodo19->nodo23;
+
+nodo23->nodo24;
+
+nodo0->nodo25;
+
+nodo25->nodo26;
+
+nodo26->nodo27;
+
+nodo26->nodo28;
+
+nodo25->nodo29;
+
+nodo29->nodo30;
 
 }

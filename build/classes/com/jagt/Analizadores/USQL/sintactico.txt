@@ -652,7 +652,7 @@ NodoParser crear_objeto():
 {NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser lista; Token t,id;}
 {
         t = <RES_OBJETO>            {nodo.hijos().add(new NodoParser("OBJETO",t.image,t.beginLine,t.beginColumn));}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",t.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
         "("
         lista = lista_atributos()   {nodo.hijos().add(lista);}
         ")"

@@ -1063,7 +1063,7 @@ public class Sintactico implements SintacticoConstants {
     t = jj_consume_token(RES_OBJETO);
                                      nodo.hijos().add(new NodoParser("OBJETO",t.image,t.beginLine,t.beginColumn));
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",t.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
     jj_consume_token(100);
     lista = lista_atributos();
                                      nodo.hijos().add(lista);

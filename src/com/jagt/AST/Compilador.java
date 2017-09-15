@@ -79,6 +79,8 @@ public class Compilador {
                 break;
             case "ASIGNAR":
                 // MINIMO!
+                Objeto dato = evaluarExpresion(nodo.hijos().get(1));
+                modificarVariable(nodo.hijos().get(0),dato);
                 break;
             case "IMPRIMIR":
                 // MINIMO!
@@ -127,15 +129,34 @@ public class Compilador {
         // ACCESO -> VAR (.ID)?
         String nombre = nodo.hijos().get(0).valor();
         Objeto var = buscarVariable(nombre);
+        Objeto atr = null;
+        if(nodo.hijos().size() == 2){
+            // Modificar atributo
+            atr = buscarAtributo(var,nodo.hijos().get(1).valor());
+            if(atr != null){
+                var.modificarAtributo(nodo.hijos().get(1).valor(), dato);
+            }else{
+                // ERROR! El atributo no existe!
+                return;
+            }
+        }
         if(var != null){
-            if(var.getTipo() == dato.getTipo()){
-                for(Hashtable<String,Objeto> ambito : variables){
-                    if(ambito.containsKey(nombre)){
-                        ambito.put(nombre, dato);
+            for(Hashtable<String,Objeto> ambito : variables){
+                if(ambito.containsKey(nombre)){
+                    if(nodo.hijos().size() == 2){
+                        if(atr.getTipo() == dato.getTipo()){
+                            ambito.put(nombre, var);
+                        }else{
+                            
+                        }
+                    }else{
+                        if(var.getTipo() == dato.getTipo()){
+                            ambito.put(nombre, dato);
+                        }else{
+                            // ERROR! No coincide con el tipo!
+                        }
                     }
                 }
-            }else{
-                // ERROR! No coincide con el tipo!
             }
         }else{
             // ERROR! La variable no existe!
@@ -466,7 +487,12 @@ public class Compilador {
         if(nodo.hijos().size() == 2){
             if(tipo == SistemaBaseDatos.OBJETO){
                 // Instancia!
-                
+                Objeto plantilla = bd.buscarObjeto(nodo.hijos().get(1).valor());
+                if(plantilla != null){
+                    declararVariables(nombres, plantilla);
+                }else{
+                    // ERROR! El objeto no existe!
+                }
             }else{
                 // Normal!
                 declararVariables(nombres,obj);
@@ -487,7 +513,6 @@ public class Compilador {
         }
     }
     
-    // Asignar
     
     /*********************************************************
      * EVALUAR EXPRESION

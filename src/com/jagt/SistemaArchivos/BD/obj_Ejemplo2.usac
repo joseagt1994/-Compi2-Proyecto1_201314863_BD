@@ -1,1 +1,10 @@
 
+<Obj>
+	<nombre>Direccion</nombre>
+	<attr>
+		<int>avenida</int>
+		<int>calle</int>
+		<text>nombre</text>
+		<text>descripcion</text>
+	</attr>
+</Obj>

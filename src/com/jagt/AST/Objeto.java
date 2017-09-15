@@ -123,4 +123,15 @@ public class Objeto {
         return tipo;
     }
     
+    public void modificarAtributo(String nombre,Objeto objeto){
+        objeto.setNombre(nombre);
+        for(int i = 0; i < atributos.size(); i++){
+            if(atributos.get(i).getNombre().equals(nombre)){
+                atributos.remove(i);
+                atributos.add(i, objeto);
+                break;
+            }
+        }
+    }
+    
 }

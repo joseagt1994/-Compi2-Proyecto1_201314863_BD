@@ -479,6 +479,16 @@ public class SistemaBaseDatos {
         return false;
     }
     
+    // Buscar Objeto existente
+    public Objeto buscarObjeto(String nombre){
+        for(Objeto obj : objetos){
+            if(obj.getNombre().equals(nombre)){
+                return obj;
+            }
+        }
+        return null;
+    }
+    
     /**************************** ACTUALIZAR *************************/
     public String verificarCampos(String nombre,LinkedList<String> campos,Registro nuevo){
         Tabla tabla = buscarTabla(nombre);
