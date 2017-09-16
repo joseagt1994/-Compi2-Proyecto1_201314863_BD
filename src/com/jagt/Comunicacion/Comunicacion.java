@@ -48,13 +48,16 @@ public class Comunicacion extends Thread implements Runnable {
                 Socket ss=s.accept();
                 PrintWriter pw = new PrintWriter(ss.getOutputStream(),true);
                 // Mensaje del cliente!
-                byte[] bytes = new byte[10000];
+                byte[] bytes = new byte[100000];
                 ss.getInputStream().read(bytes);
                 String str = new String(bytes, StandardCharsets.UTF_8);
-                System.out.println("Desde el IDE: "+str);
-                Thread.sleep(5000);
                 // Envia servidor al cliente
-                pw.println("FUNCIONO PUTO!");
+                for(int i = 0; i < 10; i++){
+                    Thread.sleep(100);
+                    pw.println(i);
+                }
+                Thread.sleep(100);
+                pw.println("201314863");
             } catch (IOException ex) {
                 Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
