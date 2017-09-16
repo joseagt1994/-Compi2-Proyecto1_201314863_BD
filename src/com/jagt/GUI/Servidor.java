@@ -6,6 +6,7 @@
 package com.jagt.GUI;
 
 import com.jagt.Analizadores.USQL.Sintactico;
+import com.jagt.Comunicacion.*;
 import com.jagt.Logica.SistemaBaseDatos;
 import com.jagt.Logica.Usuario;
 import java.io.ByteArrayInputStream;
@@ -27,6 +28,7 @@ public class Servidor extends javax.swing.JFrame {
     public static Usuario logueado = new Usuario(0,"","");
     
     public static Sintactico parser = null;
+    
     /**
      * Creates new form Servidor
      */
@@ -36,6 +38,8 @@ public class Servidor extends javax.swing.JFrame {
 //        SistemaBaseDatos bd = SistemaBaseDatos.getInstance();
 //        //bd.crearBD("Prueba", logueado.getCodigo());
 //        bd.crearUsuario("Jose", "123");
+        Comunicacion puente = Comunicacion.getInstance();
+        puente.start();
     }
 
     /**
@@ -177,4 +181,5 @@ public class Servidor extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea txtConsola;
     // End of variables declaration//GEN-END:variables
+
 }
