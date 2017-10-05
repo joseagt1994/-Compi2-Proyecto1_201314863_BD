@@ -6,6 +6,8 @@ STATIC = false;
 PARSER_BEGIN(Sintactico)
 package com.jagt.Analizadores.USQL;
 import com.jagt.AST.*;
+import com.jagt.Comunicacion.*;
+
 public class Sintactico{
 	
         public static void main(String args[]) throws ParseException{
@@ -40,8 +42,8 @@ TOKEN:{
         <ENTERO: ("-")?(<DIGITO>)+ >                                                                // INTEGER
     |   <DOBLE: ("-")?(<DIGITO>)+("."(<DIGITO>)+)? >                                                // DOUBLE 
     |   <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    // TEXT
-    |   <FECHA: (["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)>                         // DATE
-    |   <HORA: ((["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]) > // TIME
+    |   <FECHA: ("'"["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)"'">                         // DATE
+    |   <HORA: ("'"(["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]"'") > // TIME
     |   <RES_DOBLE: "Double" >
     |   <RES_ENTERO: "Integer" >
     |   <RES_CADENA: "Text" >
@@ -130,7 +132,7 @@ TOKEN:{
  
 }
 
-int inicio():
+ManejadorPaquete inicio():
 {NodoParser cuerpos,c;}
 {
         {cuerpos = new NodoParser("CUERPOS","",1,1);}
@@ -138,7 +140,11 @@ int inicio():
           c = instruccionSQL()        {cuerpos.hijos().add(c);}
         )*
         <EOF>
-        {AST arbol = new AST(); arbol.graficar(cuerpos); Compilador compi = new Compilador(cuerpos); return 0;}
+        {   
+            AST arbol = new AST(); arbol.graficar(cuerpos); 
+            Compilador compi = new Compilador(cuerpos); 
+            return new ManejadorPaquete(compi.mensajes,compi.registros,compi.historial);
+        }
 }
 
 void Empty():
@@ -200,7 +206,7 @@ NodoParser lista_sentencias():
 {
         {sentencias = new NodoParser("SENTENCIAS","",0,0);}
         (
-            s = sentencia() {sentencias.hijos().add(s);}
+            s = instruccionSQL() {sentencias.hijos().add(s);}
         )*
         {return sentencias;}
 }

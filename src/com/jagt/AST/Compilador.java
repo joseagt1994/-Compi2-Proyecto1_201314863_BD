@@ -33,6 +33,13 @@ public class Compilador {
     int numeroTablas = 0;
     boolean USAR = false;
     
+    // Consultas,Mensajes,Errores
+    public LinkedList<LinkedList<Registro>> registros = new LinkedList<LinkedList<Registro>>();
+    public LinkedList<String> mensajes = new LinkedList<String>();
+    public LinkedList<Historia> historial = new LinkedList<Historia>();
+    
+    //long duracion = System.currentTimeMillis();
+    
     public Compilador(NodoParser nodo){
         this.variables = new LinkedList<Hashtable<String,Objeto>>();
         lineas = SistemaBaseDatos.textoCompilado.split("\n");
@@ -41,7 +48,37 @@ public class Compilador {
         disminuirAmbito();
     }
     
+    // REPORTE!
+    public String getReporte(){
+        String tabla = "";
+        // Tabla html
+        // Columnas <tr><th>
+        // Datos    <tr><td>
+        for(LinkedList<Registro> lista : registros){
+            tabla += "\t<table>\n";
+            for(Registro registro : lista){
+                if(lista.getFirst().equals(registro)){
+                    // Encabezados!
+                    tabla += "\t\t<tr>\n";
+                    for(Objeto e : registro.getColumnas()){
+                        tabla += "\t\t\t<th>"+e.getNombre()+"</th>\n";
+                    }
+                    tabla += "\t\t</tr>\n";
+                }
+                tabla += "\t\t<tr>\n";
+                for(Objeto e : registro.getColumnas()){
+                    tabla += "\t\t\t<td>"+e.texto+"</td>\n";
+                }
+                tabla += "\t\t</tr>\n";
+            }
+            tabla += "\t</table>\n\n";
+        }
+        return tabla;
+    }
+    
     private void ejecutarSentencias(NodoParser nodo){
+        boolean b;
+        long dt,duracion;
         switch(nodo.nombre()){
             case "CUERPOS":
                 for(NodoParser hijo : nodo.hijos()){
@@ -63,15 +100,23 @@ public class Compilador {
                 crear(nodo);
                 break;
             case "USAR":
+                int linea = nodo.linea;
+                duracion = System.currentTimeMillis();
                 if(!Servidor.bd_actual.equals(nodo.hijos().get(0).valor())){
-                    Servidor.bd_actual = nodo.hijos().get(0).valor();
-                    bd.usarBD(Servidor.bd_actual);
-                    USAR = true;
+                    b = bd.usarBD(nodo.hijos().get(0).valor());
+                    dt = System.currentTimeMillis()-duracion;
+                    historial.add(new Historia("USAR BASE_DATOS",Long.toString(dt),0,b));
+                    if(b){
+                        USAR = true;
+                    }
                 }
                 break;
             case "ALTERAR":
+                break;
             case "OTORGAR":
+                break;
             case "DENEGAR":
+                break;
             case "BACKUP":
                 // MINIMO!
                 // USQLDUMP o TOTAL
@@ -85,15 +130,25 @@ public class Compilador {
                 insertar(nodo);
                 break;
             case "ELIMINAR":
+                break;
             case "SELECCIONAR":
                 // MINIMO!
-                evaluarSeleccionar(nodo);
+                duracion = System.currentTimeMillis();
+                LinkedList<Registro> reg = evaluarSeleccionar(nodo);
+                dt = System.currentTimeMillis()-duracion;
+                historial.add(new Historia("SELECCIONAR",Long.toString(dt),0,true));
+                registros.add(reg);
                 break;
             case "ACTUALIZAR":
                 // MINIMO!
-                actualizar(nodo);
+                duracion = System.currentTimeMillis();
+                b = actualizar(nodo);
+                dt = System.currentTimeMillis()-duracion;
+                historial.add(new Historia("ACTUALIZAR",Long.toString(dt),0,b));
                 break;
             case "BORRAR":
+                // HACER!
+                break;
             case "DECLARAR":
                 // MINIMO!
                 declarar(nodo);
@@ -107,17 +162,20 @@ public class Compilador {
                 // MINIMO!
                 Objeto valor = evaluarExpresion(nodo.hijos().get(0));
                 if(valor != null){
+                    mensajes.add(valor.texto);
                     System.out.println(valor.texto);
                 }
                 break;
             case "LLAMADA":
                 llamadaProcedimiento(nodo.hijos().get(0));
                 break;
-            case "RETORNO":
+            case "RETORNAR":
                 retorno = evaluarExpresion(nodo.hijos().get(0));
                 hayRetorno = true;
                 break;
             case "DETENER":
+                interrumpir = true;
+                break;
             case "SI":
                 // MINIMO!
                 evaluarSI(nodo);
@@ -127,12 +185,16 @@ public class Compilador {
                 evaluarSELECCIONA(nodo);
                 break;
             case "PARA":
+                // HACER!
+                //evaluarPARA(nodo);
                 break;
             case "MIENTRAS":
                 // MINIMO!
                 evaluarMIENTRAS(nodo);
                 break;
             case "CONTAR":
+                // HACER
+                break;
         }
     }
     
@@ -214,26 +276,40 @@ public class Compilador {
         ************ CREAR ************
     */
     private void crear(NodoParser nodo){
+        int linea = nodo.hijos().get(0).linea;
+        long duracion = System.currentTimeMillis();
+        long dt;
+        boolean b;
         switch(nodo.hijos().get(0).nombre()){
             case "BD":
                 // CREAR -> BD ID
-                bd.crearBD(nodo.hijos().get(1).valor(),Servidor.logueado.getCodigo());
+                b = bd.crearBD(nodo.hijos().get(1).valor(),Servidor.logueado.getCodigo());
+                dt = System.currentTimeMillis()-duracion;
+                historial.add(new Historia("CREAR BASE_DATOS",Long.toString(dt),0,b));
                 break;
             case "TABLA":
                 // CREAR -> TABLA ID CAMPOS
-                bd.crearTabla(crearTabla(nodo.hijos().get(1).valor(),nodo.hijos().get(2)));
+                b = bd.crearTabla(crearTabla(nodo.hijos().get(1).valor(),nodo.hijos().get(2)));
+                dt = System.currentTimeMillis()-duracion;
+                historial.add(new Historia("CREAR TABLA",Long.toString(dt),0,b));
                 break;
             case "OBJETO":
                 // CREAR -> OBJETO ID ATRIBUTOS
-                bd.crearObjeto(crearObjeto(nodo.hijos().get(1).valor(),nodo.hijos().get(2)));
+                b = bd.crearObjeto(crearObjeto(nodo.hijos().get(1).valor(),nodo.hijos().get(2)));
+                dt = System.currentTimeMillis()-duracion;
+                historial.add(new Historia("CREAR OBJETO",Long.toString(dt),0,b));
                 break;
             case "USUARIO":
                 // CREAR -> USUARIO ID CADENA
-                bd.crearUsuario(nodo.hijos().get(1).valor(),nodo.hijos().get(2).valor());
+                b = bd.crearUsuario(nodo.hijos().get(1).valor(),nodo.hijos().get(2).valor());
+                dt = System.currentTimeMillis()-duracion;
+                historial.add(new Historia("CREAR USUARIO",Long.toString(dt),0,b));
                 break;
             default:
                 // FUNCION O PROCEDIMIENTO
-                bd.crearMetodo(crearProcedimiento(nodo));
+                b = bd.crearMetodo(crearProcedimiento(nodo));
+                dt = System.currentTimeMillis()-duracion;
+                historial.add(new Historia("CREAR "+nodo.hijos().get(0).nombre(),Long.toString(dt),0,b));
                 break;
         }
     }
@@ -410,7 +486,7 @@ public class Compilador {
     /*
         ************ SELECCIONAR ************
     */
-    private void evaluarSeleccionar(NodoParser nodo){
+    private LinkedList<Registro> evaluarSeleccionar(NodoParser nodo){
         // SELECCIONAR -> (TODO | LISTA_ACCESO) IDS (EXP)? (ORDENAR)?
         // Llenar lista de IDS
         LinkedList<String> ids = new LinkedList<String>();
@@ -438,6 +514,9 @@ public class Compilador {
             if(nodo.hijos().size() == 4){
                 // ORDENAR
             }
+            return registrosDonde;
+        }else{
+            return registros;
         }
     }
     
@@ -466,7 +545,7 @@ public class Compilador {
     /*
         ************ ACTUALIZAR ************
     */
-    private void actualizar(NodoParser nodo){
+    private boolean actualizar(NodoParser nodo){
         // ACTUALIZAR -> ID LISTA_IDS EXPRESIONES (EXP_DONDE)?
         // Llenar lista de IDS
         String tabla = nodo.hijos().get(0).valor();
@@ -499,8 +578,10 @@ public class Compilador {
             }
             Tabla t = bd.buscarTabla(tabla);
             bd.modificarRegistro(t, registros);
+            return true;
         }else{
             // Error!
+            return false;
         }
     }
     
@@ -622,6 +703,8 @@ public class Compilador {
     
     /*********************************************************
      * EVALUAR EXPRESION
+     * @param nodo
+     * @return 
      *********************************************************/
     protected Objeto evaluarExpresion(NodoParser nodo){
         switch(nodo.hijos().size()){
@@ -669,6 +752,8 @@ public class Compilador {
                     case "ACCESO":
                         // ACCESO -> (ID | VAR)(. ID)*
                         return getAcceso(nodo.hijos().get(0));
+                    case "VAR":
+                        return getAcceso(nodo);
                     default:
                         return evaluarExpresion(nodo.hijos().get(0));
                 }
@@ -1371,7 +1456,8 @@ public class Compilador {
                         // ERROR!
                         break;
                     }
-                    return new Objeto(izq.numero / der.numero);
+                    double val = izq.numero / der.numero;
+                    return new Objeto(val);
                 }else if(tder == SistemaBaseDatos.DOBLE){
                     if(der.decimal == 0.0){
                         // ERROR!

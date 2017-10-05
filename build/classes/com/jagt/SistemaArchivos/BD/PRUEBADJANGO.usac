@@ -1,0 +1,56 @@
+<Procedure>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\proc_PRUEBADJANGO.usac"</path>
+</Procedure>
+<Object>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\obj_PRUEBADJANGO.usac"</path>
+</Object>
+
+<Tabla>
+	<nombre>Proveedor</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\Proveedor_PRUEBADJANGO.usac"</path>
+	<rows>
+		<campo nulo = "false" auto = "true" primaria = "true" unico = "true" >
+			<int>id</int>
+		</campo>
+		<campo nulo = "false" auto = "false" primaria = "false" unico = "false" >
+			<text>nombre</text>
+		</campo>
+		<campo nulo = "false" auto = "false" primaria = "false" unico = "false" >
+			<text>direccion</text>
+		</campo>
+	</rows>
+</Tabla>
+<Tabla>
+	<nombre>Producto</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\Producto_PRUEBADJANGO.usac"</path>
+	<rows>
+		<campo nulo = "false" auto = "true" primaria = "true" unico = "true" >
+			<int>id</int>
+		</campo>
+		<campo nulo = "false" auto = "false" primaria = "false" unico = "false" >
+			<text>nombre</text>
+		</campo>
+		<campo nulo = "false" auto = "false" primaria = "false" unico = "false" >
+			<double>precio</double>
+		</campo>
+		<campo nulo = "false" auto = "false" primaria = "false" unico = "false" >
+			<int>id_proveedor</int>
+			<foranea>Proveedor</foranea>
+		</campo>
+	</rows>
+</Tabla>
+<Tabla>
+	<nombre>User</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\User_PRUEBADJANGO.usac"</path>
+	<rows>
+		<campo nulo = "false" auto = "true" primaria = "true" unico = "true" >
+			<int>id</int>
+		</campo>
+		<campo nulo = "false" auto = "false" primaria = "false" unico = "false" >
+			<text>nombre</text>
+		</campo>
+		<campo nulo = "true" auto = "false" primaria = "false" unico = "false" >
+			<text>apellido</text>
+		</campo>
+	</rows>
+</Tabla>

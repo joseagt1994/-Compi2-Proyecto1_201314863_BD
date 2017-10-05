@@ -58,8 +58,18 @@ public class SistemaBaseDatos {
     /***************************** DDL **************************/
     /************************************************************/
     
+    /**************************** LOGIN *************************/
+    public boolean login(String usuario,String password){
+        for(Usuario u : usuarios){
+            if(u.getNombre().equals(usuario) && u.getContrasenia().equals(password)){
+                return true;
+            }
+        }
+        return false;
+    }
+    
     /**************************** CREAR *************************/
-    public void crearUsuario(String nombre,String password){
+    public boolean crearUsuario(String nombre,String password){
         // Analizar archivo maestro
         Servidor.codUsuario = usuarios.getLast().getCodigo()+1;
         if(!existeUsuario(nombre)){
@@ -70,8 +80,10 @@ public class SistemaBaseDatos {
                            "</usuario>\n";
             master.modificar(Servidor.rutaUsuarios, nuevo);
             llenarUsuarios();
+            return true;
         }else{
             //Error! El usuario ya existe!
+            return false;
         }
     }
     
@@ -84,7 +96,7 @@ public class SistemaBaseDatos {
         return false;
     }
     
-    public void crearBD(String nombreBD,int usuario){
+    public boolean crearBD(String nombreBD,int usuario){
         // Analizar archivo maestro
         if(!existeBD(nombreBD)){
             // Se escribe en el archivo master.usac
@@ -110,8 +122,10 @@ public class SistemaBaseDatos {
                               "</Object>\n";
             master.escribir(rutaBD, cuerpoBD);
             llenarBases();
+            return true;
         }else{
             // Error! La base de datos ya existe!
+            return false;
         }
     }
     
@@ -124,7 +138,7 @@ public class SistemaBaseDatos {
         return false;
     }
     
-    public void crearTabla(Tabla tabla){
+    public boolean crearTabla(Tabla tabla){
         // Se escribe en la base de datos seleccionada, bd.usac
         String rutaTabla = Servidor.rutaBDS+tabla.getNombre()+"_"+Servidor.bd_actual+".usac";
         master.escribir(rutaTabla, "");
@@ -175,8 +189,10 @@ public class SistemaBaseDatos {
                      "</Tabla>\n";
             master.modificar(Servidor.rutaBDS+Servidor.bd_actual+".usac", nueva);
             llenarTablas();
+            return true;
         }else{
             // Error! La tabla ya existe en la base de datos!
+            return false;
         }
     }
     
@@ -189,7 +205,7 @@ public class SistemaBaseDatos {
         return false;
     }
     
-    public void crearObjeto(Objeto objeto){
+    public boolean crearObjeto(Objeto objeto){
         // Se escribe en obj_bd.usac
         String rutaObjeto = Servidor.rutaBDS+"obj_"+Servidor.bd_actual+".usac";
         if(!existeObjeto(objeto.getNombre())){
@@ -205,8 +221,10 @@ public class SistemaBaseDatos {
                      "</Obj>\n";
             master.modificar(rutaObjeto, nueva);
             llenarObjetos();
+            return true;
         }else{
             // Error! La tabla ya existe en la base de datos!
+            return false;
         }
     }
     
@@ -219,7 +237,7 @@ public class SistemaBaseDatos {
         return false;
     }
     
-    public void crearMetodo(Metodo metodo){
+    public boolean crearMetodo(Metodo metodo){
         // Se escribe en proc_bd.usac
         String rutaMetodo = Servidor.rutaBDS+"proc_"+Servidor.bd_actual+".usac";
         if(!existeMetodo(metodo.getNombre())){
@@ -245,8 +263,10 @@ public class SistemaBaseDatos {
             nueva += "</Proc>\n";
             master.modificar(rutaMetodo, nueva);
             llenarMetodos();
+            return true;
         }else{
             // Ya existe!
+            return false;
         }
     }
     
@@ -265,6 +285,7 @@ public class SistemaBaseDatos {
         llenarBases();
         if(existeBD(nombre)){
             // Obtener los demas listados!
+            Servidor.bd_actual = nombre;
             llenarTablas();
             llenarMetodos();
             llenarObjetos();

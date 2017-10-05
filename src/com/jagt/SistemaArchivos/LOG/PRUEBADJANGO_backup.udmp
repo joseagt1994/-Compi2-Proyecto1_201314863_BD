@@ -1,0 +1,247 @@
+
+CREAR BASE_DATOS PRUEBADJANGO; 
+USAR PRUEBADJANGO;   
+CREAR TABLA Proveedor(
+	INTEGER id Llave_Primaria Autoincrementable,
+	TEXT nombre No Nulo,
+	TEXT direccion No Nulo
+);   
+
+CREAR TABLA Producto(   
+	INTEGER id Llave_Primaria Autoincrementable,   
+	TEXT nombre No Nulo,   
+	DOUBLE precio No Nulo,   
+	INTEGER id_proveedor Llave_Foranea Proveedor 
+);   
+
+CREAR PROCEDIMIENTO llenarTablas(){   
+	DECLARAR @producto INTEGER = 0;   
+	#inserta 10 registros en la tabla proveedor   
+	PARA(DECLARAR @i INTEGER = 0; @i < 10; ++){     
+		INSERTAR EN TABLA Proveedor(id, nombre, direccion)
+		VALORES (@i, "Proveedor" + @i, "Direccion" + @i);   
+		#inserta 20 productos por proveedor       
+		PARA(DECLARAR @j INTEGER = 0; @j < 20; ++){         
+			DECLARAR @precio DOUBLE = generarPrecio(@producto);         
+			INSERTAR EN TABLA Producto VALORES (@producto, "Producto" + @producto, @precio, @i);         
+			@producto = @producto + 1;       
+		}   
+	} 
+}   
+
+CREAR FUNCION generarPrecio(INTEGER @a) DOUBLE{   
+	DECLARAR @retorno DOUBLE = 1.5;   
+	RETORNO @retorno * @a; 
+}
+
+
+INSERTAR EN TABLA Proveedor VALORES ("USAC","9 ave.");
+INSERTAR EN TABLA Proveedor VALORES ("Proveedor 2","14 ave.");
+
+INSERTAR EN TABLA Producto VALORES ("Producto 1",14.56,1);
+INSERTAR EN TABLA Producto VALORES ("Producto 2",100.00,2);
+
+INSERTAR EN TABLA Proveedor (nombre, direccion) VALORES ("USAC","9 ave.");
+
+CREAR TABLA User (   
+	INTEGER id Llave_Primaria Autoincrementable,   
+	TEXT nombre No Nulo,
+	TEXT apellido Nulo
+);   
+
+INSERTAR EN TABLA User (nombre) VALORES ("Jose");
+INSERTAR EN TABLA User (nombre) VALORES ("Jherson");
+INSERTAR EN TABLA User (nombre) VALORES ("Juan");
+INSERTAR EN TABLA User (nombre) VALORES ("Max");
+INSERTAR EN TABLA User (nombre) VALORES ("Isabel");
+INSERTAR EN TABLA User (nombre) VALORES ("Lorena");
+INSERTAR EN TABLA User (nombre) VALORES ("Carolina");
+
+ACTUALIZAR TABLA User (nombre) VALORES ("Usuario") DONDE nombre == "Jose";
+
+SELECCIONAR Producto.nombre,Proveedor.nombre 
+	DE Producto,Proveedor
+	DONDE Producto.id_proveedor == Proveedor.id
+	AND Producto.precio > 10.00
+	Ordenar_Por Producto.precio ASC; 
+
+DECLARAR @a,@b,@c INTEGER = 12;
+DECLARAR @prueba TEXT;
+
+@prueba = "Hola jajaja!";
+
+@a = 10;
+@b = 13;
+
+
+
+
+
+...
+
+
+
+CREAR BASE_DATOS PRUEBADJANGO; 
+USAR PRUEBADJANGO;   
+CREAR TABLA Proveedor(
+	INTEGER id Llave_Primaria Autoincrementable,
+	TEXT nombre No Nulo,
+	TEXT direccion No Nulo
+);   
+
+CREAR TABLA Producto(   
+	INTEGER id Llave_Primaria Autoincrementable,   
+	TEXT nombre No Nulo,   
+	DOUBLE precio No Nulo,   
+	INTEGER id_proveedor Llave_Foranea Proveedor 
+);   
+
+CREAR PROCEDIMIENTO llenarTablas(){   
+	DECLARAR @producto INTEGER = 0;   
+	#inserta 10 registros en la tabla proveedor   
+	PARA(DECLARAR @i INTEGER = 0; @i < 10; ++){     
+		INSERTAR EN TABLA Proveedor(id, nombre, direccion)
+		VALORES (@i, "Proveedor" + @i, "Direccion" + @i);   
+		#inserta 20 productos por proveedor       
+		PARA(DECLARAR @j INTEGER = 0; @j < 20; ++){         
+			DECLARAR @precio DOUBLE = generarPrecio(@producto);         
+			INSERTAR EN TABLA Producto VALORES (@producto, "Producto" + @producto, @precio, @i);         
+			@producto = @producto + 1;       
+		}   
+	} 
+}   
+
+CREAR FUNCION generarPrecio(INTEGER @a) DOUBLE{   
+	DECLARAR @retorno DOUBLE = 1.5;   
+	RETORNO @retorno * @a; 
+}
+
+
+INSERTAR EN TABLA Proveedor VALORES ("USAC","9 ave.");
+INSERTAR EN TABLA Proveedor VALORES ("Proveedor 2","14 ave.");
+
+INSERTAR EN TABLA Producto VALORES ("Producto 1",14.56,1);
+INSERTAR EN TABLA Producto VALORES ("Producto 2",100.00,2);
+
+INSERTAR EN TABLA Proveedor (nombre, direccion) VALORES ("USAC","9 ave.");
+
+CREAR TABLA User (   
+	INTEGER id Llave_Primaria Autoincrementable,   
+	TEXT nombre No Nulo,
+	TEXT apellido Nulo
+);   
+
+INSERTAR EN TABLA User (nombre) VALORES ("Jose");
+INSERTAR EN TABLA User (nombre) VALORES ("Jherson");
+INSERTAR EN TABLA User (nombre) VALORES ("Juan");
+INSERTAR EN TABLA User (nombre) VALORES ("Max");
+INSERTAR EN TABLA User (nombre) VALORES ("Isabel");
+INSERTAR EN TABLA User (nombre) VALORES ("Lorena");
+INSERTAR EN TABLA User (nombre) VALORES ("Carolina");
+
+ACTUALIZAR TABLA User (nombre) VALORES ("Usuario") DONDE nombre == "Jose";
+
+SELECCIONAR Producto.nombre,Proveedor.nombre 
+	DE Producto,Proveedor
+	DONDE Producto.id_proveedor == Proveedor.id
+	AND Producto.precio > 10.00
+	Ordenar_Por Producto.precio ASC; 
+
+DECLARAR @a,@b,@c INTEGER = 12;
+DECLARAR @prueba TEXT;
+
+@prueba = "Hola jajaja!";
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+
+
+
+
+
+...
+
+
+USAR PRUEBADJANGO;   
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+IMPRIMIR(@a);
+
+
+
+
+...
+
+
+USAR PRUEBADJANGO;   
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+IMPRIMIR(@a);
+
+
+
+
+...
+
+
+USAR PRUEBADJANGO;   
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+IMPRIMIR(@a);
+
+
+
+
+...
+
+
+USAR PRUEBADJANGO;   
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+IMPRIMIR(@a);
+
+
+
+
+...
+
+
+USAR PRUEBADJANGO;   
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+IMPRIMIR(@a);
+
+
+
+
+...
+
+
+USAR PRUEBADJANGO;   
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+IMPRIMIR(@a);
+
+
+
+
+...
+
+
+USAR PRUEBADJANGO;   
+
+@a = 10+9*(1/7)+generarPrecio(12);
+@b = 13;
+IMPRIMIR(@a);
+
+
+
+
+...
+

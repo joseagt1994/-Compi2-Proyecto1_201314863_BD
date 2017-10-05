@@ -1,0 +1,446 @@
+options{
+STATIC = false;
+}
+
+PARSER_BEGIN(SintacticoPaquetes)
+package com.jagt.Analizadores.Paquetes;
+import com.jagt.AST.*;
+import com.jagt.Logica.*;
+import com.jagt.Comunicacion.*;
+import java.util.LinkedList;
+import com.jagt.GUI.Servidor;
+
+public class SintacticoPaquetes{
+	
+        public static void main(String args[]) throws ParseException{
+
+		SintacticoPaquetes parser = new SintacticoPaquetes(System.in);
+		parser.inicio();
+
+	}
+
+}
+PARSER_END(SintacticoPaquetes)
+
+/* ESPACIOS */
+
+SKIP:{
+
+	" "
+	| "\n"              
+	| "\t"
+        | "\r"
+        | "\f"
+        | "\b"
+
+}
+
+/* AQUI VAN LOS TOKENS (ANALIZADOR LEXICO) */
+
+TOKEN:{
+    
+        <LOGIN: "'login'" >                                   
+    |   <USUARIO: "'usuario'" >  
+    |   <BGCOLOR: "Bgcolor" >
+    |   <PASSWORD: "'password'" >
+    |   <FIN: "'fin'" >  
+    |   <USQL: "'usql'" >  
+    |   <INSTRUCCION: "'instruccion'" >
+    |   <PAQUETE: "'paquete'" >
+    |   <REPORTE: "'reporte'" >
+    |   <ARBOL: "'arbol'" >
+    |   <ENTERO: ("-")?(<DIGITO>)+ >                                                                // INTEGER
+    |   <DOBLE: ("-")?(<DIGITO>)+("."(<DIGITO>)+)? >                                                // DOUBLE 
+    |   <FECHA: ("'"["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)"'">                         // DATE
+    |   <HORA: ("'"(["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]"'") > // TIME
+    |   <VERDADERO: ("true"|"verdadero") >
+    |   <FALSO: ("falso"|"false") >
+    |   <RES_TABLA: "Tabla" >
+    |   <RES_DONDE: "Donde" >
+    |   <RES_SELECCIONAR: "Seleccionar" >
+    |   <RES_DE: "De" >
+    |   <RES_ORDENAR: "Ordenar_Por" >
+    |   <RES_ASC: "ASC" >
+    |   <RES_DESC: "DESC" >
+    |   <PUNTO: "." >
+    |   <MAS: "+" >
+    |   <MENOS: "-" >
+    |   <POR: "*" >
+    |   <DIV: "/" >
+    |   <POT: "^" >
+    |   <MAYOR: ">" >
+    |   <MENOR: "<" >
+    |   <IGUAL: "==" >
+    |   <DIFERENTE: "!=" >
+    |   <MENOR_IGUAL: "<=" >
+    |   <MAYOR_IGUAL: ">=" >
+    |   <OR: "||" | "OR" >
+    |   <AND: "&&" | "AND" >
+    |   <NOT: "!" | "NOT" >
+    |   <INSTRUCCIONES: "?"(~["?"])*"""?" >
+    |   <ID: (<LETRA>)(<LETRA>|<DIGITO>|"_")* >
+    |   <VAR: "@"(<ID>) >
+    |   <DIGITO: ["0"-"9"] >
+    |   <LETRA: ["a"-"z","A"-"Z"] >
+    |   <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >
+ 
+}
+
+ManejadorPaquete inicio():
+{ManejadorPaquete lista;}
+{
+        "["
+        lista = tipo_instruccion()
+        "]"
+        <EOF>
+        {return lista;}
+}
+
+ManejadorPaquete tipo_instruccion():
+{ManejadorPaquete manejador;}
+{
+        <LOGIN>
+        ":"
+        "["
+        manejador = login()
+        "]"             {return manejador;}
+    |   <PAQUETE>
+        ":"
+        manejador = tipo_paquete()
+        {return manejador;}
+}
+
+ManejadorPaquete login():
+{Token user,pass;}
+{
+        <USUARIO>
+        ":"
+        user = <CADENA>
+        ","
+        <PASSWORD>
+        ":"
+        pass = <CADENA>         {
+                                    SistemaBaseDatos bd = SistemaBaseDatos.getInstance();
+                                    if(bd.login(user.image.replaceAll("\"",""),pass.image.replaceAll("\"",""))){
+                                        return new ManejadorPaquete(user.image,true);
+                                    }else{
+                                        return new ManejadorPaquete(user.image,false);
+                                    }
+                                }
+}
+
+ManejadorPaquete tipo_paquete():
+{ManejadorPaquete manejador = null; String cadena; Token ins;}
+{
+        <FIN>           {return new ManejadorPaquete(ManejadorPaquete.LOGOUT);}
+    |   <ARBOL>         {return manejador;}
+    |   <USQL>
+        ","
+        <INSTRUCCION>
+        ":"
+        ins = <INSTRUCCIONES>   {
+                                    String usql = ins.image.substring(1, ins.image.length()-1);
+                                    manejador = Servidor.getInstance().ejecutarUSQL(usql);
+                                    return manejador;
+                                }
+    |   <REPORTE>
+        ","
+        <INSTRUCCION>
+        ":"
+        cadena = html()         {
+                                    manejador = new ManejadorPaquete("?"+cadena+"?");
+                                    return manejador;
+                                }
+}
+
+String html():
+{String cad = ""; String c;}
+{
+        "<html>"        {cad += "<html>\n";}
+        (
+            "<head>"    {cad += "\t<head>\n";}
+            "</head>"   {cad += "\t</head>\n";}
+        )?
+        (
+            c = cuerpo() {cad += c;}
+        )?
+        "</html>"       {cad += "</html>\n";}
+        {return cad;}
+}
+
+String cuerpo():
+{String i,cad = ""; Token t;}
+{
+        "<body"                 {cad += "\t<body";}
+        (
+            <BGCOLOR>           {cad += " Bgcolor";}
+            "="                 {cad += " = ";}
+            t = <CADENA>        {cad += t.image;}
+        )?
+        ">"                     {cad += ">\n";}
+        i = instruccionesHTML() {cad += i;}
+        "</body>"               {cad += "\t</body>\n";}
+        {return cad;}
+}
+
+String instruccionesHTML():
+{String i,cad = "";}
+{
+    (
+        i = instruccionHTML()   {cad += i;}
+    )*
+    {return cad;}
+}
+
+String instruccionHTML():
+{String cad;}
+{
+        cad = usql()        {return cad;}
+    |   cad = etiqueta()    {return cad;}
+    |   cad = contenedor()  {return cad;}
+}
+
+String contenedor():
+{String cad = ""; String val;}
+{
+        "<div>"     {cad += "<div>\n";}
+        (
+            val = instruccionHTML()     {cad += val+"\n";}
+        )*
+        "</div>"    {cad += "</div>\n"; return cad;}
+}
+
+String etiqueta():
+{String cad = ""; Token t;}
+{
+        "<h"            {cad += "\t\t<h";}
+        t = <ENTERO>    {cad += t.image;}
+        <MAYOR>         {cad += ">";}
+        (
+            t = <ID>    {cad += t.image;}
+        )*
+        "</h"           {cad += "\t\t<h";}
+        <ENTERO>        {cad += t.image;}
+        <MAYOR>         {cad += "/>\n";}
+        {return cad;}    
+}
+
+String usql():
+{String cad = ""; NodoParser sen;}
+{
+        "<usql>"                    
+        (
+            sen = seleccionar()     {Compilador compi = new Compilador(sen); cad = compi.getReporte();}
+        )?
+        "</usql>"
+        {return cad;}
+}
+
+NodoParser seleccionar():
+{NodoParser nodo,s,d,tipo,o,lista,id; Token or,t;}
+{
+        t = <RES_SELECCIONAR>       {nodo = new NodoParser("SELECCIONAR",t.image,t.beginLine,t.beginColumn);}
+        s = seleccion()             {nodo.hijos().add(s);}
+        <RES_DE>
+        lista = lista_ids()      {nodo.hijos().add(lista);}
+        (
+            d = donde()             {nodo.hijos().add(d);}
+        )?  
+        (
+            or = <RES_ORDENAR>      {o = new NodoParser("ORDENAR",or.image,or.beginLine,or.beginColumn);}
+            id = acceso()           {o.hijos().add(id);}
+            tipo = tipo_orden()     {o.hijos().add(tipo); nodo.hijos().add(o);}
+        )?
+        {return nodo;}
+}
+
+NodoParser lista_ids():
+{NodoParser nodo; Token id;}
+{
+        id = <ID>                   {nodo = new NodoParser("IDS","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        (
+            ","
+            id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        )*
+        {return nodo;}
+}
+
+NodoParser lista_acceso():
+{NodoParser sentencias,s;}
+{
+        {sentencias = new NodoParser("LISTA_ACCESO","",0,0);}
+        s = acceso() {sentencias.hijos().add(s);}
+        (
+            ","
+            s = acceso() {sentencias.hijos().add(s);}
+        )*
+        {return sentencias;}
+}
+
+NodoParser acceso():
+{NodoParser nodo = new NodoParser("ACCESO","",0,0); NodoParser a; Token t;}
+{
+        a = tipo_acceso()    {nodo.hijos().add(a);}
+        (
+            "."
+            t = <ID>         {nodo.hijos().add(new NodoParser("ID",t.image,t.beginLine,t.beginColumn));}
+        )*
+        {return nodo;}
+}
+
+NodoParser tipo_acceso():
+{Token t;}
+{
+        t = <VAR>   {return new NodoParser("VAR",t.image,t.beginLine,t.beginColumn);}
+    |   t = <ID>    {return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
+}
+
+NodoParser seleccion():
+{NodoParser nodo; Token id;}
+{
+        nodo = lista_acceso()       {return nodo;}
+    |   id = <POR>                  {return new NodoParser("TODO",id.image,id.beginLine,id.beginColumn);}
+}
+
+NodoParser tipo_orden():
+{NodoParser nodo; Token t;}
+{
+        t = <RES_ASC>               {return new NodoParser("ASC",t.image,t.beginLine,t.beginColumn);}
+    |   t = <RES_DESC>              {return new NodoParser("DESC",t.image,t.beginLine,t.beginColumn);}
+}
+
+NodoParser donde():
+{NodoParser cond;}
+{
+        <RES_DONDE>             
+        cond = condicion()          {return cond;}
+}
+
+//EXP
+NodoParser expresion():
+{NodoParser nodo,ope,exp;}
+{
+        ope = operacion1()  {}
+        exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); return exp;}else{return ope;}}
+}
+
+void Empty():
+{}
+{
+    {System.out.println("epsilon");}
+}
+
+NodoParser expresion2():
+{NodoParser nodo,ope,exp; Token t;}
+{
+        t = <MAS>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","+",t.beginLine,t.beginColumn));}
+        ope = operacion1()  {}
+        exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); nodo.hijos().add(exp);}else{nodo.hijos().add(ope);} return nodo;}
+    |   t = <MENOS>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","-",t.beginLine,t.beginColumn));}
+        ope = operacion1()  {}
+        exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); nodo.hijos().add(exp);}else{nodo.hijos().add(ope);} return nodo;}
+    |   Empty()             {return null;}
+}
+
+NodoParser operacion1():
+{NodoParser nodo,tip,exp;}
+{
+    tip = tipoValor()       {}
+    exp = operacion2()      {if(exp!=null){exp.hijos().addFirst(tip); return exp;}else{return tip;}}
+}
+
+NodoParser operacion2():
+{NodoParser nodo,exp,ope; Token t;}
+{
+        t = <POR>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","*",t.beginLine,t.beginColumn));}
+        exp = tipoValor()   {}
+        ope = operacion2()  {if(ope!=null){ope.hijos().addFirst(exp); nodo.hijos().add(ope);}else{nodo.hijos().add(exp);} return nodo;}
+    |   t = <DIV>                 {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPEARIT","/",t.beginLine,t.beginColumn));}
+        exp = tipoValor()   {}
+        ope = operacion2()  {if(ope!=null){ope.hijos().addFirst(exp); nodo.hijos().add(ope);}else{nodo.hijos().add(exp);} return nodo;}
+    |   Empty()             {return null;}
+}
+
+NodoParser tipoValor():
+{NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,tipoL; Token t;}
+{       "("
+        nodo = expresion()
+        ")"                 {return nodo;}
+    |   t = <ENTERO>        {tipo = new NodoParser("entero",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo; }
+    |   t = <CADENA>        {tipo = new NodoParser("cadena",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <FECHA>         {tipo = new NodoParser("fecha",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <HORA>          {tipo = new NodoParser("fechahora",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <DOBLE>         {tipo = new NodoParser("doble",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <VERDADERO>     {tipo = new NodoParser("boolean","1",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <FALSO>         {tipo = new NodoParser("boolean","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+}
+
+NodoParser condicion():
+{NodoParser nodo,ope,con;}
+{
+    ope = operando1()   {nodo = new NodoParser("EXP","",0,0); if(ope!=null){nodo.hijos().add(ope);}}
+    con = condicion2()  {if(con!=null){nodo.hijos().add(con);}}
+    {return nodo;}
+}
+
+NodoParser condicion2():
+{NodoParser nodo,ope,con; Token t;}
+{
+        t = <OR>                {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","OR",t.beginLine,t.beginColumn));}
+        ope = operando1()       {}
+        con = condicion2()      {if(con!=null){con.hijos().addFirst(ope); nodo.hijos().add(con);}else{nodo.hijos().add(ope);} return nodo;}
+    |   Empty()                 {return null;}
+}
+
+NodoParser operando1():
+{NodoParser tip,ope;}
+{
+    tip = tipoCondicion()
+    ope = operando2()           {if(ope!=null){ope.hijos().addFirst(tip); return ope;}else{return tip;}}
+}
+
+NodoParser operando2():
+{NodoParser nodo,tip,ope; Token t;}
+{
+        t = <AND>                   {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","AND",t.beginLine,t.beginColumn));}
+        tip = tipoCondicion()   {}
+        ope = operando2()       {if(ope!=null){ope.hijos().addFirst(tip); nodo.hijos().add(ope);}else{nodo.hijos().add(tip);} return nodo;}
+    |   Empty()                 {return null;}
+}
+
+NodoParser tipoCondicion():
+{NodoParser exp,sub,nodo; boolean no = false; Token t;}
+{
+        // condicion -> NOT subcondicion | subcondicion;
+        t = <NOT>                   {System.out.println("! -> NOT"); exp = new NodoParser("EXP","",t.beginLine,t.beginColumn);}
+        "("                         {System.out.println("( -> Parentesis condicion");}
+        sub = subcondicion()        {exp.hijos().addFirst(new NodoParser("NOT","!",t.beginLine,t.beginColumn)); exp.hijos().add(sub);}
+        ")"                         {System.out.println(") -> Parentesis condicion"); return exp;}
+    |   sub = subcondicion()        {System.out.println(") -> Parentesis condicion"); return sub;}
+}
+
+NodoParser subcondicion():
+{NodoParser nodo,exp,opl;}
+{      
+        // exp -> exp Ope_Logica exp
+        exp = expresion()       {}
+        opl = operacionLogica() {if(opl!=null){opl.hijos().addFirst(exp); return opl;}else{return exp;}}
+}
+
+NodoParser operacionLogica():
+{NodoParser nodo,exp; Token t;}
+{
+        t = <IGUAL>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","==",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <DIFERENTE>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","!=",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MENOR>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","<",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MENOR_IGUAL>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA","<=",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MAYOR_IGUAL>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA",">=",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   t = <MAYOR>
+        exp = expresion() {nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA",">",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); return nodo;}
+    |   Empty()           {return null;}
+}

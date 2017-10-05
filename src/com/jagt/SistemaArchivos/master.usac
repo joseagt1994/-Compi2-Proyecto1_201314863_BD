@@ -11,3 +11,10 @@
 		<usuario>0</usuario>
 	</permisos>
 </DB>
+<DB>
+	<nombre>PRUEBADJANGO</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\PRUEBADJANGO.usac"</path>
+	<permisos>
+		<usuario>0</usuario>
+	</permisos>
+</DB>

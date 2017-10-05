@@ -19,7 +19,8 @@ import java.io.InputStream;
 public class Servidor extends javax.swing.JFrame {
 
     // Variables a usar en el servidor!!!
-    public static String bd_actual;
+    public static String bd_actual = "";
+    public static String usuario = "";
     public static int codUsuario = 1;
     public static String rutaMaestra = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\master.usac";
     public static String rutaUsuarios = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\usuarios.usac";
@@ -27,12 +28,20 @@ public class Servidor extends javax.swing.JFrame {
     public static String rutaLOGS = "C:\\Users\\Jose Antonio\\Documents\\GitHub\\[Compi2]Proyecto1_201314863_BD\\src\\com\\jagt\\SistemaArchivos\\LOG\\";
     public static Usuario logueado = new Usuario(0,"","");
     
+    private static Servidor server = null;
+    
     public static Sintactico parser = null;
     
+    public static Servidor getInstance(){
+        if(server == null){
+            server = new Servidor();
+        }
+        return server;
+    }
     /**
      * Creates new form Servidor
      */
-    public Servidor() {
+    private Servidor() {
         initComponents();
         // Iniciar procesos
 //        SistemaBaseDatos bd = SistemaBaseDatos.getInstance();
@@ -113,33 +122,37 @@ public class Servidor extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Compilar jajaja
-        SistemaBaseDatos.textoCompilado = txtConsola.getText();
-        InputStream is = new ByteArrayInputStream(txtConsola.getText().getBytes());
+    }//GEN-LAST:event_jButton1ActionPerformed
+    
+    public void concatenarMensaje(String mensaje){
+        txtConsola.append(mensaje);
+    }
+    
+    public ManejadorPaquete ejecutarUSQL(String texto){
+        ManejadorPaquete maneja = new ManejadorPaquete();
+        SistemaBaseDatos.textoCompilado = texto;
+        InputStream is = new ByteArrayInputStream(texto.getBytes());
         if(parser == null) parser = new Sintactico(is);   
         else parser.ReInit(is);
         try
         {
-          switch (parser.inicio())
-          {
-            case 0 :
-                txtConsola.append("Se ejecuto correctamente!\n");
-                break;
-            default :
-                break;
-          }
+            maneja = parser.inicio();
+            txtConsola.append("Se ejecuto correctamente!\n");
         }
         catch (Exception e)
         {
-          txtConsola.append("Error:\n"+ e.getMessage()+"\n");
+            txtConsola.append("Error:\n"+ e.getMessage()+"\n");
         }
         catch (Error e)
         {
-         txtConsola.append("Error:\n"+ e.getMessage()+"\n");
+            txtConsola.append("Error:\n"+ e.getMessage()+"\n");
         }
         finally
-        {}
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+        {
+            return maneja;
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -170,7 +183,7 @@ public class Servidor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Servidor().setVisible(true);
+                getInstance().setVisible(true);
             }
         });
     }
