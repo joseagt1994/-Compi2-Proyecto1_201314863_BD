@@ -243,8 +243,8 @@ NodoParser backup():
 {
         t = <RES_BACKUP>        {nodo = new NodoParser("BACKUP","",t.beginLine,t.beginColumn);}
         tipo = tipo_backup()    {nodo.hijos().add(tipo);}
-        id1 = <ID>              {nodo.hijos().add(new NodoParser("ID",id1.image,id1.beginLine,id1.beginColumn));}
-        id2 = <ID>              {nodo.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));}
+        id1 = <ID>              {nodo.hijos().add(new NodoParser("ID",id1.image.toUpperCase(),id1.beginLine,id1.beginColumn));}
+        id2 = <ID>              {nodo.hijos().add(new NodoParser("ID",id2.image.toUpperCase(),id2.beginLine,id2.beginColumn));}
         ";"
         {return nodo;}
 }
@@ -270,10 +270,10 @@ NodoParser imprimir():
 NodoParser asignar():
 {NodoParser nodo = new NodoParser("ASIGNAR","",0,0); NodoParser acceso,exp; Token id,id2;}
 {
-        id = <VAR>                  {acceso = new NodoParser("ACCESO","",0,0); acceso.hijos().add(new NodoParser("VAR",id.image,id.beginLine,id.beginColumn));}
+        id = <VAR>                  {acceso = new NodoParser("ACCESO","",0,0); acceso.hijos().add(new NodoParser("VAR",id.image,id.beginLine.toUpperCase(),id.beginColumn));}
         (
             "."
-            id2 = <ID>              {acceso.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));}
+            id2 = <ID>              {acceso.hijos().add(new NodoParser("ID",id2.image.toUpperCase(),id2.beginLine,id2.beginColumn));}
         )?
         <ASIGNA>
         exp = condicion()           {nodo.hijos().add(acceso); nodo.hijos().add(exp);}
@@ -311,9 +311,9 @@ NodoParser denegar():
 {
         t = <RES_DENEGAR>       {nodo = new NodoParser("DENEGAR","",t.beginLine,t.beginColumn);}
         <RES_PERMISOS>
-        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         ","
-        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         <PUNTO>
         tipo = tipo_permiso()   {nodo.hijos().add(tipo);}
         ";"
@@ -325,9 +325,9 @@ NodoParser otorgar():
 {
         t = <RES_OTORGAR>       {nodo = new NodoParser("OTORGAR","",t.beginLine,t.beginColumn);}
         <RES_PERMISOS>
-        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         ","
-        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         <PUNTO>
         tipo = tipo_permiso()   {nodo.hijos().add(tipo);}
         ";"
@@ -337,7 +337,7 @@ NodoParser otorgar():
 NodoParser tipo_permiso():
 {NodoParser tipo; Token t;}
 {
-        t = <ID>                {return new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
+        t = <ID>                {return new NodoParser("TIPO",t.image.toUpperCase(),t.beginLine,t.beginColumn);}
     |   t = <POR>               {return new NodoParser("TIPO","*",t.beginLine,t.beginColumn);}
 }
 
@@ -347,7 +347,7 @@ NodoParser borrar():
         t = <RES_BORRAR>        {nodo = new NodoParser("BORRAR",t.image,t.beginLine,t.beginColumn);}
         <RES_EN>
         <RES_TABLA>
-        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         (
             d = donde()         {nodo.hijos().add(d);}
         )?
@@ -359,7 +359,7 @@ NodoParser actualizar():
 {
         t = <RES_ACTUALIZAR>        {nodo = new NodoParser("ACTUALIZAR",t.image,t.beginLine,t.beginColumn);}
         <RES_TABLA>
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         "("
         lista = lista_ids()         {nodo.hijos().add(lista);}
         ")"
@@ -409,7 +409,7 @@ NodoParser acceso():
         a = tipo_acceso()    {nodo.hijos().add(a);}
         (
             "."
-            t = <ID>         {nodo.hijos().add(new NodoParser("ID",t.image,t.beginLine,t.beginColumn));}
+            t = <ID>         {nodo.hijos().add(new NodoParser("ID",t.image.toUpperCase(),t.beginLine,t.beginColumn));}
         )*
         {return nodo;}
 }
@@ -418,7 +418,7 @@ NodoParser tipo_acceso():
 {Token t;}
 {
         t = <VAR>   {return new NodoParser("VAR",t.image,t.beginLine,t.beginColumn);}
-    |   t = <ID>    {return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
+    |   t = <ID>    {return new NodoParser("ID",t.image.toUpperCase(),t.beginLine,t.beginColumn);}
 }
 
 NodoParser seleccion():
@@ -454,17 +454,17 @@ NodoParser tipo_eliminar():
 {NodoParser tipo; Token t,id;}
 {
         t = <RES_TABLA>             {tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return tipo;}
+        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return tipo;}
     |   t = <RES_OBJETO>            {tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return tipo;}
+        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return tipo;}
     |   t = <RES_BD>                {tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return tipo;}
+        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return tipo;}
     |   t = <RES_USUARIO>           {tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return tipo;}
+        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return tipo;}
     |   t = <RES_PROCEDIMIENTO>     {tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return tipo;}
+        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return tipo;}
     |   t = <RES_FUNCION>           {tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return tipo;}
+        id = <ID>                   {tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return tipo;}
 }
 
 NodoParser accesar():
@@ -473,7 +473,7 @@ NodoParser accesar():
         id = <VAR>                      {nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("VAR",id.image,id.beginLine,id.beginColumn));}
         (
             "."
-            id2 = <ID>                  {nodo.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));}
+            id2 = <ID>                  {nodo.hijos().add(new NodoParser("ID",id2.image.toUpperCase(),id2.beginLine,id2.beginColumn));}
         )?
         {return nodo;}
 }
@@ -481,7 +481,7 @@ NodoParser accesar():
 NodoParser llamada():
 {NodoParser nodo,temp,exp,lista; Token id,id2;}
 {
-        id = <ID>                       {nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                       {nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         (
             temp = tipo_llamada()       {
                                             nodo = temp;
@@ -501,10 +501,10 @@ NodoParser tipo_llamada():
         ")"
         {return nodo;}
     |   "."                             {nodo = new NodoParser("ACCESO","",0,0);}
-        id = <ID>                       {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                       {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         (
             "."
-            id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+            id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         )?
         {return nodo;}
 }
@@ -515,7 +515,7 @@ NodoParser insertar():
         t = <RES_INSERTAR>          {nodo = new NodoParser("INSERTAR",t.image,t.beginLine,t.beginColumn);}
         <RES_EN>       
         <RES_TABLA>
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         "("
         (
             lista = lista_ids()     {nodo.hijos().add(lista);}
@@ -540,13 +540,13 @@ NodoParser tipo_alterar():
 {NodoParser nodo,tipo; Token t,id,cad;}
 {
         t = <RES_OBJETO>            {nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         tipo = tipo_opalterar()     {nodo.hijos().add(tipo); return nodo;}
     |   t = <RES_TABLA>             {nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         tipo = tipo_opalterar()     {nodo.hijos().add(tipo);}
     |   t = <RES_USUARIO>           {nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         <RES_CAMBIAR>
         <RES_PASSWORD>
         <ASIGNA>
@@ -567,10 +567,10 @@ NodoParser tipo_opalterar():
 NodoParser lista_ids():
 {NodoParser nodo; Token id;}
 {
-        id = <ID>                   {nodo = new NodoParser("IDS","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo = new NodoParser("IDS","",0,0); nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         (
             ","
-            id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+            id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         )*
         {return nodo;}
 }
@@ -579,7 +579,7 @@ NodoParser usar():
 {NodoParser nodo; Token t,id;}
 {
         t = <RES_USAR>              {nodo = new NodoParser("USAR",t.image,t.beginLine,t.beginColumn);}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         ";"                         {return nodo;}
 }
 
@@ -605,7 +605,7 @@ NodoParser crear_base():
 {NodoParser nodo = new NodoParser("CREAR","",0,0); Token t,id;}
 {
         t = <RES_BD>                {nodo.hijos().add(new NodoParser("BD",t.image,t.beginLine,t.beginColumn));}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         ";"                         {return nodo;}
 }
 
@@ -613,7 +613,7 @@ NodoParser crear_tabla():
 {NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser lista; Token t,id;}
 {
         t = <RES_TABLA>             {nodo.hijos().add(new NodoParser("TABLA",t.image,t.beginLine,t.beginColumn));}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         "("
         lista = lista_campos()      {nodo.hijos().add(lista);}
         ")"
@@ -624,7 +624,7 @@ NodoParser campo():
 {NodoParser nodo = new NodoParser("CAMPO","",0,0); NodoParser tip,coms,com; Token id;}
 {
         tip = tipo()                {nodo.hijos().add(tip);}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         {coms = new NodoParser("COMPLEMENTOS","",0,0);}
         (
             com = complemento()     {coms.hijos().add(com);}
@@ -652,7 +652,7 @@ NodoParser complemento():
     |   t = <RES_AUTOINC>           {nodo.hijos().add(new NodoParser("AUTOINC","",t.beginLine,t.beginColumn)); return nodo;}
     |   t = <RES_PRIMARIA>          {nodo.hijos().add(new NodoParser("PRIMARIA","",t.beginLine,t.beginColumn)); return nodo;}
     |   t = <RES_FORANEA>           {nodo.hijos().add(new NodoParser("FORANEA","",t.beginLine,t.beginColumn));}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return nodo;}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return nodo;}
     |   t = <RES_UNICO>             {nodo.hijos().add(new NodoParser("UNICO","",t.beginLine,t.beginColumn)); return nodo;}
 }
 
@@ -660,7 +660,7 @@ NodoParser crear_objeto():
 {NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser lista; Token t,id;}
 {
         t = <RES_OBJETO>            {nodo.hijos().add(new NodoParser("OBJETO",t.image,t.beginLine,t.beginColumn));}
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         "("
         lista = lista_atributos()   {nodo.hijos().add(lista);}
         ")"
@@ -671,7 +671,7 @@ NodoParser atributo():
 {NodoParser nodo = new NodoParser("ATRIBUTO","",0,0); NodoParser t; Token id;}
 {
         t = tipo()                  {nodo.hijos().add(t);}           
-        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); return nodo;}
+        id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); return nodo;}
 }
 
 NodoParser lista_atributos():
@@ -689,7 +689,7 @@ NodoParser crear_procedimiento():
 {NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser params,sens; Token t,id,abre,cierra;}
 {
         t = <RES_PROCEDIMIENTO>             {nodo.hijos().add(new NodoParser("PROCEDIMIENTO",t.image,t.beginLine,t.beginColumn));}
-        id = <ID>                           {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                           {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         "("
         (
             params = lista_parametros()     {nodo.hijos().add(params);}
@@ -713,7 +713,7 @@ NodoParser crear_funcion():
 {NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser params,sens,ti; Token t,id,abre,cierra;}
 {
         t = <RES_FUNCION>               {nodo.hijos().add(new NodoParser("FUNCION",t.image,t.beginLine,t.beginColumn));}
-        id = <ID>                       {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>                       {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         "("
         (
             params = lista_parametros() {nodo.hijos().add(params);}
@@ -741,7 +741,7 @@ NodoParser crear_usuario():
 {NodoParser nodo = new NodoParser("CREAR","",0,0); Token t,id,cad;}
 {
         t = <RES_USUARIO>       {nodo.hijos().add(new NodoParser("USUARIO",t.image,t.beginLine,t.beginColumn));}
-        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        id = <ID>               {nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));}
         <RES_COLOCAR>           
         <RES_PASSWORD>
         <ASIGNA>
@@ -758,7 +758,7 @@ NodoParser tipo():
     | t = <RES_DOBLE> {System.out.println("caracter"); return new NodoParser("TIPO","doble",t.beginLine,t.beginColumn);}
     | t = <RES_DATE> {System.out.println("fecha"); return new NodoParser("TIPO","fecha",t.beginLine,t.beginColumn);}
     | t = <RES_DATETIME> {System.out.println("fecha y hora"); return new NodoParser("TIPO","fechahora",t.beginLine,t.beginColumn);}
-    | t = <ID> {System.out.println("id: "+t.image); return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
+    | t = <ID> {System.out.println("id: "+t.image); return new NodoParser("ID",t.image.toUpperCase(),t.beginLine,t.beginColumn);}
 }
 
 //EXP

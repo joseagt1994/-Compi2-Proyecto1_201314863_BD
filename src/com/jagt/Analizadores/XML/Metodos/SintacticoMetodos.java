@@ -326,9 +326,9 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     tipo = tipo_backup();
                                  nodo.hijos().add(tipo);
     id1 = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id1.image,id1.beginLine,id1.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id1.image.toUpperCase(),id1.beginLine,id1.beginColumn));
     id2 = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id2.image.toUpperCase(),id2.beginLine,id2.beginColumn));
     jj_consume_token(109);
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");
@@ -369,12 +369,12 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
   final public NodoParser asignar() throws ParseException {
  NodoParser nodo = new NodoParser("ASIGNAR","",0,0); NodoParser acceso,exp; Token id,id2;
     id = jj_consume_token(VAR);
-                                     acceso = new NodoParser("ACCESO","",0,0); acceso.hijos().add(new NodoParser("VAR",id.image,id.beginLine,id.beginColumn));
+                                     acceso = new NodoParser("ACCESO","",0,0); acceso.hijos().add(new NodoParser("VAR",id.image,id.beginLine.toUpperCase(),id.beginColumn));
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case PUNTO:
       jj_consume_token(PUNTO);
       id2 = jj_consume_token(ID);
-                                     acceso.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));
+                                     acceso.hijos().add(new NodoParser("ID",id2.image.toUpperCase(),id2.beginLine,id2.beginColumn));
       break;
     default:
       jj_la1[7] = jj_gen;
@@ -438,10 +438,10 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                  nodo = new NodoParser("DENEGAR","",t.beginLine,t.beginColumn);
     jj_consume_token(RES_PERMISOS);
     id = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(112);
     id = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(PUNTO);
     tipo = tipo_permiso();
                                  nodo.hijos().add(tipo);
@@ -456,10 +456,10 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                  nodo = new NodoParser("OTORGAR","",t.beginLine,t.beginColumn);
     jj_consume_token(RES_PERMISOS);
     id = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(112);
     id = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(PUNTO);
     tipo = tipo_permiso();
                                  nodo.hijos().add(tipo);
@@ -473,7 +473,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ID:
       t = jj_consume_token(ID);
-                                 {if (true) return new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
+                                 {if (true) return new NodoParser("TIPO",t.image.toUpperCase(),t.beginLine,t.beginColumn);}
       break;
     case POR:
       t = jj_consume_token(POR);
@@ -494,7 +494,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     jj_consume_token(RES_EN);
     jj_consume_token(RES_TABLA);
     id = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RES_DONDE:
       d = donde();
@@ -515,7 +515,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                      nodo = new NodoParser("ACTUALIZAR",t.image,t.beginLine,t.beginColumn);
     jj_consume_token(RES_TABLA);
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(110);
     lista = lista_ids();
                                      nodo.hijos().add(lista);
@@ -613,7 +613,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       }
       jj_consume_token(PUNTO);
       t = jj_consume_token(ID);
-                              nodo.hijos().add(new NodoParser("ID",t.image,t.beginLine,t.beginColumn));
+                              nodo.hijos().add(new NodoParser("ID",t.image.toUpperCase(),t.beginLine,t.beginColumn));
     }
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");
@@ -628,7 +628,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       break;
     case ID:
       t = jj_consume_token(ID);
-                     {if (true) return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
+                     {if (true) return new NodoParser("ID",t.image.toUpperCase(),t.beginLine,t.beginColumn);}
       break;
     default:
       jj_la1[17] = jj_gen;
@@ -703,37 +703,37 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       t = jj_consume_token(RES_TABLA);
                                      tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+                                     tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return tipo;}
       break;
     case RES_OBJETO:
       t = jj_consume_token(RES_OBJETO);
                                      tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+                                     tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return tipo;}
       break;
     case RES_BD:
       t = jj_consume_token(RES_BD);
                                      tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+                                     tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return tipo;}
       break;
     case RES_USUARIO:
       t = jj_consume_token(RES_USUARIO);
                                      tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+                                     tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return tipo;}
       break;
     case RES_PROCEDIMIENTO:
       t = jj_consume_token(RES_PROCEDIMIENTO);
                                      tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+                                     tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return tipo;}
       break;
     case RES_FUNCION:
       t = jj_consume_token(RES_FUNCION);
                                      tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+                                     tipo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return tipo;}
       break;
     default:
       jj_la1[20] = jj_gen;
@@ -751,7 +751,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     case PUNTO:
       jj_consume_token(PUNTO);
       id2 = jj_consume_token(ID);
-                                         nodo.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));
+                                         nodo.hijos().add(new NodoParser("ID",id2.image.toUpperCase(),id2.beginLine,id2.beginColumn));
       break;
     default:
       jj_la1[21] = jj_gen;
@@ -764,7 +764,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
   final public NodoParser llamada() throws ParseException {
  NodoParser nodo,temp,exp,lista; Token id,id2;
     id = jj_consume_token(ID);
-                                         nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                         nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case PUNTO:
     case 110:
@@ -813,12 +813,12 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       jj_consume_token(PUNTO);
                                          nodo = new NodoParser("ACCESO","",0,0);
       id = jj_consume_token(ID);
-                                         nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                         nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PUNTO:
         jj_consume_token(PUNTO);
         id = jj_consume_token(ID);
-                                         nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                         nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
         break;
       default:
         jj_la1[24] = jj_gen;
@@ -841,7 +841,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     jj_consume_token(RES_EN);
     jj_consume_token(RES_TABLA);
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(110);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ID:
@@ -881,7 +881,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       t = jj_consume_token(RES_OBJETO);
                                      nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
       tipo = tipo_opalterar();
                                      nodo.hijos().add(tipo); {if (true) return nodo;}
       break;
@@ -889,7 +889,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       t = jj_consume_token(RES_TABLA);
                                      nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
       tipo = tipo_opalterar();
                                      nodo.hijos().add(tipo);
       break;
@@ -897,7 +897,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       t = jj_consume_token(RES_USUARIO);
                                      nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
       id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
       jj_consume_token(RES_CAMBIAR);
       jj_consume_token(RES_PASSWORD);
       jj_consume_token(ASIGNA);
@@ -940,7 +940,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
   final public NodoParser lista_ids() throws ParseException {
  NodoParser nodo; Token id;
     id = jj_consume_token(ID);
-                                     nodo = new NodoParser("IDS","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo = new NodoParser("IDS","",0,0); nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -953,7 +953,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       }
       jj_consume_token(112);
       id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     }
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");
@@ -964,7 +964,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = jj_consume_token(RES_USAR);
                                      nodo = new NodoParser("USAR",t.image,t.beginLine,t.beginColumn);
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(109);
                                      {if (true) return nodo;}
     throw new Error("Missing return statement in function");
@@ -1018,7 +1018,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = jj_consume_token(RES_BD);
                                      nodo.hijos().add(new NodoParser("BD",t.image,t.beginLine,t.beginColumn));
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(109);
                                      {if (true) return nodo;}
     throw new Error("Missing return statement in function");
@@ -1029,7 +1029,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = jj_consume_token(RES_TABLA);
                                      nodo.hijos().add(new NodoParser("TABLA",t.image,t.beginLine,t.beginColumn));
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(110);
     lista = lista_campos();
                                      nodo.hijos().add(lista);
@@ -1044,7 +1044,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     tip = tipo();
                                      nodo.hijos().add(tip);
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
          coms = new NodoParser("COMPLEMENTOS","",0,0);
     label_8:
     while (true) {
@@ -1115,7 +1115,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       t = jj_consume_token(RES_FORANEA);
                                      nodo.hijos().add(new NodoParser("FORANEA","",t.beginLine,t.beginColumn));
       id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return nodo;}
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return nodo;}
       break;
     case RES_UNICO:
       t = jj_consume_token(RES_UNICO);
@@ -1134,7 +1134,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = jj_consume_token(RES_OBJETO);
                                      nodo.hijos().add(new NodoParser("OBJETO",t.image,t.beginLine,t.beginColumn));
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(110);
     lista = lista_atributos();
                                      nodo.hijos().add(lista);
@@ -1149,7 +1149,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = tipo();
                                      nodo.hijos().add(t);
     id = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return nodo;}
+                                     nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn)); {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
 
@@ -1180,7 +1180,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = jj_consume_token(RES_PROCEDIMIENTO);
                                              nodo.hijos().add(new NodoParser("PROCEDIMIENTO",t.image,t.beginLine,t.beginColumn));
     id = jj_consume_token(ID);
-                                             nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                             nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(110);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RES_DOBLE:
@@ -1221,7 +1221,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = jj_consume_token(RES_FUNCION);
                                          nodo.hijos().add(new NodoParser("FUNCION",t.image,t.beginLine,t.beginColumn));
     id = jj_consume_token(ID);
-                                         nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                         nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(110);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RES_DOBLE:
@@ -1276,7 +1276,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     t = jj_consume_token(RES_USUARIO);
                                  nodo.hijos().add(new NodoParser("USUARIO",t.image,t.beginLine,t.beginColumn));
     id = jj_consume_token(ID);
-                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                 nodo.hijos().add(new NodoParser("ID",id.image.toUpperCase(),id.beginLine,id.beginColumn));
     jj_consume_token(RES_COLOCAR);
     jj_consume_token(RES_PASSWORD);
     jj_consume_token(ASIGNA);
@@ -1316,7 +1316,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       break;
     case ID:
       t = jj_consume_token(ID);
-                System.out.println("id: "+t.image); {if (true) return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
+                System.out.println("id: "+t.image); {if (true) return new NodoParser("ID",t.image.toUpperCase(),t.beginLine,t.beginColumn);}
       break;
     default:
       jj_la1[38] = jj_gen;
@@ -1422,7 +1422,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
   }
 
   final public NodoParser tipoValor() throws ParseException {
- NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,exp,tipoL; Token t,t2;
+ NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,tipoL,exp; Token t,t2;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case 110:
       jj_consume_token(110);

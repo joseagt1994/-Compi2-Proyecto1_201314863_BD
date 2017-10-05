@@ -2,196 +2,412 @@ digraph grafica {
 nodo0[label="CUERPOS"];
 nodo1[label="CREAR"];
 nodo2[label="PROCEDIMIENTO PROCEDIMIENTO"];
-nodo3[label="ID inicio_archivo4"];
+nodo3[label="ID Relacionar"];
 nodo4[label="SENTENCIAS"];
-nodo5[label="CREAR"];
-nodo6[label="TABLA tabla"];
-nodo7[label="ID BANCODEDATOSA"];
-nodo8[label="CAMPOS"];
-nodo9[label="CAMPO"];
-nodo10[label="TIPO cadena"];
-nodo11[label="ID Valor"];
-nodo12[label="COMPLEMENTOS"];
-nodo13[label="COMPLEMENTO"];
-nodo14[label="NULO"];
-nodo15[label="CAMPO"];
-nodo16[label="TIPO entero"];
-nodo17[label="ID TIPO"];
-nodo18[label="COMPLEMENTOS"];
-nodo19[label="COMPLEMENTO"];
-nodo20[label="NULO"];
-nodo21[label="CAMPO"];
-nodo22[label="TIPO entero"];
-nodo23[label="ID Orden"];
-nodo24[label="COMPLEMENTOS"];
-nodo25[label="COMPLEMENTO"];
-nodo26[label="NULO"];
-nodo27[label="CREAR"];
-nodo28[label="TABLA tabla"];
-nodo29[label="ID BANCODEDATOSB"];
-nodo30[label="CAMPOS"];
-nodo31[label="CAMPO"];
-nodo32[label="TIPO cadena"];
-nodo33[label="ID Valor"];
-nodo34[label="COMPLEMENTOS"];
-nodo35[label="COMPLEMENTO"];
-nodo36[label="NULO"];
-nodo37[label="CAMPO"];
-nodo38[label="TIPO entero"];
-nodo39[label="ID TIPO"];
-nodo40[label="COMPLEMENTOS"];
-nodo41[label="COMPLEMENTO"];
-nodo42[label="NULO"];
-nodo43[label="CAMPO"];
-nodo44[label="TIPO entero"];
-nodo45[label="ID Orden"];
-nodo46[label="COMPLEMENTOS"];
-nodo47[label="COMPLEMENTO"];
-nodo48[label="NULO"];
-nodo49[label="CREAR"];
-nodo50[label="TABLA tabla"];
-nodo51[label="ID BANCODEDATOSC"];
-nodo52[label="CAMPOS"];
-nodo53[label="CAMPO"];
-nodo54[label="TIPO cadena"];
-nodo55[label="ID Valor"];
-nodo56[label="COMPLEMENTOS"];
-nodo57[label="COMPLEMENTO"];
-nodo58[label="NULO"];
-nodo59[label="CAMPO"];
-nodo60[label="TIPO entero"];
-nodo61[label="ID TIPO"];
-nodo62[label="COMPLEMENTOS"];
-nodo63[label="COMPLEMENTO"];
-nodo64[label="NULO"];
-nodo65[label="CAMPO"];
-nodo66[label="TIPO entero"];
-nodo67[label="ID Orden"];
-nodo68[label="COMPLEMENTOS"];
-nodo69[label="COMPLEMENTO"];
-nodo70[label="NULO"];
-nodo71[label="CREAR"];
-nodo72[label="TABLA TABLA"];
-nodo73[label="ID Profesor"];
-nodo74[label="CAMPOS"];
-nodo75[label="CAMPO"];
-nodo76[label="TIPO entero"];
-nodo77[label="ID codigo"];
-nodo78[label="COMPLEMENTOS"];
-nodo79[label="COMPLEMENTO"];
-nodo80[label="PRIMARIA"];
-nodo81[label="COMPLEMENTO"];
-nodo82[label="AUTOINC"];
-nodo83[label="CAMPO"];
-nodo84[label="TIPO cadena"];
-nodo85[label="ID nombre"];
-nodo86[label="COMPLEMENTOS"];
-nodo87[label="COMPLEMENTO"];
-nodo88[label="NO NULO"];
-nodo89[label="CAMPO"];
-nodo90[label="TIPO boolean"];
-nodo91[label="ID titular"];
-nodo92[label="COMPLEMENTOS"];
-nodo93[label="COMPLEMENTO"];
-nodo94[label="NO NULO"];
-nodo95[label="CREAR"];
-nodo96[label="TABLA TABLA"];
-nodo97[label="ID Cursos"];
-nodo98[label="CAMPOS"];
-nodo99[label="CAMPO"];
-nodo100[label="TIPO entero"];
-nodo101[label="ID cod"];
-nodo102[label="COMPLEMENTOS"];
-nodo103[label="COMPLEMENTO"];
-nodo104[label="PRIMARIA"];
-nodo105[label="COMPLEMENTO"];
-nodo106[label="AUTOINC"];
-nodo107[label="CAMPO"];
-nodo108[label="TIPO cadena"];
-nodo109[label="ID curso"];
-nodo110[label="COMPLEMENTOS"];
-nodo111[label="COMPLEMENTO"];
-nodo112[label="NO NULO"];
-nodo113[label="CAMPO"];
-nodo114[label="TIPO cadena"];
-nodo115[label="ID semestre"];
-nodo116[label="COMPLEMENTOS"];
-nodo117[label="COMPLEMENTO"];
-nodo118[label="NO NULO"];
-nodo119[label="CAMPO"];
-nodo120[label="TIPO entero"];
-nodo121[label="ID salon"];
-nodo122[label="COMPLEMENTOS"];
-nodo123[label="CREAR"];
-nodo124[label="OBJETO OBJETO"];
-nodo125[label="ID obj_Carrera"];
-nodo126[label="ATRIBUTOS"];
-nodo127[label="ATRIBUTO"];
-nodo128[label="TIPO entero"];
-nodo129[label="ID id"];
-nodo130[label="ATRIBUTO"];
-nodo131[label="TIPO cadena"];
-nodo132[label="ID name"];
-nodo133[label="INSERTAR INSertar"];
-nodo134[label="ID profesor"];
-nodo135[label="IDS"];
-nodo136[label="ID nombre"];
-nodo137[label="ID TITULAR"];
-nodo138[label="EXPRESIONES"];
-nodo139[label="EXP"];
-nodo140[label="cadena JUAN RAYMUNDO GOMEZ RAMIREZ"];
-nodo141[label="EXP"];
-nodo142[label="boolean 0"];
-nodo143[label="INSERTAR INSertar"];
-nodo144[label="ID profesor"];
-nodo145[label="IDS"];
-nodo146[label="ID nombre"];
-nodo147[label="ID TITULAR"];
-nodo148[label="EXPRESIONES"];
-nodo149[label="EXP"];
-nodo150[label="cadena WALTER RAMOS GONZALEZ"];
-nodo151[label="EXP"];
-nodo152[label="boolean 0"];
-nodo153[label="INSERTAR INSertar"];
-nodo154[label="ID profesor"];
-nodo155[label="IDS"];
-nodo156[label="ID nombre"];
-nodo157[label="ID TITULAR"];
-nodo158[label="EXPRESIONES"];
+nodo5[label="INSERTAR insertar"];
+nodo6[label="ID cursos"];
+nodo7[label="IDS"];
+nodo8[label="ID curso"];
+nodo9[label="ID semestre"];
+nodo10[label="ID salon"];
+nodo11[label="EXPRESIONES"];
+nodo12[label="EXP"];
+nodo13[label="cadena ORIENTACION Y LIDERAZGO"];
+nodo14[label="EXP"];
+nodo15[label="cadena 1er semestre 2017"];
+nodo16[label="EXP"];
+nodo17[label="entero 101"];
+nodo18[label="INSERTAR insertar"];
+nodo19[label="ID cursos"];
+nodo20[label="IDS"];
+nodo21[label="ID curso"];
+nodo22[label="ID semestre"];
+nodo23[label="ID salon"];
+nodo24[label="EXPRESIONES"];
+nodo25[label="EXP"];
+nodo26[label="cadena AREA SOCIAL HUMANISTICA 1"];
+nodo27[label="EXP"];
+nodo28[label="cadena 2do semestre 2017"];
+nodo29[label="EXP"];
+nodo30[label="entero 102"];
+nodo31[label="INSERTAR insertar"];
+nodo32[label="ID cursos"];
+nodo33[label="IDS"];
+nodo34[label="ID curso"];
+nodo35[label="ID semestre"];
+nodo36[label="ID salon"];
+nodo37[label="EXPRESIONES"];
+nodo38[label="EXP"];
+nodo39[label="cadena DEPORTES 1"];
+nodo40[label="EXP"];
+nodo41[label="cadena 1er semestre 2018"];
+nodo42[label="EXP"];
+nodo43[label="entero 103"];
+nodo44[label="INSERTAR insertar"];
+nodo45[label="ID cursos"];
+nodo46[label="IDS"];
+nodo47[label="ID curso"];
+nodo48[label="ID semestre"];
+nodo49[label="ID salon"];
+nodo50[label="EXPRESIONES"];
+nodo51[label="EXP"];
+nodo52[label="cadena AREA TECNICA COMPLEMENTARIA 1"];
+nodo53[label="EXP"];
+nodo54[label="cadena 2do semestre 2018"];
+nodo55[label="EXP"];
+nodo56[label="entero 104"];
+nodo57[label="INSERTAR insertar"];
+nodo58[label="ID cursos"];
+nodo59[label="IDS"];
+nodo60[label="ID curso"];
+nodo61[label="ID semestre"];
+nodo62[label="ID salon"];
+nodo63[label="EXPRESIONES"];
+nodo64[label="EXP"];
+nodo65[label="cadena AREA MATEMATICA BASICA 1"];
+nodo66[label="EXP"];
+nodo67[label="cadena 1er semestre 2019"];
+nodo68[label="EXP"];
+nodo69[label="entero 105"];
+nodo70[label="INSERTAR insertar"];
+nodo71[label="ID cursos"];
+nodo72[label="IDS"];
+nodo73[label="ID curso"];
+nodo74[label="ID semestre"];
+nodo75[label="ID salon"];
+nodo76[label="EXPRESIONES"];
+nodo77[label="EXP"];
+nodo78[label="cadena QUIMICA GENERAL 1"];
+nodo79[label="EXP"];
+nodo80[label="cadena 2do semestre 2019"];
+nodo81[label="EXP"];
+nodo82[label="entero 106"];
+nodo83[label="INSERTAR insertar"];
+nodo84[label="ID cursos"];
+nodo85[label="IDS"];
+nodo86[label="ID curso"];
+nodo87[label="ID semestre"];
+nodo88[label="ID salon"];
+nodo89[label="EXPRESIONES"];
+nodo90[label="EXP"];
+nodo91[label="cadena AREA MATEMATICA BASICA 2"];
+nodo92[label="EXP"];
+nodo93[label="cadena 1er semestre 2020"];
+nodo94[label="EXP"];
+nodo95[label="entero 201"];
+nodo96[label="INSERTAR insertar"];
+nodo97[label="ID cursos"];
+nodo98[label="IDS"];
+nodo99[label="ID curso"];
+nodo100[label="ID semestre"];
+nodo101[label="ID salon"];
+nodo102[label="EXPRESIONES"];
+nodo103[label="EXP"];
+nodo104[label="cadena AREA SOCIAL HUMANISTICA 2"];
+nodo105[label="EXP"];
+nodo106[label="cadena 2do semestre 2020"];
+nodo107[label="EXP"];
+nodo108[label="entero 202"];
+nodo109[label="INSERTAR insertar"];
+nodo110[label="ID cursos"];
+nodo111[label="IDS"];
+nodo112[label="ID curso"];
+nodo113[label="ID semestre"];
+nodo114[label="ID salon"];
+nodo115[label="EXPRESIONES"];
+nodo116[label="EXP"];
+nodo117[label="cadena AREA MATEMATICA INTERMEDIA 1"];
+nodo118[label="EXP"];
+nodo119[label="cadena 1er semestre 2021"];
+nodo120[label="EXP"];
+nodo121[label="entero 203"];
+nodo122[label="INSERTAR insertar"];
+nodo123[label="ID cursos"];
+nodo124[label="IDS"];
+nodo125[label="ID curso"];
+nodo126[label="ID semestre"];
+nodo127[label="ID salon"];
+nodo128[label="EXPRESIONES"];
+nodo129[label="EXP"];
+nodo130[label="cadena FISICA BASICA"];
+nodo131[label="EXP"];
+nodo132[label="cadena 2do semestre 2021"];
+nodo133[label="EXP"];
+nodo134[label="entero 204"];
+nodo135[label="INSERTAR insertar"];
+nodo136[label="ID cursos"];
+nodo137[label="IDS"];
+nodo138[label="ID curso"];
+nodo139[label="ID semestre"];
+nodo140[label="ID salon"];
+nodo141[label="EXPRESIONES"];
+nodo142[label="EXP"];
+nodo143[label="cadena INTRODUCCION A LA PROGRAMACION Y COMPUTACION 1"];
+nodo144[label="EXP"];
+nodo145[label="cadena 1er semestre 2017"];
+nodo146[label="EXP"];
+nodo147[label="entero 205"];
+nodo148[label="INSERTAR insertar"];
+nodo149[label="ID cursos"];
+nodo150[label="IDS"];
+nodo151[label="ID curso"];
+nodo152[label="ID semestre"];
+nodo153[label="ID salon"];
+nodo154[label="EXPRESIONES"];
+nodo155[label="EXP"];
+nodo156[label="cadena LOGICA DE SISTEMAS"];
+nodo157[label="EXP"];
+nodo158[label="cadena 2do semestre 2017"];
 nodo159[label="EXP"];
-nodo160[label="cadena CESAR TOMAS LOPEZ DE LEON"];
-nodo161[label="EXP"];
-nodo162[label="boolean 0"];
-nodo163[label="INSERTAR INSertar"];
-nodo164[label="ID profesor"];
-nodo165[label="IDS"];
-nodo166[label="ID nombre"];
-nodo167[label="ID TITULAR"];
-nodo168[label="EXPRESIONES"];
-nodo169[label="EXP"];
-nodo170[label="cadena JENNIFER ESTHER CABRERA PIVARAL"];
-nodo171[label="EXP"];
-nodo172[label="boolean 0"];
-nodo173[label="INSERTAR INSertar"];
-nodo174[label="ID profesor"];
-nodo175[label="IDS"];
-nodo176[label="ID nombre"];
-nodo177[label="ID TITULAR"];
-nodo178[label="EXPRESIONES"];
-nodo179[label="EXP"];
-nodo180[label="cadena FREDDY NOEL ROCA ZALDANHA"];
+nodo160[label="entero 206"];
+nodo161[label="INSERTAR insertar"];
+nodo162[label="ID cursos"];
+nodo163[label="IDS"];
+nodo164[label="ID curso"];
+nodo165[label="ID semestre"];
+nodo166[label="ID salon"];
+nodo167[label="EXPRESIONES"];
+nodo168[label="EXP"];
+nodo169[label="cadena MATEMATICA PARA COMPUTACION 1"];
+nodo170[label="EXP"];
+nodo171[label="cadena 1er semestre 2018"];
+nodo172[label="EXP"];
+nodo173[label="entero 207"];
+nodo174[label="INSERTAR insertar"];
+nodo175[label="ID cursos"];
+nodo176[label="IDS"];
+nodo177[label="ID curso"];
+nodo178[label="ID semestre"];
+nodo179[label="ID salon"];
+nodo180[label="EXPRESIONES"];
 nodo181[label="EXP"];
-nodo182[label="boolean 0"];
-nodo183[label="INSERTAR INSertar"];
-nodo184[label="ID profesor"];
-nodo185[label="IDS"];
-nodo186[label="ID nombre"];
-nodo187[label="ID TITULAR"];
-nodo188[label="EXPRESIONES"];
-nodo189[label="EXP"];
-nodo190[label="cadena DAVID ANTONIO JOEL DE LEON CABRERA"];
-nodo191[label="EXP"];
-nodo192[label="boolean 0"];
+nodo182[label="cadena PRACTICAS INICIALES"];
+nodo183[label="EXP"];
+nodo184[label="cadena 2do semestre 2018"];
+nodo185[label="EXP"];
+nodo186[label="entero 301"];
+nodo187[label="INSERTAR insertar"];
+nodo188[label="ID cursos"];
+nodo189[label="IDS"];
+nodo190[label="ID curso"];
+nodo191[label="ID semestre"];
+nodo192[label="ID salon"];
+nodo193[label="EXPRESIONES"];
+nodo194[label="EXP"];
+nodo195[label="cadena AREA MATEMATICA INTERMEDIA 2"];
+nodo196[label="EXP"];
+nodo197[label="cadena 1er semestre 2019"];
+nodo198[label="EXP"];
+nodo199[label="entero 302"];
+nodo200[label="INSERTAR insertar"];
+nodo201[label="ID cursos"];
+nodo202[label="IDS"];
+nodo203[label="ID curso"];
+nodo204[label="ID semestre"];
+nodo205[label="ID salon"];
+nodo206[label="EXPRESIONES"];
+nodo207[label="EXP"];
+nodo208[label="cadena FISICA 1"];
+nodo209[label="EXP"];
+nodo210[label="cadena 2do semestre 2019"];
+nodo211[label="EXP"];
+nodo212[label="entero 303"];
+nodo213[label="INSERTAR insertar"];
+nodo214[label="ID cursos"];
+nodo215[label="IDS"];
+nodo216[label="ID curso"];
+nodo217[label="ID semestre"];
+nodo218[label="ID salon"];
+nodo219[label="EXPRESIONES"];
+nodo220[label="EXP"];
+nodo221[label="cadena MATEMATICA PARA COMPUTACION 2"];
+nodo222[label="EXP"];
+nodo223[label="cadena 1er semestre 2020"];
+nodo224[label="EXP"];
+nodo225[label="entero 304"];
+nodo226[label="INSERTAR insertar"];
+nodo227[label="ID cursos"];
+nodo228[label="IDS"];
+nodo229[label="ID curso"];
+nodo230[label="ID semestre"];
+nodo231[label="ID salon"];
+nodo232[label="EXPRESIONES"];
+nodo233[label="EXP"];
+nodo234[label="cadena AREA MATEMATICA INTERMEDIA 3"];
+nodo235[label="EXP"];
+nodo236[label="cadena 2do semestre 2020"];
+nodo237[label="EXP"];
+nodo238[label="entero 305"];
+nodo239[label="INSERTAR insertar"];
+nodo240[label="ID cursos"];
+nodo241[label="IDS"];
+nodo242[label="ID curso"];
+nodo243[label="ID semestre"];
+nodo244[label="ID salon"];
+nodo245[label="EXPRESIONES"];
+nodo246[label="EXP"];
+nodo247[label="cadena TECNICAS DE ESTUDIO E INVESTIGACION"];
+nodo248[label="EXP"];
+nodo249[label="cadena 1er semestre 2021"];
+nodo250[label="EXP"];
+nodo251[label="entero 306"];
+nodo252[label="INSERTAR insertar"];
+nodo253[label="ID cursos"];
+nodo254[label="IDS"];
+nodo255[label="ID curso"];
+nodo256[label="ID semestre"];
+nodo257[label="ID salon"];
+nodo258[label="EXPRESIONES"];
+nodo259[label="EXP"];
+nodo260[label="cadena LOGICA"];
+nodo261[label="EXP"];
+nodo262[label="cadena 2do semestre 2021"];
+nodo263[label="EXP"];
+nodo264[label="entero 401"];
+nodo265[label="INSERTAR insertar"];
+nodo266[label="ID cursos"];
+nodo267[label="IDS"];
+nodo268[label="ID curso"];
+nodo269[label="ID semestre"];
+nodo270[label="ID salon"];
+nodo271[label="EXPRESIONES"];
+nodo272[label="EXP"];
+nodo273[label="cadena MATEMATICA APLICADA 1"];
+nodo274[label="EXP"];
+nodo275[label="cadena 1er semestre 2017"];
+nodo276[label="EXP"];
+nodo277[label="entero 402"];
+nodo278[label="INSERTAR insertar"];
+nodo279[label="ID cursos"];
+nodo280[label="IDS"];
+nodo281[label="ID curso"];
+nodo282[label="ID semestre"];
+nodo283[label="ID salon"];
+nodo284[label="EXPRESIONES"];
+nodo285[label="EXP"];
+nodo286[label="cadena MATEMATICA APLICADA 3"];
+nodo287[label="EXP"];
+nodo288[label="cadena 2do semestre 2017"];
+nodo289[label="EXP"];
+nodo290[label="entero 403"];
+nodo291[label="INSERTAR insertar"];
+nodo292[label="ID cursos"];
+nodo293[label="IDS"];
+nodo294[label="ID curso"];
+nodo295[label="ID semestre"];
+nodo296[label="ID salon"];
+nodo297[label="EXPRESIONES"];
+nodo298[label="EXP"];
+nodo299[label="cadena FISICA 2"];
+nodo300[label="EXP"];
+nodo301[label="cadena 1er semestre 2018"];
+nodo302[label="EXP"];
+nodo303[label="entero 404"];
+nodo304[label="INSERTAR insertar"];
+nodo305[label="ID cursos"];
+nodo306[label="IDS"];
+nodo307[label="ID curso"];
+nodo308[label="ID semestre"];
+nodo309[label="ID salon"];
+nodo310[label="EXPRESIONES"];
+nodo311[label="EXP"];
+nodo312[label="cadena ESTADISTICA 1"];
+nodo313[label="EXP"];
+nodo314[label="cadena 2do semestre 2018"];
+nodo315[label="EXP"];
+nodo316[label="entero 501"];
+nodo317[label="INSERTAR insertar"];
+nodo318[label="ID cursos"];
+nodo319[label="IDS"];
+nodo320[label="ID curso"];
+nodo321[label="ID semestre"];
+nodo322[label="ID salon"];
+nodo323[label="EXPRESIONES"];
+nodo324[label="EXP"];
+nodo325[label="cadena INTRODUCCION A LA PROGRAMACION Y COMPUTACION 2"];
+nodo326[label="EXP"];
+nodo327[label="cadena 1er semestre 2019"];
+nodo328[label="EXP"];
+nodo329[label="entero 502"];
+nodo330[label="INSERTAR insertar"];
+nodo331[label="ID cursos"];
+nodo332[label="IDS"];
+nodo333[label="ID curso"];
+nodo334[label="ID semestre"];
+nodo335[label="ID salon"];
+nodo336[label="EXPRESIONES"];
+nodo337[label="EXP"];
+nodo338[label="cadena LENGUAJES FORMALES Y DE PROGRAMACION"];
+nodo339[label="EXP"];
+nodo340[label="cadena 2do semestre 2019"];
+nodo341[label="EXP"];
+nodo342[label="entero 502"];
+nodo343[label="INSERTAR insertar"];
+nodo344[label="ID cursos"];
+nodo345[label="IDS"];
+nodo346[label="ID curso"];
+nodo347[label="ID semestre"];
+nodo348[label="ID salon"];
+nodo349[label="EXPRESIONES"];
+nodo350[label="EXP"];
+nodo351[label="cadena ESTRUCTURAS DE DATOS"];
+nodo352[label="EXP"];
+nodo353[label="cadena 1er semestre 2020"];
+nodo354[label="EXP"];
+nodo355[label="entero 504"];
+nodo356[label="INSERTAR insertar"];
+nodo357[label="ID cursos"];
+nodo358[label="IDS"];
+nodo359[label="ID curso"];
+nodo360[label="ID semestre"];
+nodo361[label="ID salon"];
+nodo362[label="EXPRESIONES"];
+nodo363[label="EXP"];
+nodo364[label="cadena ORGANIZACION COMPUTACIONAL"];
+nodo365[label="EXP"];
+nodo366[label="cadena 2do semestre 2020"];
+nodo367[label="EXP"];
+nodo368[label="entero 505"];
+nodo369[label="INSERTAR insertar"];
+nodo370[label="ID cursos"];
+nodo371[label="IDS"];
+nodo372[label="ID curso"];
+nodo373[label="ID semestre"];
+nodo374[label="ID salon"];
+nodo375[label="EXPRESIONES"];
+nodo376[label="EXP"];
+nodo377[label="cadena INVESTIGACION DE OPERACIONES I"];
+nodo378[label="EXP"];
+nodo379[label="cadena 1er semestre 2021"];
+nodo380[label="EXP"];
+nodo381[label="entero 506"];
+nodo382[label="INSERTAR insertar"];
+nodo383[label="ID cursos"];
+nodo384[label="IDS"];
+nodo385[label="ID curso"];
+nodo386[label="ID semestre"];
+nodo387[label="ID salon"];
+nodo388[label="EXPRESIONES"];
+nodo389[label="EXP"];
+nodo390[label="cadena ORGANIZACION DE LENGUAJES Y COMPILADORES 1"];
+nodo391[label="EXP"];
+nodo392[label="cadena 2do semestre 2021"];
+nodo393[label="EXP"];
+nodo394[label="entero 507"];
+nodo395[label="IMPRIMIR"];
+nodo396[label="EXP"];
+nodo397[label="EXP"];
+nodo398[label="cadena Conteo Cursos: "];
+nodo399[label="OPEARIT +"];
+nodo400[label="CONTAR"];
+nodo401[label="SELECCIONAR SELECCIONAR"];
+nodo402[label="TODO *"];
+nodo403[label="IDS"];
+nodo404[label="ID cursos"];
+nodo405[label="SELECCIONAR SELECCIONAR"];
+nodo406[label="TODO *"];
+nodo407[label="IDS"];
+nodo408[label="ID cursos"];
 nodo0->nodo1;
 
 nodo1->nodo2;
@@ -206,109 +422,109 @@ nodo5->nodo6;
 
 nodo5->nodo7;
 
-nodo5->nodo8;
+nodo7->nodo8;
 
-nodo8->nodo9;
+nodo7->nodo9;
 
-nodo9->nodo10;
+nodo7->nodo10;
 
-nodo9->nodo11;
+nodo5->nodo11;
 
-nodo9->nodo12;
+nodo11->nodo12;
 
 nodo12->nodo13;
 
-nodo13->nodo14;
+nodo11->nodo14;
 
-nodo8->nodo15;
+nodo14->nodo15;
 
-nodo15->nodo16;
+nodo11->nodo16;
 
-nodo15->nodo17;
+nodo16->nodo17;
 
-nodo15->nodo18;
+nodo4->nodo18;
 
 nodo18->nodo19;
 
-nodo19->nodo20;
+nodo18->nodo20;
 
-nodo8->nodo21;
+nodo20->nodo21;
 
-nodo21->nodo22;
+nodo20->nodo22;
 
-nodo21->nodo23;
+nodo20->nodo23;
 
-nodo21->nodo24;
+nodo18->nodo24;
 
 nodo24->nodo25;
 
 nodo25->nodo26;
 
-nodo4->nodo27;
+nodo24->nodo27;
 
 nodo27->nodo28;
 
-nodo27->nodo29;
+nodo24->nodo29;
 
-nodo27->nodo30;
+nodo29->nodo30;
 
-nodo30->nodo31;
+nodo4->nodo31;
 
 nodo31->nodo32;
 
 nodo31->nodo33;
 
-nodo31->nodo34;
+nodo33->nodo34;
 
-nodo34->nodo35;
+nodo33->nodo35;
 
-nodo35->nodo36;
+nodo33->nodo36;
 
-nodo30->nodo37;
+nodo31->nodo37;
 
 nodo37->nodo38;
 
-nodo37->nodo39;
+nodo38->nodo39;
 
 nodo37->nodo40;
 
 nodo40->nodo41;
 
-nodo41->nodo42;
+nodo37->nodo42;
 
-nodo30->nodo43;
+nodo42->nodo43;
 
-nodo43->nodo44;
+nodo4->nodo44;
 
-nodo43->nodo45;
+nodo44->nodo45;
 
-nodo43->nodo46;
+nodo44->nodo46;
 
 nodo46->nodo47;
 
-nodo47->nodo48;
+nodo46->nodo48;
 
-nodo4->nodo49;
+nodo46->nodo49;
 
-nodo49->nodo50;
+nodo44->nodo50;
 
-nodo49->nodo51;
+nodo50->nodo51;
 
-nodo49->nodo52;
+nodo51->nodo52;
 
-nodo52->nodo53;
+nodo50->nodo53;
 
 nodo53->nodo54;
 
-nodo53->nodo55;
+nodo50->nodo55;
 
-nodo53->nodo56;
+nodo55->nodo56;
 
-nodo56->nodo57;
+nodo4->nodo57;
 
 nodo57->nodo58;
 
-nodo52->nodo59;
+nodo57->nodo59;
 
 nodo59->nodo60;
 
@@ -316,85 +532,85 @@ nodo59->nodo61;
 
 nodo59->nodo62;
 
-nodo62->nodo63;
+nodo57->nodo63;
 
 nodo63->nodo64;
 
-nodo52->nodo65;
+nodo64->nodo65;
 
-nodo65->nodo66;
+nodo63->nodo66;
 
-nodo65->nodo67;
+nodo66->nodo67;
 
-nodo65->nodo68;
+nodo63->nodo68;
 
 nodo68->nodo69;
 
-nodo69->nodo70;
+nodo4->nodo70;
 
-nodo4->nodo71;
+nodo70->nodo71;
 
-nodo71->nodo72;
+nodo70->nodo72;
 
-nodo71->nodo73;
+nodo72->nodo73;
 
-nodo71->nodo74;
+nodo72->nodo74;
 
-nodo74->nodo75;
+nodo72->nodo75;
 
-nodo75->nodo76;
+nodo70->nodo76;
 
-nodo75->nodo77;
+nodo76->nodo77;
 
-nodo75->nodo78;
+nodo77->nodo78;
 
-nodo78->nodo79;
+nodo76->nodo79;
 
 nodo79->nodo80;
 
-nodo78->nodo81;
+nodo76->nodo81;
 
 nodo81->nodo82;
 
-nodo74->nodo83;
+nodo4->nodo83;
 
 nodo83->nodo84;
 
 nodo83->nodo85;
 
-nodo83->nodo86;
+nodo85->nodo86;
 
-nodo86->nodo87;
+nodo85->nodo87;
 
-nodo87->nodo88;
+nodo85->nodo88;
 
-nodo74->nodo89;
+nodo83->nodo89;
 
 nodo89->nodo90;
 
-nodo89->nodo91;
+nodo90->nodo91;
 
 nodo89->nodo92;
 
 nodo92->nodo93;
 
-nodo93->nodo94;
+nodo89->nodo94;
 
-nodo4->nodo95;
+nodo94->nodo95;
 
-nodo95->nodo96;
+nodo4->nodo96;
 
-nodo95->nodo97;
+nodo96->nodo97;
 
-nodo95->nodo98;
+nodo96->nodo98;
 
 nodo98->nodo99;
 
-nodo99->nodo100;
+nodo98->nodo100;
 
-nodo99->nodo101;
+nodo98->nodo101;
 
-nodo99->nodo102;
+nodo96->nodo102;
 
 nodo102->nodo103;
 
@@ -404,176 +620,608 @@ nodo102->nodo105;
 
 nodo105->nodo106;
 
-nodo98->nodo107;
+nodo102->nodo107;
 
 nodo107->nodo108;
 
-nodo107->nodo109;
+nodo4->nodo109;
 
-nodo107->nodo110;
+nodo109->nodo110;
 
-nodo110->nodo111;
+nodo109->nodo111;
 
 nodo111->nodo112;
 
-nodo98->nodo113;
+nodo111->nodo113;
 
-nodo113->nodo114;
+nodo111->nodo114;
 
-nodo113->nodo115;
+nodo109->nodo115;
 
-nodo113->nodo116;
+nodo115->nodo116;
 
 nodo116->nodo117;
 
-nodo117->nodo118;
+nodo115->nodo118;
 
-nodo98->nodo119;
+nodo118->nodo119;
 
-nodo119->nodo120;
+nodo115->nodo120;
 
-nodo119->nodo121;
+nodo120->nodo121;
 
-nodo119->nodo122;
+nodo4->nodo122;
 
-nodo4->nodo123;
+nodo122->nodo123;
 
-nodo123->nodo124;
+nodo122->nodo124;
 
-nodo123->nodo125;
+nodo124->nodo125;
 
-nodo123->nodo126;
+nodo124->nodo126;
 
-nodo126->nodo127;
+nodo124->nodo127;
 
-nodo127->nodo128;
+nodo122->nodo128;
 
-nodo127->nodo129;
+nodo128->nodo129;
 
-nodo126->nodo130;
+nodo129->nodo130;
 
-nodo130->nodo131;
+nodo128->nodo131;
 
-nodo130->nodo132;
+nodo131->nodo132;
 
-nodo4->nodo133;
+nodo128->nodo133;
 
 nodo133->nodo134;
 
-nodo133->nodo135;
+nodo4->nodo135;
 
 nodo135->nodo136;
 
 nodo135->nodo137;
 
-nodo133->nodo138;
+nodo137->nodo138;
 
-nodo138->nodo139;
+nodo137->nodo139;
 
-nodo139->nodo140;
+nodo137->nodo140;
 
-nodo138->nodo141;
+nodo135->nodo141;
 
 nodo141->nodo142;
 
-nodo4->nodo143;
+nodo142->nodo143;
 
-nodo143->nodo144;
+nodo141->nodo144;
 
-nodo143->nodo145;
+nodo144->nodo145;
 
-nodo145->nodo146;
+nodo141->nodo146;
 
-nodo145->nodo147;
+nodo146->nodo147;
 
-nodo143->nodo148;
+nodo4->nodo148;
 
 nodo148->nodo149;
 
-nodo149->nodo150;
+nodo148->nodo150;
 
-nodo148->nodo151;
+nodo150->nodo151;
 
-nodo151->nodo152;
+nodo150->nodo152;
 
-nodo4->nodo153;
+nodo150->nodo153;
 
-nodo153->nodo154;
+nodo148->nodo154;
 
-nodo153->nodo155;
+nodo154->nodo155;
 
 nodo155->nodo156;
 
-nodo155->nodo157;
+nodo154->nodo157;
 
-nodo153->nodo158;
+nodo157->nodo158;
 
-nodo158->nodo159;
+nodo154->nodo159;
 
 nodo159->nodo160;
 
-nodo158->nodo161;
+nodo4->nodo161;
 
 nodo161->nodo162;
 
-nodo4->nodo163;
+nodo161->nodo163;
 
 nodo163->nodo164;
 
 nodo163->nodo165;
 
-nodo165->nodo166;
+nodo163->nodo166;
 
-nodo165->nodo167;
+nodo161->nodo167;
 
-nodo163->nodo168;
+nodo167->nodo168;
 
 nodo168->nodo169;
 
-nodo169->nodo170;
+nodo167->nodo170;
 
-nodo168->nodo171;
+nodo170->nodo171;
 
-nodo171->nodo172;
+nodo167->nodo172;
 
-nodo4->nodo173;
+nodo172->nodo173;
 
-nodo173->nodo174;
+nodo4->nodo174;
 
-nodo173->nodo175;
+nodo174->nodo175;
 
-nodo175->nodo176;
+nodo174->nodo176;
 
-nodo175->nodo177;
+nodo176->nodo177;
 
-nodo173->nodo178;
+nodo176->nodo178;
 
-nodo178->nodo179;
+nodo176->nodo179;
 
-nodo179->nodo180;
+nodo174->nodo180;
 
-nodo178->nodo181;
+nodo180->nodo181;
 
 nodo181->nodo182;
 
-nodo4->nodo183;
+nodo180->nodo183;
 
 nodo183->nodo184;
 
-nodo183->nodo185;
+nodo180->nodo185;
 
 nodo185->nodo186;
 
-nodo185->nodo187;
+nodo4->nodo187;
 
-nodo183->nodo188;
+nodo187->nodo188;
 
-nodo188->nodo189;
+nodo187->nodo189;
 
 nodo189->nodo190;
 
-nodo188->nodo191;
+nodo189->nodo191;
 
-nodo191->nodo192;
+nodo189->nodo192;
+
+nodo187->nodo193;
+
+nodo193->nodo194;
+
+nodo194->nodo195;
+
+nodo193->nodo196;
+
+nodo196->nodo197;
+
+nodo193->nodo198;
+
+nodo198->nodo199;
+
+nodo4->nodo200;
+
+nodo200->nodo201;
+
+nodo200->nodo202;
+
+nodo202->nodo203;
+
+nodo202->nodo204;
+
+nodo202->nodo205;
+
+nodo200->nodo206;
+
+nodo206->nodo207;
+
+nodo207->nodo208;
+
+nodo206->nodo209;
+
+nodo209->nodo210;
+
+nodo206->nodo211;
+
+nodo211->nodo212;
+
+nodo4->nodo213;
+
+nodo213->nodo214;
+
+nodo213->nodo215;
+
+nodo215->nodo216;
+
+nodo215->nodo217;
+
+nodo215->nodo218;
+
+nodo213->nodo219;
+
+nodo219->nodo220;
+
+nodo220->nodo221;
+
+nodo219->nodo222;
+
+nodo222->nodo223;
+
+nodo219->nodo224;
+
+nodo224->nodo225;
+
+nodo4->nodo226;
+
+nodo226->nodo227;
+
+nodo226->nodo228;
+
+nodo228->nodo229;
+
+nodo228->nodo230;
+
+nodo228->nodo231;
+
+nodo226->nodo232;
+
+nodo232->nodo233;
+
+nodo233->nodo234;
+
+nodo232->nodo235;
+
+nodo235->nodo236;
+
+nodo232->nodo237;
+
+nodo237->nodo238;
+
+nodo4->nodo239;
+
+nodo239->nodo240;
+
+nodo239->nodo241;
+
+nodo241->nodo242;
+
+nodo241->nodo243;
+
+nodo241->nodo244;
+
+nodo239->nodo245;
+
+nodo245->nodo246;
+
+nodo246->nodo247;
+
+nodo245->nodo248;
+
+nodo248->nodo249;
+
+nodo245->nodo250;
+
+nodo250->nodo251;
+
+nodo4->nodo252;
+
+nodo252->nodo253;
+
+nodo252->nodo254;
+
+nodo254->nodo255;
+
+nodo254->nodo256;
+
+nodo254->nodo257;
+
+nodo252->nodo258;
+
+nodo258->nodo259;
+
+nodo259->nodo260;
+
+nodo258->nodo261;
+
+nodo261->nodo262;
+
+nodo258->nodo263;
+
+nodo263->nodo264;
+
+nodo4->nodo265;
+
+nodo265->nodo266;
+
+nodo265->nodo267;
+
+nodo267->nodo268;
+
+nodo267->nodo269;
+
+nodo267->nodo270;
+
+nodo265->nodo271;
+
+nodo271->nodo272;
+
+nodo272->nodo273;
+
+nodo271->nodo274;
+
+nodo274->nodo275;
+
+nodo271->nodo276;
+
+nodo276->nodo277;
+
+nodo4->nodo278;
+
+nodo278->nodo279;
+
+nodo278->nodo280;
+
+nodo280->nodo281;
+
+nodo280->nodo282;
+
+nodo280->nodo283;
+
+nodo278->nodo284;
+
+nodo284->nodo285;
+
+nodo285->nodo286;
+
+nodo284->nodo287;
+
+nodo287->nodo288;
+
+nodo284->nodo289;
+
+nodo289->nodo290;
+
+nodo4->nodo291;
+
+nodo291->nodo292;
+
+nodo291->nodo293;
+
+nodo293->nodo294;
+
+nodo293->nodo295;
+
+nodo293->nodo296;
+
+nodo291->nodo297;
+
+nodo297->nodo298;
+
+nodo298->nodo299;
+
+nodo297->nodo300;
+
+nodo300->nodo301;
+
+nodo297->nodo302;
+
+nodo302->nodo303;
+
+nodo4->nodo304;
+
+nodo304->nodo305;
+
+nodo304->nodo306;
+
+nodo306->nodo307;
+
+nodo306->nodo308;
+
+nodo306->nodo309;
+
+nodo304->nodo310;
+
+nodo310->nodo311;
+
+nodo311->nodo312;
+
+nodo310->nodo313;
+
+nodo313->nodo314;
+
+nodo310->nodo315;
+
+nodo315->nodo316;
+
+nodo4->nodo317;
+
+nodo317->nodo318;
+
+nodo317->nodo319;
+
+nodo319->nodo320;
+
+nodo319->nodo321;
+
+nodo319->nodo322;
+
+nodo317->nodo323;
+
+nodo323->nodo324;
+
+nodo324->nodo325;
+
+nodo323->nodo326;
+
+nodo326->nodo327;
+
+nodo323->nodo328;
+
+nodo328->nodo329;
+
+nodo4->nodo330;
+
+nodo330->nodo331;
+
+nodo330->nodo332;
+
+nodo332->nodo333;
+
+nodo332->nodo334;
+
+nodo332->nodo335;
+
+nodo330->nodo336;
+
+nodo336->nodo337;
+
+nodo337->nodo338;
+
+nodo336->nodo339;
+
+nodo339->nodo340;
+
+nodo336->nodo341;
+
+nodo341->nodo342;
+
+nodo4->nodo343;
+
+nodo343->nodo344;
+
+nodo343->nodo345;
+
+nodo345->nodo346;
+
+nodo345->nodo347;
+
+nodo345->nodo348;
+
+nodo343->nodo349;
+
+nodo349->nodo350;
+
+nodo350->nodo351;
+
+nodo349->nodo352;
+
+nodo352->nodo353;
+
+nodo349->nodo354;
+
+nodo354->nodo355;
+
+nodo4->nodo356;
+
+nodo356->nodo357;
+
+nodo356->nodo358;
+
+nodo358->nodo359;
+
+nodo358->nodo360;
+
+nodo358->nodo361;
+
+nodo356->nodo362;
+
+nodo362->nodo363;
+
+nodo363->nodo364;
+
+nodo362->nodo365;
+
+nodo365->nodo366;
+
+nodo362->nodo367;
+
+nodo367->nodo368;
+
+nodo4->nodo369;
+
+nodo369->nodo370;
+
+nodo369->nodo371;
+
+nodo371->nodo372;
+
+nodo371->nodo373;
+
+nodo371->nodo374;
+
+nodo369->nodo375;
+
+nodo375->nodo376;
+
+nodo376->nodo377;
+
+nodo375->nodo378;
+
+nodo378->nodo379;
+
+nodo375->nodo380;
+
+nodo380->nodo381;
+
+nodo4->nodo382;
+
+nodo382->nodo383;
+
+nodo382->nodo384;
+
+nodo384->nodo385;
+
+nodo384->nodo386;
+
+nodo384->nodo387;
+
+nodo382->nodo388;
+
+nodo388->nodo389;
+
+nodo389->nodo390;
+
+nodo388->nodo391;
+
+nodo391->nodo392;
+
+nodo388->nodo393;
+
+nodo393->nodo394;
+
+nodo4->nodo395;
+
+nodo395->nodo396;
+
+nodo396->nodo397;
+
+nodo397->nodo398;
+
+nodo396->nodo399;
+
+nodo396->nodo400;
+
+nodo400->nodo401;
+
+nodo401->nodo402;
+
+nodo401->nodo403;
+
+nodo403->nodo404;
+
+nodo4->nodo405;
+
+nodo405->nodo406;
+
+nodo405->nodo407;
+
+nodo407->nodo408;
 
 }
