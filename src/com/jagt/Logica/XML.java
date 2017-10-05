@@ -138,10 +138,12 @@ public class XML {
         }
         catch (Exception e)
         {
+            System.out.println(e.getMessage());
             metodos = new LinkedList<Metodo>();
         }
         catch (Error e)
         {
+            System.out.println(e.getMessage());
             metodos = new LinkedList<Metodo>();
         }
         finally

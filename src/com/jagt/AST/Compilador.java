@@ -5,9 +5,16 @@
  */
 package com.jagt.AST;
 
+import com.jagt.Analizadores.Paquetes.SintacticoPaquetes;
+import com.jagt.Comunicacion.ManejadorPaquete;
 import com.jagt.GUI.Servidor;
+import com.jagt.Logica.Archivo;
 import com.jagt.Logica.Registro;
 import com.jagt.Logica.SistemaBaseDatos;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
@@ -124,6 +131,32 @@ public class Compilador {
             case "RESTAURAR":
                 // MINIMO!
                 // USQLDUMP o TOTAL
+                // RESTAURAR TIPO CADENA
+                if(nodo.hijos().get(1).valor().equals("USQLDUMP")){
+                    Archivo a = new Archivo();
+                    String contenido = a.leer(nodo.hijos().get(2).valor().replaceAll("\"", ""));
+                    String cadena = "'[\n'paquete': 'usql',\n'instruccion':\n ?\n"+contenido+"\n?\n]\n'";
+                    ManejadorPaquete mp = new ManejadorPaquete();
+                    InputStream is = new ByteArrayInputStream(cadena.getBytes());
+                    SintacticoPaquetes parser = null;
+                    if(parser == null) parser = new SintacticoPaquetes(is);   
+                    else parser.ReInit(is);
+                    try
+                    {
+                        mp = parser.inicio();
+                    }
+                    catch (Exception e)
+                    {
+                        System.out.println("Error:\n"+ e.getMessage()+"\n");
+                    }
+                    catch (Error e)
+                    {
+                        System.out.println("Error:\n"+ e.getMessage()+"\n");
+                    }
+                    finally
+                    {
+                    }
+                }
                 break;
             case "INSERTAR":
                 // MINIMO!
@@ -167,7 +200,7 @@ public class Compilador {
                 }
                 break;
             case "LLAMADA":
-                llamadaProcedimiento(nodo.hijos().get(0));
+                llamadaProcedimiento(nodo);
                 break;
             case "RETORNAR":
                 retorno = evaluarExpresion(nodo.hijos().get(0));
@@ -356,7 +389,11 @@ public class Compilador {
     private LinkedList<Parametro> getParametros(NodoParser nodo){
         LinkedList<Parametro> params = new LinkedList<Parametro>();
         for(NodoParser p : nodo.hijos()){
-            params.add(new Parametro(p.hijos().get(1).valor(),bd.obtenerTipo(p.hijos().get(0).valor())));
+            Parametro nuevo = new Parametro(p.hijos().get(1).valor(),bd.obtenerTipo(p.hijos().get(0).valor()));
+            if(nuevo.tipo == SistemaBaseDatos.OBJETO){
+                nuevo.objeto = p.hijos().get(0).valor();
+            }
+            params.add(nuevo);
         }
         return params;
     }
@@ -490,6 +527,7 @@ public class Compilador {
         // SELECCIONAR -> (TODO | LISTA_ACCESO) IDS (EXP)? (ORDENAR)?
         // Llenar lista de IDS
         LinkedList<String> ids = new LinkedList<String>();
+        String valor = nodo.hijos().get(0).valor();
         for(NodoParser id : nodo.hijos().get(1).hijos()){
             ids.add(id.valor());
         }
@@ -518,6 +556,13 @@ public class Compilador {
         }else{
             return registros;
         }
+    }
+    
+    // Guardar solo los campos requeridos!
+    private LinkedList<Registro> buscarSolicitados(LinkedList<Registro> registros,NodoParser lista){
+        LinkedList<Registro> nuevo = new LinkedList<Registro>();
+        
+        return nuevo;
     }
     
     // Guardar temporales
@@ -752,6 +797,14 @@ public class Compilador {
                     case "ACCESO":
                         // ACCESO -> (ID | VAR)(. ID)*
                         return getAcceso(nodo.hijos().get(0));
+                    case "date":
+                        String fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+                        return new Objeto(SistemaBaseDatos.DATE,fecha);
+                    case "datetime":
+                        String fechah = new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime());
+                        return new Objeto(SistemaBaseDatos.DATETIME,fechah);
+                    case "CONTAR":
+                        return new Objeto(evaluarSeleccionar(nodo.hijos().get(0)).size());
                     case "VAR":
                         return getAcceso(nodo);
                     default:

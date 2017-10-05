@@ -197,6 +197,7 @@ public class SistemaBaseDatos {
     }
     
     public boolean existeTabla(String nombre){
+        llenarTodo();
         for(Tabla tabla : tablas){
             if(tabla.getNombre().equals(nombre)){
                 return true;
@@ -229,6 +230,7 @@ public class SistemaBaseDatos {
     }
     
     public boolean existeObjeto(String nombre){
+        llenarTodo();
         for(Objeto obj : objetos){
             if(obj.getNombre().equals(nombre)){
                 return true;
@@ -253,7 +255,11 @@ public class SistemaBaseDatos {
             // Recorrer la lista de parametros
             for(Parametro p : metodo.getParametros()){
                 String tipo = obtenerTipo(p.getTipo());
-                nueva += "\t\t<"+tipo+">"+p.getNombre()+"</"+tipo+">\n";
+                if(tipo.equals("objeto")){
+                    nueva += "\t\t<"+p.objeto+">"+p.getNombre()+"</"+p.objeto+">\n";
+                }else{
+                    nueva += "\t\t<"+tipo+">"+p.getNombre()+"</"+tipo+">\n";
+                }
             }
             nueva += "\t</params>\n";
             // Listado de expresiones
@@ -271,6 +277,7 @@ public class SistemaBaseDatos {
     }
     
     public boolean existeMetodo(String nombre){
+        llenarTodo();
         for(Metodo metodo : metodos){
             if(metodo.getNombre().equals(nombre)){
                 return true;
@@ -300,6 +307,14 @@ public class SistemaBaseDatos {
         }
     }
     
+    public void llenarTodo(){
+        if(!Servidor.bd_actual.equals("")){
+            llenarTablas();
+            llenarMetodos();
+            llenarObjetos();
+        }
+    }
+    
     /**************************** BACKUPS *************************/
     // Backup USQLDUMP
     public void backup_usqldump(){
@@ -307,10 +322,10 @@ public class SistemaBaseDatos {
         File archivo = new File(ruta);
         if(archivo.exists()){
             // Ya existe!
-            master.modificar(ruta, textoCompilado+"\n\n...\n\n");
+            master.modificar(ruta, textoCompilado+"\n\n\n\n");
         }else{
             // No existe!
-            master.escribir(ruta, textoCompilado+"\n\n...\n\n");
+            master.escribir(ruta, textoCompilado+"\n\n\n\n");
         }
     }
     
@@ -473,6 +488,7 @@ public class SistemaBaseDatos {
     
     // Buscar tabla existente
     public Tabla buscarTabla(String nombre){
+        llenarTodo();
         for(Tabla t : tablas){
             if(t.getNombre().equals(nombre)){
                 return t;
@@ -518,6 +534,7 @@ public class SistemaBaseDatos {
     
     // Buscar Objeto existente
     public Objeto buscarObjeto(String nombre){
+        llenarTodo();
         for(Objeto obj : objetos){
             if(obj.getNombre().equals(nombre)){
                 return obj;
@@ -528,6 +545,7 @@ public class SistemaBaseDatos {
     
     // Buscar Metodo existente
     public Metodo buscarMetodo(String nombre){
+        llenarTodo();
         for(Metodo m : metodos){
             if(m.getNombre().equals(nombre)){
                 return m;

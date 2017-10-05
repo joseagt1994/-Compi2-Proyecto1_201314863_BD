@@ -95,7 +95,7 @@ public class SintacticoPaquetes implements SintacticoPaquetesConstants {
       jj_consume_token(INSTRUCCION);
       jj_consume_token(53);
       cadena = html();
-                                    manejador = new ManejadorPaquete("?"+cadena+"?");
+                                    manejador = new ManejadorPaquete(cadena);
                                     {if (true) return manejador;}
       break;
     default:

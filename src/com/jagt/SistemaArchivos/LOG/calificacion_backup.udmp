@@ -1,0 +1,1553 @@
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+CREAR BASE_DATOS calificacion;
+
+USAR calificacion;
+
+CREAR PROCEDIMIENTO crear_inicial (){
+
+	#falta crear usuario usuario_calificacion
+
+	CREAR OBJETO T_direcCION(
+		INTEGER avenida, 
+		INTEGER calle, 
+		TEXT nombre, 
+		TEXT descripcion
+	);
+
+	CREAR TABLA estudiante(
+		INTEGER carnet LLAVE_PRIMARIA,
+		TEXT dpi UNICO,
+		TEXT nombre NO NULO,
+		TEXT direccion,
+		DATE fh_nac NO NULO,
+		DATETIME fh_creacion NO NULO
+	);
+
+	CREAR TABLA curso(
+		INTEGER codigo_curso LLAVE_PRIMARIA,
+		TEXT nombre NO NULO,
+		INTEGER creditos  NO NULO,
+		INTEGER creditos_prerrequisito
+	);
+
+	CREAR TABLA prerrequisito(
+		#INTEGER id_pre LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER prerrequisito NO NULO LLAVE_FORANEA curso
+	);
+
+	CREAR TABLA asignacion(
+		#INTEGER id_asignacion LLAVE_PRIMARIA AUTOINCREMENTABLE,
+		INTEGER codigo_curso NO NULO LLAVE_FORANEA curso,
+		INTEGER carnet NO NULO LLAVE_FORANEA estudiante,
+		DATETIME fh_asignacion NO NULO,
+		TEXT estado
+	);
+
+	CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+}
+
+
+
+
+
+
+
+CREAR PROCEDIMIENTO insertar_inicial (){
+
+	INSERTAR EN TABLA estudiante (201403001, "2950130000101","Juan Pablo Ruiz Guerra", "14 av 11-25 zona 5, Guatemala",'19-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403002, "2950130001101","Jose Luis Torres Polanco", "12 av 1-78 zona 1, Guatemala",'07-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403003, "2950130002101","Carlos Alberto Villeda", "km 8.5 carretera al atlantico, residenciales vista azul, casa 27, Guatemala",'29-12-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403004, "2950130003101","Ana Patricia Bonilla Fernandez", "4 av 18-46 zona 1, Guatemala",'03-02-1993','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403005, "2950130004101","Maria Camila Hernandez", "5 calle 2-05 zona 2, Mixco",'19-01-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403006, "2950130005101","Gabriel Jesus Mazariegos", "6 av 16-72 zona 13, Guatemala",'09-07-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403007, "2950130006101","Alba Maritza Carrillo Lopez", "17 av 11-25 zona 21, Guatemala",'30-11-1990','17-08-1990 00:00:00');
+	INSERTAR EN TABLA estudiante (201403008, "2950130007101","Fernanda Nicole Carrera Salazar", "11 av 9-25 zona 6, Guatemala",'20-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403009, "2950130008101","Jose Gustavo Bran Orellana", "14 av 11-25 zona 5",'04-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403010, "2950130009101","Hugo Manuel Pineda", "17 av 1-20 zona 7, Mixco",'01-01-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403011, "2950130010101","Victor Alejandro Perez", "13 av 15-15 zona 3, Guatemala",'10-09-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403012, "2950130011101","Joaquin Alberto Gutierrez", "14 av 14-62 zona 2, Guatemala",'27-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403013, "2950130012101","Jorge Luis Barrera Fernandez", "14 av 12-32 zona 6, Guatemala",'21-12-1994','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403014, "2950130013101","Katerine Rodriguez Lopez", "km 18 residenciales villas de San Jose, casa 86, San Jose Pinula",'23-05-1995','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403015, "2950130014101","Felix Estuardo Perez", "10 av 3-87 zona 8, San Miguel Petapa",'07-11-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403016, "2950130015101","Ricardo Perez Hernandez", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+	INSERTAR EN TABLA estudiante (201403017, "2950130000101","Repetido - Error", "7 av 1-48 zona 1, Guatemala",'11-02-1990','17-08-2017 00:00:00');
+
+
+	INSERTAR EN TABLA curso (772,"Estructuras de Datos", 5, "");
+	INSERTAR EN TABLA curso (777,"Organizacion de lenguajes y compiladores 1", 5, "");
+	INSERTAR EN TABLA curso (781,"Organizacion de lenguajes y compiladores 2", 5, "");
+	INSERTAR EN TABLA curso (281,"Sistemas Operativos 1", 5, "");
+
+	INSERTAR EN TABLA prerrequisito (781, 772);
+	INSERTAR EN TABLA prerrequisito (781, 777);
+	INSERTAR EN TABLA prerrequisito (281, 781);
+
+}
+
+
+CREAR PROCEDIMIENTO funcionamientos_minimos (INTEGER @variable1, INTEGER @variable2){
+
+	SI(@variable1 > @variable2){
+		IMPRIMIR("variable 1 es mayor");
+	}SINO{
+		SI(@variable1 < @variable2){
+			IMPRIMIR("variable 2 es mayor");
+		}SINO{
+			IMPRIMIR("los prarmentros son iguales");
+		}
+	}
+
+	DECLARAR @contador INTEGER= 0;
+	DECLARAR @bandera BOOL= (5 > 10);
+
+
+	MIENTRAS((@contador >= 0)&&((@contador < 10)||(@bandera == 0))){
+
+		SI(@contador > 5){
+			IMPRIMIR("Salida de Mientras [6-9]: " + @contador);
+		}
+		SELECCIONA (@contador){
+			CASO 6: IMPRIMIR(" seis\n"); DETENER;
+			CASO 7: IMPRIMIR (" siete\n"); DETENER;
+			CASO 8: IMPRIMIR (" ocho\n"); DETENER;
+			CASO 9: IMPRIMIR (" nueve\n"); DETENER;
+		}
+		@contador = @contador + 1;
+	}
+
+
+
+	DECLARAR @midirec T_direcCION;
+	@midirec.calle = 4;
+	@midirec.avenida = 12;
+	@midirec.nombre = "Residenciales el bosque";
+	@midirec.descripcion = "casa 45";
+	IMPRIMIR(T_direcCION_TO_TEXT(@midirec));
+}
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	crear_inicial();
+	insertar_inicial();
+	funcionamientos_minimos((15+2/2)*2-10, 5+(28/4)*2);
+
+	#*
+	Reporte 1 
+	<html>
+		<body>
+			<h1> Reporte 1 </h1>
+			<usql> SELECCIONAR * DE estudiante</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 2
+	<html>
+		<body>
+			<h1> Reporte 2 </h1>
+			<usql> SELECCIONAR * DE curso</usql>
+		</body>
+	</html>
+	*#
+
+
+	#*
+	Reporte 3
+	<html>
+		<body>
+			<h1> Reporte 3 </h1>
+			<usql> SELECCIONAR * DE prerrequisito</usql>
+		</body>
+	</html>
+	*#
+
+}
+
+ejecucion();
+
+
+...
+
+
+
+USAR calificacion;
+
+
+CREAR PROCEDIMIENTO insertar_primer_semestre (){
+
+	#El 17 de enero del 2017 se asignan unos estudiantes a Estructuras de Datos
+	INSERTAR EN TABLA asignacion (772, 201403002, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403003, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403004, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403006, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403008, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403009, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403010, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403011, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403012, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403013, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (772, 201403015, '17-01-2017 00:00:00', "C");
+
+	#El 17 de enero del 2017 se asignan unos estudiantes a Compiladores 1
+	INSERTAR EN TABLA asignacion (777, 201403002, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403004, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403006, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403008, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403007, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403010, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403014, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403012, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403013, '17-01-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (777, 201403015, '17-01-2017 00:00:00', "C");
+
+}
+
+
+
+CREAR PROCEDIMIENTO finalizar_primer_semestre (){
+
+	#Se cambia el estado de los alumnos que ganaron EDD y Compiladores 1;
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403002 && (codigo_curso == 772 || codigo_curso == 777);
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403004 && (codigo_curso == 772 || codigo_curso == 777);
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403006 && (codigo_curso == 772 || codigo_curso == 777);
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403013 && (codigo_curso == 772 || codigo_curso == 777);
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403015 && (codigo_curso == 772 || codigo_curso == 777);
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403003 && (codigo_curso == 777);
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403010 && (codigo_curso == 772);
+
+	#Se cambia de estado a los alumnos que perdieron EDD y Compiladores 1
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("R") DONDE estado == "C" && (codigo_curso == 772 || codigo_curso == 777);
+
+}
+
+
+
+CREAR PROCEDIMIENTO insertar_segundo_semestre (){
+
+	#El 12 de julio del 2017 se asignan a Compiladores 2 los alumnos que ya ganaron EDD y Compiladores 1
+	INSERTAR EN TABLA asignacion (781, 201403002, '12-07-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (781, 201403004, '12-07-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (781, 201403006, '12-07-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (781, 201403013, '12-07-2017 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (781, 201403015, '12-07-2017 00:00:00', "C");
+
+}
+
+
+
+CREAR PROCEDIMIENTO finalizar_segundo_semestre (){
+
+	#Se cambia de estado a los alumnos que ganaron Compiladores 2
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403002 && codigo_curso == 781;
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("A") DONDE carnet == 201403004 && codigo_curso == 781;
+
+	#Se cambia de estado a los alumnos que perdieron Compiladores 2
+	ACTUALIZAR TABLA asignacion (estado) VALORES ("R") DONDE carnet != 201403002 && carnet != 201403004 && codigo_curso == 781;
+
+}
+
+
+
+CREAR PROCEDIMIENTO insertar_tercer_semestre (){
+
+	#El 17 de enero del 2018 se asignan a SO1 los alumnos que ya ganaron Compiladores 2
+	INSERTAR EN TABLA asignacion (281, 201403002, '17-01-2018 00:00:00', "C");
+	INSERTAR EN TABLA asignacion (281, 201403004, '17-01-2018 00:00:00', "C");
+
+}
+
+
+
+CREAR PROCEDIMIENTO consultas (){
+
+	SELECCIONAR * DE estudiante;
+
+	SELECCIONAR * DE curso;
+
+	SELECCIONAR * DE prerrequisito;
+
+	SELECCIONAR * DE asignacion;
+
+	#Nombre de cursos con sus prerrequisitos
+	SELECCIONAR curso.nombre, prerrequisito.prerrequisito 
+	DE prerrequisito, curso 
+	DONDE prerrequisito.codigo_curso == curso.codigo_curso;
+
+	#Alumnos asignados a SO1
+	SELECCIONAR curso.nombre, estudiante.nombre, asignacion.estado 
+	DE curso, asignacion, estudiante 
+	DONDE asignacion.codigo_curso == 281 
+	&& asignacion.carnet == estudiante.carnet 
+	&& asignacion.codigo_curso == curso.codigo_curso;
+
+	#Alumnos asignados a compiladores 2
+	SELECCIONAR curso.nombre, estudiante.nombre, asignacion.estado 
+	DE curso, asignacion, estudiante 
+	DONDE asignacion.codigo_curso == 781 
+	&& asignacion.carnet == estudiante.carnet 
+	&& asignacion.codigo_curso == curso.codigo_curso;
+
+
+	#Asignaciones después del '12-07-2017 00:00:00'
+	SELECCIONAR curso.nombre, estudiante.nombre, asignacion.estado 
+	DE curso, asignacion, estudiante 
+	DONDE asignacion.carnet == estudiante.carnet 
+	&& asignacion.codigo_curso == curso.codigo_curso
+	&& asignacion.fh_asignacion >= '12-07-2017 00:00:00';
+}
+
+
+
+CREAR PROCEDIMIENTO ejecucion (){
+	insertar_primer_semestre();
+	finalizar_primer_semestre();
+	insertar_segundo_semestre();
+	finalizar_segundo_semestre();
+	insertar_tercer_semestre();
+	consultas();
+}
+
+ejecucion();
+
+
+...
+

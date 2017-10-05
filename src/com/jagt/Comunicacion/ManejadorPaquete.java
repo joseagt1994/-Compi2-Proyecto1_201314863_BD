@@ -43,6 +43,8 @@ public class ManejadorPaquete {
         this.usuario = u;
         this.tipoPaquete = LOGIN;
         Servidor.usuario = this.usuario;
+        String fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
+        Servidor.getInstance().concatenarMensaje(">>> ["+fecha+"]: "+Servidor.usuario+" ha iniciado sesion.\n");
     }
     
     // LOGOUT
@@ -50,7 +52,7 @@ public class ManejadorPaquete {
         this.tipoPaquete = tipo;
         Servidor.usuario = "";
         String fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(Calendar.getInstance().getTime());
-        Servidor.getInstance().concatenarMensaje(">>> ["+fecha+"]: El usuario ha cerrado sesion "+Servidor.usuario+"\n");
+        Servidor.getInstance().concatenarMensaje(">>> ["+fecha+"]: "+Servidor.usuario+" ha cerrado sesion.\n");
     }
 
     public ManejadorPaquete(LinkedList<String> mensajes, LinkedList<LinkedList<Registro>> consultas, 

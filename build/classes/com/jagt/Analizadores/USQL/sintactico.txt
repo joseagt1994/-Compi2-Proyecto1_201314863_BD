@@ -39,11 +39,11 @@ SKIP:{
 
 TOKEN:{
     
-        <ENTERO: ("-")?(<DIGITO>)+ >                                                                // INTEGER
-    |   <DOBLE: ("-")?(<DIGITO>)+("."(<DIGITO>)+)? >                                                // DOUBLE 
+        <ENTERO: (<DIGITO>)+ >                                                                // INTEGER
+    |   <DOBLE: (<DIGITO>)+("."(<DIGITO>)+)? >                                                // DOUBLE 
     |   <CADENA: "\""(~["\"","#","\n","\t"]|"##"|"#\"")*"""\"" >                                    // TEXT
-    |   <FECHA: ("'"["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)"'">                         // DATE
-    |   <HORA: ("'"(["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]"'") > // TIME
+    |   <FECHA: (["0"-"3"]["0"-"9"])"-"(["0"-"1"]["0"-"9"])"-"((<DIGITO>)+)>                         // DATE
+    |   <HORA: ((["0"-"1"]["0"-"9"])|("2"["0"-"3"]))":"(["0"-"5"]["0"-"9"])":"(["0"-"5"]["0"-"9"]) > // TIME
     |   <RES_DOBLE: "Double" >
     |   <RES_ENTERO: "Integer" >
     |   <RES_CADENA: "Text" >
@@ -276,7 +276,7 @@ NodoParser asignar():
             id2 = <ID>              {acceso.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));}
         )?
         <ASIGNA>
-        exp = expresion()           {nodo.hijos().add(acceso); nodo.hijos().add(exp);}
+        exp = condicion()           {nodo.hijos().add(acceso); nodo.hijos().add(exp);}
         ";"
         {return nodo;}
 }
@@ -289,7 +289,7 @@ NodoParser declarar():
         tipov = tipo()              {declara.hijos().add(tipov);}
         (
             <ASIGNA>
-            exp = expresion()       {declara.hijos().add(exp);}
+            exp = condicion()       {declara.hijos().add(exp);}
         )?
         ";"
         {return declara;}
@@ -516,13 +516,13 @@ NodoParser insertar():
         <RES_EN>       
         <RES_TABLA>
         id = <ID>                   {nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));}
+        "("
         (
-            "("
             lista = lista_ids()     {nodo.hijos().add(lista);}
             ")"
+            <RES_VALORES>
+            "("
         )?
-        <RES_VALORES>
-        "("
         exps = lista_expresiones()  {nodo.hijos().add(exps);}
         ")"
         ";"                         {return nodo;}
@@ -767,7 +767,6 @@ NodoParser expresion():
 {
         ope = operacion1()  {}
         exp = expresion2()  {if(exp!=null){exp.hijos().addFirst(ope); return exp;}else{return ope;}}
-    |   exp = contar()      {return exp;}
 }
 
 NodoParser lista_expresiones():
@@ -813,19 +812,30 @@ NodoParser operacion2():
 }
 
 NodoParser tipoValor():
-{NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,tipoL; Token t;}
+{NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,tipoL,exp; Token t,t2;}
 {       "("
-        nodo = expresion()
+        nodo = condicion()
         ")"                 {return nodo;}
     |   t = <ENTERO>        {tipo = new NodoParser("entero",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo; }
     |   t = <CADENA>        {tipo = new NodoParser("cadena",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
-    |   t = <FECHA>         {tipo = new NodoParser("fecha",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
-    |   t = <HORA>          {tipo = new NodoParser("fechahora",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   "'" 
+        t = <FECHA>         {tipo = new NodoParser("fecha",t.image,t.beginLine,t.beginColumn);}
+        (
+            t2 = <HORA>     {tipo = new NodoParser("fechahora",t.image+t2.image,t.beginLine,t.beginColumn);}
+        )?                  
+        "'"                 {nodo.hijos().add(tipo); return nodo;}
     |   t = <DOBLE>         {tipo = new NodoParser("doble",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   t = <VERDADERO>     {tipo = new NodoParser("boolean","1",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   t = <FALSO>         {tipo = new NodoParser("boolean","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <RES_FECHA>
+        "("
+        ")"                 {tipo = new NodoParser("date","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
+    |   t = <RES_FECHAHORA>
+        "("
+        ")"                 {tipo = new NodoParser("datetime","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); return nodo;}
     |   tipoL = llamada()   {nodo.hijos().add(tipoL); return nodo;}
     |   tipoL = accesar()   {nodo.hijos().add(tipoL); return nodo;}
+    |   exp = contar()      {return exp;}
 }
 
 NodoParser control():
@@ -921,9 +931,11 @@ NodoParser mientras():
 NodoParser condicion():
 {NodoParser nodo,ope,con;}
 {
-    ope = operando1()   {nodo = new NodoParser("EXP","",0,0); if(ope!=null){nodo.hijos().add(ope);}}
-    con = condicion2()  {if(con!=null){nodo.hijos().add(con);}}
-    {return nodo;}
+        ope = operando1()   {nodo = new NodoParser("EXP","",0,0); if(ope!=null){nodo.hijos().add(ope);}}
+        con = condicion2()  {if(con!=null){nodo.hijos().add(con);} return nodo;}
+    |   "("
+        con = condicion()   
+        ")"                 {return con;}
 }
 
 NodoParser condicion2():

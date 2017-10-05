@@ -75,14 +75,14 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
         jj_la1[2] = jj_gen;
         break label_2;
       }
-      p = parametro();
-                             parametros.add(p);
+      p = param();
+                         parametros.add(p);
     }
          {if (true) return parametros;}
     throw new Error("Missing return statement in function");
   }
 
-  final public Parametro parametro() throws ParseException {
+  final public Parametro param() throws ParseException {
  Token t; Parametro p; NodoParser nodo;
     jj_consume_token(MENOR);
     nodo = tipo();
@@ -101,6 +101,64 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
      System.out.println("epsilon");
   }
 
+  final public NodoParser instruccionSQL() throws ParseException {
+ NodoParser ins;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_CREAR:
+      ins = crear();
+                                 {if (true) return ins;}
+      break;
+    case RES_USAR:
+      ins = usar();
+                                 {if (true) return ins;}
+      break;
+    case RES_ALTERAR:
+      ins = alterar();
+                                 {if (true) return ins;}
+      break;
+    case RETORNAR:
+    case RES_ELIMINAR:
+    case RES_INSERTAR:
+    case RES_ACTUALIZAR:
+    case RES_BORRAR:
+    case RES_SELECCIONAR:
+    case RES_DECLARAR:
+    case RES_IMPRIMIR:
+    case RES_CONTAR:
+    case SI:
+    case SELECCIONA:
+    case DETENER:
+    case PARA:
+    case MIENTRAS:
+    case ID:
+    case VAR:
+      ins = sentencia();
+                                 {if (true) return ins;}
+      break;
+    case RES_OTORGAR:
+      ins = otorgar();
+                                 {if (true) return ins;}
+      break;
+    case RES_DENEGAR:
+      ins = denegar();
+                                 {if (true) return ins;}
+      break;
+    case RES_BACKUP:
+      ins = backup();
+                                 {if (true) return ins;}
+      break;
+    case RES_RESTAURAR:
+      ins = restaurar();
+                                 {if (true) return ins;}
+      break;
+    default:
+      jj_la1[3] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+  }
+
   final public NodoParser sentencia() throws ParseException {
  NodoParser sen;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -108,9 +166,13 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       sen = insertar();
                                  {if (true) return sen;}
       break;
+    case RES_ELIMINAR:
+      sen = eliminar();
+                                 {if (true) return sen;}
+      break;
     case RES_SELECCIONAR:
       sen = seleccionar();
-      jj_consume_token(86);
+      jj_consume_token(109);
                                  {if (true) return sen;}
       break;
     case RES_ACTUALIZAR:
@@ -135,8 +197,8 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       break;
     case ID:
       sen = llamada();
+      jj_consume_token(109);
                                  {if (true) return sen;}
-      jj_consume_token(86);
       break;
     case RETORNAR:
       sen = retorno();
@@ -155,11 +217,11 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       break;
     case RES_CONTAR:
       sen = contar();
-      jj_consume_token(86);
+      jj_consume_token(109);
                                  {if (true) return sen;}
       break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[4] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -170,14 +232,14 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo,sel; Token t;
     t = jj_consume_token(RES_CONTAR);
                          nodo = new NodoParser("CONTAR","",t.beginLine,t.beginColumn);
-    jj_consume_token(87);
+    jj_consume_token(110);
     jj_consume_token(MENOR);
     jj_consume_token(MENOR);
     sel = seleccionar();
                          nodo.hijos().add(sel);
     jj_consume_token(MAYOR);
     jj_consume_token(MAYOR);
-    jj_consume_token(88);
+    jj_consume_token(111);
      {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
@@ -188,29 +250,37 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     label_3:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case RES_CREAR:
+      case RETORNAR:
+      case RES_USAR:
+      case RES_ALTERAR:
+      case RES_ELIMINAR:
       case RES_INSERTAR:
       case RES_ACTUALIZAR:
       case RES_BORRAR:
       case RES_SELECCIONAR:
+      case RES_OTORGAR:
+      case RES_DENEGAR:
       case RES_DECLARAR:
       case RES_IMPRIMIR:
       case RES_CONTAR:
+      case RES_BACKUP:
+      case RES_RESTAURAR:
       case SI:
       case SELECCIONA:
       case DETENER:
       case PARA:
       case MIENTRAS:
-      case RETORNAR:
       case ID:
       case VAR:
         ;
         break;
       default:
-        jj_la1[4] = jj_gen;
+        jj_la1[5] = jj_gen;
         break label_3;
       }
-      s = sentencia();
-                             sentencias.hijos().add(s);
+      s = instruccionSQL();
+                                  sentencias.hijos().add(s);
     }
          {if (true) return sentencias;}
     throw new Error("Missing return statement in function");
@@ -220,7 +290,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  Token t; NodoParser nodo;
     t = jj_consume_token(DETENER);
                        nodo = new NodoParser("DETENER","",t.beginLine,t.beginColumn);
-    jj_consume_token(86);
+    jj_consume_token(109);
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
@@ -231,8 +301,55 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                              nodo = new NodoParser("RETORNAR","",t.beginLine,t.beginColumn);
     exp = expresion();
                              nodo.hijos().add(exp);
-    jj_consume_token(86);
+    jj_consume_token(109);
          {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser restaurar() throws ParseException {
+ NodoParser nodo,tipo; Token t,cad;
+    t = jj_consume_token(RES_RESTAURAR);
+                                 nodo = new NodoParser("RESTAURAR","",t.beginLine,t.beginColumn);
+    tipo = tipo_backup();
+                                 nodo.hijos().add(tipo);
+    cad = jj_consume_token(CADENA);
+                                 nodo.hijos().add(new NodoParser("CADENA",cad.image,cad.beginLine,cad.beginColumn));
+    jj_consume_token(109);
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser backup() throws ParseException {
+ NodoParser nodo,tipo; Token t,id1,id2;
+    t = jj_consume_token(RES_BACKUP);
+                                 nodo = new NodoParser("BACKUP","",t.beginLine,t.beginColumn);
+    tipo = tipo_backup();
+                                 nodo.hijos().add(tipo);
+    id1 = jj_consume_token(ID);
+                                 nodo.hijos().add(new NodoParser("ID",id1.image,id1.beginLine,id1.beginColumn));
+    id2 = jj_consume_token(ID);
+                                 nodo.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));
+    jj_consume_token(109);
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_backup() throws ParseException {
+ Token t;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_USQLDUMP:
+      t = jj_consume_token(RES_USQLDUMP);
+                                 {if (true) return new NodoParser("TIPO","USQLDUMP",t.beginLine,t.beginColumn);}
+      break;
+    case RES_COMPLETO:
+      t = jj_consume_token(RES_COMPLETO);
+                                 {if (true) return new NodoParser("TIPO","COMPLETO",t.beginLine,t.beginColumn);}
+      break;
+    default:
+      jj_la1[6] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -240,35 +357,33 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo,exp; Token t;
     t = jj_consume_token(RES_IMPRIMIR);
                                  nodo = new NodoParser("IMPRIMIR","",t.beginLine,t.beginColumn);
-    jj_consume_token(87);
+    jj_consume_token(110);
     exp = expresion();
                                  nodo.hijos().add(exp);
-    jj_consume_token(88);
-    jj_consume_token(86);
+    jj_consume_token(111);
+    jj_consume_token(109);
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
 
   final public NodoParser asignar() throws ParseException {
- Token v,id; NodoParser nodo = new NodoParser("ASIGNAR","",0,0); NodoParser acceso,exp;
-    v = jj_consume_token(VAR);
-                                 nodo.hijos().add(new NodoParser("VAR",v.image,v.beginLine,v.beginColumn));
-         acceso = new NodoParser("ACCESO","",0,0);
+ NodoParser nodo = new NodoParser("ASIGNAR","",0,0); NodoParser acceso,exp; Token id,id2;
+    id = jj_consume_token(VAR);
+                                     acceso = new NodoParser("ACCESO","",0,0); acceso.hijos().add(new NodoParser("VAR",id.image,id.beginLine,id.beginColumn));
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case PUNTO:
       jj_consume_token(PUNTO);
-      id = jj_consume_token(ID);
-                                 acceso.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+      id2 = jj_consume_token(ID);
+                                     acceso.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));
       break;
     default:
-      jj_la1[5] = jj_gen;
+      jj_la1[7] = jj_gen;
       ;
     }
-         nodo.hijos().add(acceso);
     jj_consume_token(ASIGNA);
-    exp = expresion();
-                                 nodo.hijos().add(exp);
-    jj_consume_token(86);
+    exp = condicion();
+                                     nodo.hijos().add(acceso); nodo.hijos().add(exp);
+    jj_consume_token(109);
          {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
@@ -283,14 +398,14 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ASIGNA:
       jj_consume_token(ASIGNA);
-      exp = expresion();
+      exp = condicion();
                                      declara.hijos().add(exp);
       break;
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[8] = jj_gen;
       ;
     }
-    jj_consume_token(86);
+    jj_consume_token(109);
          {if (true) return declara;}
     throw new Error("Missing return statement in function");
   }
@@ -302,18 +417,73 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 89:
+      case 112:
         ;
         break;
       default:
-        jj_la1[7] = jj_gen;
+        jj_la1[9] = jj_gen;
         break label_4;
       }
-      jj_consume_token(89);
+      jj_consume_token(112);
       v = jj_consume_token(VAR);
                          nodo.hijos().add(new NodoParser("VAR",v.image,v.beginLine,v.beginColumn));
     }
          {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser denegar() throws ParseException {
+ NodoParser nodo,tipo; Token t,id;
+    t = jj_consume_token(RES_DENEGAR);
+                                 nodo = new NodoParser("DENEGAR","",t.beginLine,t.beginColumn);
+    jj_consume_token(RES_PERMISOS);
+    id = jj_consume_token(ID);
+                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(112);
+    id = jj_consume_token(ID);
+                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(PUNTO);
+    tipo = tipo_permiso();
+                                 nodo.hijos().add(tipo);
+    jj_consume_token(109);
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser otorgar() throws ParseException {
+ NodoParser nodo,tipo; Token t,id;
+    t = jj_consume_token(RES_OTORGAR);
+                                 nodo = new NodoParser("OTORGAR","",t.beginLine,t.beginColumn);
+    jj_consume_token(RES_PERMISOS);
+    id = jj_consume_token(ID);
+                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(112);
+    id = jj_consume_token(ID);
+                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(PUNTO);
+    tipo = tipo_permiso();
+                                 nodo.hijos().add(tipo);
+    jj_consume_token(109);
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_permiso() throws ParseException {
+ NodoParser tipo; Token t;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ID:
+      t = jj_consume_token(ID);
+                                 {if (true) return new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);}
+      break;
+    case POR:
+      t = jj_consume_token(POR);
+                                 {if (true) return new NodoParser("TIPO","*",t.beginLine,t.beginColumn);}
+      break;
+    default:
+      jj_la1[10] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -331,10 +501,10 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                  nodo.hijos().add(d);
       break;
     default:
-      jj_la1[8] = jj_gen;
+      jj_la1[11] = jj_gen;
       ;
     }
-    jj_consume_token(86);
+    jj_consume_token(109);
                                  {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
@@ -346,61 +516,125 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     jj_consume_token(RES_TABLA);
     id = jj_consume_token(ID);
                                      nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
-    jj_consume_token(87);
+    jj_consume_token(110);
     lista = lista_ids();
                                      nodo.hijos().add(lista);
-    jj_consume_token(88);
+    jj_consume_token(111);
     jj_consume_token(RES_VALORES);
-    jj_consume_token(87);
+    jj_consume_token(110);
     exps = lista_expresiones();
                                      nodo.hijos().add(exps);
-    jj_consume_token(88);
+    jj_consume_token(111);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RES_DONDE:
       d = donde();
                                      nodo.hijos().add(d);
       break;
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[12] = jj_gen;
       ;
     }
-    jj_consume_token(86);
+    jj_consume_token(109);
                                      {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
 
   final public NodoParser seleccionar() throws ParseException {
- NodoParser nodo,s,d,tipo,o; Token or,t,id,tabla;
+ NodoParser nodo,s,d,tipo,o,lista,id; Token or,t;
     t = jj_consume_token(RES_SELECCIONAR);
                                      nodo = new NodoParser("SELECCIONAR",t.image,t.beginLine,t.beginColumn);
     s = seleccion();
                                      nodo.hijos().add(s);
     jj_consume_token(RES_DE);
-    tabla = jj_consume_token(ID);
-                                     nodo.hijos().add(new NodoParser("ID",tabla.image,tabla.beginLine,tabla.beginColumn));
+    lista = lista_ids();
+                                  nodo.hijos().add(lista);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RES_DONDE:
       d = donde();
                                      nodo.hijos().add(d);
       break;
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[13] = jj_gen;
       ;
     }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case RES_ORDENAR:
       or = jj_consume_token(RES_ORDENAR);
-                                      o = new NodoParser("ORDENAR",or.image,or.beginLine,or.beginColumn);
-      id = jj_consume_token(ID);
-                                     o.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+                                     o = new NodoParser("ORDENAR",or.image,or.beginLine,or.beginColumn);
+      id = acceso();
+                                     o.hijos().add(id);
       tipo = tipo_orden();
                                      o.hijos().add(tipo); nodo.hijos().add(o);
       break;
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[14] = jj_gen;
       ;
     }
          {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser lista_acceso() throws ParseException {
+ NodoParser sentencias,s;
+         sentencias = new NodoParser("LISTA_ACCESO","",0,0);
+    s = acceso();
+                      sentencias.hijos().add(s);
+    label_5:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 112:
+        ;
+        break;
+      default:
+        jj_la1[15] = jj_gen;
+        break label_5;
+      }
+      jj_consume_token(112);
+      s = acceso();
+                          sentencias.hijos().add(s);
+    }
+         {if (true) return sentencias;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser acceso() throws ParseException {
+ NodoParser nodo = new NodoParser("ACCESO","",0,0); NodoParser a; Token t;
+    a = tipo_acceso();
+                              nodo.hijos().add(a);
+    label_6:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PUNTO:
+        ;
+        break;
+      default:
+        jj_la1[16] = jj_gen;
+        break label_6;
+      }
+      jj_consume_token(PUNTO);
+      t = jj_consume_token(ID);
+                              nodo.hijos().add(new NodoParser("ID",t.image,t.beginLine,t.beginColumn));
+    }
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_acceso() throws ParseException {
+ Token t;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case VAR:
+      t = jj_consume_token(VAR);
+                     {if (true) return new NodoParser("VAR",t.image,t.beginLine,t.beginColumn);}
+      break;
+    case ID:
+      t = jj_consume_token(ID);
+                     {if (true) return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
+      break;
+    default:
+      jj_la1[17] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -408,7 +642,8 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo; Token id;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ID:
-      nodo = lista_ids();
+    case VAR:
+      nodo = lista_acceso();
                                      {if (true) return nodo;}
       break;
     case POR:
@@ -416,7 +651,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                      {if (true) return new NodoParser("TODO",id.image,id.beginLine,id.beginColumn);}
       break;
     default:
-      jj_la1[12] = jj_gen;
+      jj_la1[18] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -435,7 +670,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                      {if (true) return new NodoParser("DESC",t.image,t.beginLine,t.beginColumn);}
       break;
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[19] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -450,22 +685,152 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     throw new Error("Missing return statement in function");
   }
 
-  final public NodoParser llamada() throws ParseException {
- NodoParser nodo,temp,lista; Token id;
-    id = jj_consume_token(ID);
-                                         nodo = new NodoParser("ID",id.image,id.beginLine,id.beginColumn);
+  final public NodoParser eliminar() throws ParseException {
+ NodoParser nodo,tipo; Token t;
+    t = jj_consume_token(RES_ELIMINAR);
+                                     nodo = new NodoParser("ELIMINAR",t.image,t.beginLine,t.beginColumn);
+    tipo = tipo_eliminar();
+                                     nodo.hijos().add(tipo);
+    jj_consume_token(109);
+                                     {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_eliminar() throws ParseException {
+ NodoParser tipo; Token t,id;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 87:
-      jj_consume_token(87);
-      lista = lista_expresiones();
-                                         nodo = new NodoParser("LLAMADA","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); nodo.hijos().add(lista);
-      jj_consume_token(88);
+    case RES_TABLA:
+      t = jj_consume_token(RES_TABLA);
+                                     tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+      break;
+    case RES_OBJETO:
+      t = jj_consume_token(RES_OBJETO);
+                                     tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+      break;
+    case RES_BD:
+      t = jj_consume_token(RES_BD);
+                                     tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+      break;
+    case RES_USUARIO:
+      t = jj_consume_token(RES_USUARIO);
+                                     tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+      break;
+    case RES_PROCEDIMIENTO:
+      t = jj_consume_token(RES_PROCEDIMIENTO);
+                                     tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
+      break;
+    case RES_FUNCION:
+      t = jj_consume_token(RES_FUNCION);
+                                     tipo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     tipo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return tipo;}
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[20] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser accesar() throws ParseException {
+ NodoParser nodo; Token id,id2;
+    id = jj_consume_token(VAR);
+                                         nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("VAR",id.image,id.beginLine,id.beginColumn));
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PUNTO:
+      jj_consume_token(PUNTO);
+      id2 = jj_consume_token(ID);
+                                         nodo.hijos().add(new NodoParser("ID",id2.image,id2.beginLine,id2.beginColumn));
+      break;
+    default:
+      jj_la1[21] = jj_gen;
       ;
     }
          {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser llamada() throws ParseException {
+ NodoParser nodo,temp,exp,lista; Token id,id2;
+    id = jj_consume_token(ID);
+                                         nodo = new NodoParser("ACCESO","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PUNTO:
+    case 110:
+      temp = tipo_llamada();
+                                            nodo = temp;
+                                            nodo.hijos().addFirst(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+      break;
+    default:
+      jj_la1[22] = jj_gen;
+      ;
+    }
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_llamada() throws ParseException {
+ NodoParser nodo; NodoParser lista; Token id;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case 110:
+      jj_consume_token(110);
+                                         nodo = new NodoParser("LLAMADA","",0,0);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ENTERO:
+      case DOBLE:
+      case CADENA:
+      case VERDADERO:
+      case FALSO:
+      case RES_FECHA:
+      case RES_FECHAHORA:
+      case RES_CONTAR:
+      case ID:
+      case VAR:
+      case 110:
+      case 113:
+        lista = lista_expresiones();
+                                         nodo.hijos().add(lista);
+        break;
+      default:
+        jj_la1[23] = jj_gen;
+        ;
+      }
+      jj_consume_token(111);
+         {if (true) return nodo;}
+      break;
+    case PUNTO:
+      jj_consume_token(PUNTO);
+                                         nodo = new NodoParser("ACCESO","",0,0);
+      id = jj_consume_token(ID);
+                                         nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PUNTO:
+        jj_consume_token(PUNTO);
+        id = jj_consume_token(ID);
+                                         nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+        break;
+      default:
+        jj_la1[24] = jj_gen;
+        ;
+      }
+         {if (true) return nodo;}
+      break;
+    default:
+      jj_la1[25] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -477,24 +842,98 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     jj_consume_token(RES_TABLA);
     id = jj_consume_token(ID);
                                      nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(110);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 87:
-      jj_consume_token(87);
+    case ID:
       lista = lista_ids();
                                      nodo.hijos().add(lista);
-      jj_consume_token(88);
+      jj_consume_token(111);
+      jj_consume_token(RES_VALORES);
+      jj_consume_token(110);
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[26] = jj_gen;
       ;
     }
-    jj_consume_token(RES_VALORES);
-    jj_consume_token(87);
     exps = lista_expresiones();
                                      nodo.hijos().add(exps);
-    jj_consume_token(88);
-    jj_consume_token(86);
+    jj_consume_token(111);
+    jj_consume_token(109);
                                      {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser alterar() throws ParseException {
+ NodoParser nodo,tipo; Token t;
+    t = jj_consume_token(RES_ALTERAR);
+                                      nodo = new NodoParser("ALTERAR",t.image,t.beginLine,t.beginColumn);
+    tipo = tipo_alterar();
+                                      nodo.hijos().add(tipo);
+    jj_consume_token(109);
+                                      {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_alterar() throws ParseException {
+ NodoParser nodo,tipo; Token t,id,cad;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_OBJETO:
+      t = jj_consume_token(RES_OBJETO);
+                                     nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+      tipo = tipo_opalterar();
+                                     nodo.hijos().add(tipo); {if (true) return nodo;}
+      break;
+    case RES_TABLA:
+      t = jj_consume_token(RES_TABLA);
+                                     nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+      tipo = tipo_opalterar();
+                                     nodo.hijos().add(tipo);
+      break;
+    case RES_USUARIO:
+      t = jj_consume_token(RES_USUARIO);
+                                     nodo = new NodoParser("TIPO",t.image,t.beginLine,t.beginColumn);
+      id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+      jj_consume_token(RES_CAMBIAR);
+      jj_consume_token(RES_PASSWORD);
+      jj_consume_token(ASIGNA);
+      cad = jj_consume_token(CADENA);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+      break;
+    default:
+      jj_la1[27] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_opalterar() throws ParseException {
+ NodoParser nodo,lista; Token t;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_AGREGAR:
+      t = jj_consume_token(RES_AGREGAR);
+                                     nodo = new NodoParser("AGREGAR",t.image,t.beginLine,t.beginColumn);
+      jj_consume_token(110);
+      lista = lista_campos();
+                                     nodo.hijos().add(lista); {if (true) return nodo;}
+      jj_consume_token(111);
+      break;
+    case RES_QUITAR:
+      t = jj_consume_token(RES_QUITAR);
+                                     nodo = new NodoParser("QUITAR",t.image,t.beginLine,t.beginColumn);
+      lista = lista_ids();
+                                     nodo.hijos().add(lista); {if (true) return nodo;}
+      break;
+    default:
+      jj_la1[28] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -502,21 +941,349 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo; Token id;
     id = jj_consume_token(ID);
                                      nodo = new NodoParser("IDS","",0,0); nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
-    label_5:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 89:
+      case 112:
         ;
         break;
       default:
-        jj_la1[16] = jj_gen;
-        break label_5;
+        jj_la1[29] = jj_gen;
+        break label_7;
       }
-      jj_consume_token(89);
+      jj_consume_token(112);
       id = jj_consume_token(ID);
                                      nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
     }
          {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser usar() throws ParseException {
+ NodoParser nodo; Token t,id;
+    t = jj_consume_token(RES_USAR);
+                                     nodo = new NodoParser("USAR",t.image,t.beginLine,t.beginColumn);
+    id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(109);
+                                     {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser crear() throws ParseException {
+ NodoParser tipo;
+    jj_consume_token(RES_CREAR);
+    tipo = tipo_crear();
+                                     {if (true) return tipo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser tipo_crear() throws ParseException {
+ NodoParser nodo;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_BD:
+      nodo = crear_base();
+                                     {if (true) return nodo;}
+      break;
+    case RES_TABLA:
+      nodo = crear_tabla();
+                                     {if (true) return nodo;}
+      break;
+    case RES_OBJETO:
+      nodo = crear_objeto();
+                                     {if (true) return nodo;}
+      break;
+    case RES_PROCEDIMIENTO:
+      nodo = crear_procedimiento();
+                                     {if (true) return nodo;}
+      break;
+    case RES_FUNCION:
+      nodo = crear_funcion();
+                                     {if (true) return nodo;}
+      break;
+    case RES_USUARIO:
+      nodo = crear_usuario();
+                                     {if (true) return nodo;}
+      break;
+    default:
+      jj_la1[30] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser crear_base() throws ParseException {
+ NodoParser nodo = new NodoParser("CREAR","",0,0); Token t,id;
+    t = jj_consume_token(RES_BD);
+                                     nodo.hijos().add(new NodoParser("BD",t.image,t.beginLine,t.beginColumn));
+    id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(109);
+                                     {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser crear_tabla() throws ParseException {
+ NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser lista; Token t,id;
+    t = jj_consume_token(RES_TABLA);
+                                     nodo.hijos().add(new NodoParser("TABLA",t.image,t.beginLine,t.beginColumn));
+    id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(110);
+    lista = lista_campos();
+                                     nodo.hijos().add(lista);
+    jj_consume_token(111);
+    jj_consume_token(109);
+                                     {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser campo() throws ParseException {
+ NodoParser nodo = new NodoParser("CAMPO","",0,0); NodoParser tip,coms,com; Token id;
+    tip = tipo();
+                                     nodo.hijos().add(tip);
+    id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+         coms = new NodoParser("COMPLEMENTOS","",0,0);
+    label_8:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case RES_NO:
+      case RES_NULO:
+      case RES_AUTOINC:
+      case RES_PRIMARIA:
+      case RES_FORANEA:
+      case RES_UNICO:
+        ;
+        break;
+      default:
+        jj_la1[31] = jj_gen;
+        break label_8;
+      }
+      com = complemento();
+                                     coms.hijos().add(com);
+    }
+         nodo.hijos().add(coms);
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser lista_campos() throws ParseException {
+ NodoParser nodo,c;
+    c = campo();
+                                     nodo = new NodoParser("CAMPOS","",0,0); nodo.hijos().add(c);
+    label_9:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 112:
+        ;
+        break;
+      default:
+        jj_la1[32] = jj_gen;
+        break label_9;
+      }
+      jj_consume_token(112);
+      c = campo();
+                                     nodo.hijos().add(c);
+    }
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser complemento() throws ParseException {
+ NodoParser nodo = new NodoParser("COMPLEMENTO","",0,0); Token t,id;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_NO:
+      t = jj_consume_token(RES_NO);
+      jj_consume_token(RES_NULO);
+                                     nodo.hijos().add(new NodoParser("NO NULO","",t.beginLine,t.beginColumn)); {if (true) return nodo;}
+      break;
+    case RES_NULO:
+      t = jj_consume_token(RES_NULO);
+                                     nodo.hijos().add(new NodoParser("NULO","",t.beginLine,t.beginColumn)); {if (true) return nodo;}
+      break;
+    case RES_AUTOINC:
+      t = jj_consume_token(RES_AUTOINC);
+                                     nodo.hijos().add(new NodoParser("AUTOINC","",t.beginLine,t.beginColumn)); {if (true) return nodo;}
+      break;
+    case RES_PRIMARIA:
+      t = jj_consume_token(RES_PRIMARIA);
+                                     nodo.hijos().add(new NodoParser("PRIMARIA","",t.beginLine,t.beginColumn)); {if (true) return nodo;}
+      break;
+    case RES_FORANEA:
+      t = jj_consume_token(RES_FORANEA);
+                                     nodo.hijos().add(new NodoParser("FORANEA","",t.beginLine,t.beginColumn));
+      id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return nodo;}
+      break;
+    case RES_UNICO:
+      t = jj_consume_token(RES_UNICO);
+                                     nodo.hijos().add(new NodoParser("UNICO","",t.beginLine,t.beginColumn)); {if (true) return nodo;}
+      break;
+    default:
+      jj_la1[33] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser crear_objeto() throws ParseException {
+ NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser lista; Token t,id;
+    t = jj_consume_token(RES_OBJETO);
+                                     nodo.hijos().add(new NodoParser("OBJETO",t.image,t.beginLine,t.beginColumn));
+    id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(110);
+    lista = lista_atributos();
+                                     nodo.hijos().add(lista);
+    jj_consume_token(111);
+    jj_consume_token(109);
+                                     {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser atributo() throws ParseException {
+ NodoParser nodo = new NodoParser("ATRIBUTO","",0,0); NodoParser t; Token id;
+    t = tipo();
+                                     nodo.hijos().add(t);
+    id = jj_consume_token(ID);
+                                     nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn)); {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser lista_atributos() throws ParseException {
+ NodoParser nodo,atr;
+    atr = atributo();
+                                     nodo = new NodoParser("ATRIBUTOS","",0,0); nodo.hijos().add(atr);
+    label_10:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 112:
+        ;
+        break;
+      default:
+        jj_la1[34] = jj_gen;
+        break label_10;
+      }
+      jj_consume_token(112);
+      atr = atributo();
+                                     nodo.hijos().add(atr);
+    }
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser crear_procedimiento() throws ParseException {
+ NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser params,sens; Token t,id,abre,cierra;
+    t = jj_consume_token(RES_PROCEDIMIENTO);
+                                             nodo.hijos().add(new NodoParser("PROCEDIMIENTO",t.image,t.beginLine,t.beginColumn));
+    id = jj_consume_token(ID);
+                                             nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(110);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_DOBLE:
+    case RES_ENTERO:
+    case RES_CADENA:
+    case RES_BOOLEAN:
+    case RES_DATE:
+    case RES_DATETIME:
+    case ID:
+      params = lista_parametros();
+                                             nodo.hijos().add(params);
+      break;
+    default:
+      jj_la1[35] = jj_gen;
+      ;
+    }
+    jj_consume_token(111);
+    abre = jj_consume_token(ABRE);
+    sens = lista_sentencias();
+                                             nodo.hijos().add(sens);
+    cierra = jj_consume_token(CIERRA);
+         nodo.inicio = abre.endLine; nodo.fin = cierra.beginLine; {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser parametro() throws ParseException {
+ NodoParser nodo = new NodoParser("PARAMETRO","",0,0); NodoParser t; Token v;
+    t = tipo();
+                         nodo.hijos().add(t);
+    v = jj_consume_token(VAR);
+                         System.out.println(v.image); nodo.hijos().add(new NodoParser("VAR",v.image,v.beginLine,v.beginColumn));
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser crear_funcion() throws ParseException {
+ NodoParser nodo = new NodoParser("CREAR","",0,0); NodoParser params,sens,ti; Token t,id,abre,cierra;
+    t = jj_consume_token(RES_FUNCION);
+                                         nodo.hijos().add(new NodoParser("FUNCION",t.image,t.beginLine,t.beginColumn));
+    id = jj_consume_token(ID);
+                                         nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(110);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case RES_DOBLE:
+    case RES_ENTERO:
+    case RES_CADENA:
+    case RES_BOOLEAN:
+    case RES_DATE:
+    case RES_DATETIME:
+    case ID:
+      params = lista_parametros();
+                                         nodo.hijos().add(params);
+      break;
+    default:
+      jj_la1[36] = jj_gen;
+      ;
+    }
+    jj_consume_token(111);
+    ti = tipo();
+                                         nodo.hijos().add(ti);
+    abre = jj_consume_token(ABRE);
+    sens = lista_sentencias();
+                                         nodo.hijos().add(sens);
+    cierra = jj_consume_token(CIERRA);
+         nodo.inicio = abre.endLine; nodo.fin = cierra.beginLine; {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser lista_parametros() throws ParseException {
+ NodoParser nodo = new NodoParser("PARAMS","",0,0); NodoParser p;
+    p = parametro();
+                                 nodo.hijos().add(p);
+    label_11:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 112:
+        ;
+        break;
+      default:
+        jj_la1[37] = jj_gen;
+        break label_11;
+      }
+      jj_consume_token(112);
+      p = parametro();
+                                 nodo.hijos().add(p);
+    }
+         {if (true) return nodo;}
+    throw new Error("Missing return statement in function");
+  }
+
+  final public NodoParser crear_usuario() throws ParseException {
+ NodoParser nodo = new NodoParser("CREAR","",0,0); Token t,id,cad;
+    t = jj_consume_token(RES_USUARIO);
+                                 nodo.hijos().add(new NodoParser("USUARIO",t.image,t.beginLine,t.beginColumn));
+    id = jj_consume_token(ID);
+                                 nodo.hijos().add(new NodoParser("ID",id.image,id.beginLine,id.beginColumn));
+    jj_consume_token(RES_COLOCAR);
+    jj_consume_token(RES_PASSWORD);
+    jj_consume_token(ASIGNA);
+    cad = jj_consume_token(CADENA);
+                                 nodo.hijos().add(new NodoParser("CADENA",cad.image,cad.beginLine,cad.beginColumn));
+    jj_consume_token(109);
+                                 {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
 
@@ -552,7 +1319,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                 System.out.println("id: "+t.image); {if (true) return new NodoParser("ID",t.image,t.beginLine,t.beginColumn);}
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[38] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -562,31 +1329,10 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
 //EXP
   final public NodoParser expresion() throws ParseException {
  NodoParser nodo,ope,exp;
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ENTERO:
-    case DOBLE:
-    case CADENA:
-    case FECHA:
-    case HORA:
-    case VERDADERO:
-    case FALSO:
-    case ID:
-    case VAR:
-    case 87:
-      ope = operacion1();
+    ope = operacion1();
 
-      exp = expresion2();
+    exp = expresion2();
                              if(exp!=null){exp.hijos().addFirst(ope); {if (true) return exp;}}else{{if (true) return ope;}}
-      break;
-    case RES_CONTAR:
-      exp = contar();
-                             {if (true) return exp;}
-      break;
-    default:
-      jj_la1[18] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
     throw new Error("Missing return statement in function");
   }
 
@@ -594,17 +1340,17 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo,exp;
     exp = expresion();
                                       nodo = new NodoParser("EXPRESIONES","",0,0); nodo.hijos().add(exp);
-    label_6:
+    label_12:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case 89:
+      case 112:
         ;
         break;
       default:
-        jj_la1[19] = jj_gen;
-        break label_6;
+        jj_la1[39] = jj_gen;
+        break label_12;
       }
-      jj_consume_token(89);
+      jj_consume_token(112);
       exp = expresion();
                                       nodo.hijos().add(exp);
     }
@@ -632,7 +1378,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                              if(exp!=null){exp.hijos().addFirst(ope); nodo.hijos().add(exp);}else{nodo.hijos().add(ope);} {if (true) return nodo;}
       break;
     default:
-      jj_la1[20] = jj_gen;
+      jj_la1[40] = jj_gen;
       Empty();
                              {if (true) return null;}
     }
@@ -668,7 +1414,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                              if(ope!=null){ope.hijos().addFirst(exp); nodo.hijos().add(ope);}else{nodo.hijos().add(exp);} {if (true) return nodo;}
       break;
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[41] = jj_gen;
       Empty();
                              {if (true) return null;}
     }
@@ -676,12 +1422,12 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
   }
 
   final public NodoParser tipoValor() throws ParseException {
- NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,tipoL; Token t;
+ NodoParser nodo = new NodoParser("EXP","",0,0); NodoParser tipo,exp,tipoL; Token t,t2;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 87:
-      jj_consume_token(87);
-      nodo = expresion();
-      jj_consume_token(88);
+    case 110:
+      jj_consume_token(110);
+      nodo = condicion();
+      jj_consume_token(111);
                              {if (true) return nodo;}
       break;
     case ENTERO:
@@ -692,13 +1438,21 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       t = jj_consume_token(CADENA);
                              tipo = new NodoParser("cadena",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); {if (true) return nodo;}
       break;
-    case FECHA:
+    case 113:
+      jj_consume_token(113);
       t = jj_consume_token(FECHA);
-                             tipo = new NodoParser("fecha",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); {if (true) return nodo;}
-      break;
-    case HORA:
-      t = jj_consume_token(HORA);
-                             tipo = new NodoParser("fechahora",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); {if (true) return nodo;}
+                             tipo = new NodoParser("fecha",t.image,t.beginLine,t.beginColumn);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case HORA:
+        t2 = jj_consume_token(HORA);
+                             tipo = new NodoParser("fechahora",t.image+t2.image,t.beginLine,t.beginColumn);
+        break;
+      default:
+        jj_la1[42] = jj_gen;
+        ;
+      }
+      jj_consume_token(113);
+                             nodo.hijos().add(tipo); {if (true) return nodo;}
       break;
     case DOBLE:
       t = jj_consume_token(DOBLE);
@@ -712,16 +1466,32 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       t = jj_consume_token(FALSO);
                              tipo = new NodoParser("boolean","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); {if (true) return nodo;}
       break;
+    case RES_FECHA:
+      t = jj_consume_token(RES_FECHA);
+      jj_consume_token(110);
+      jj_consume_token(111);
+                             tipo = new NodoParser("date","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); {if (true) return nodo;}
+      break;
+    case RES_FECHAHORA:
+      t = jj_consume_token(RES_FECHAHORA);
+      jj_consume_token(110);
+      jj_consume_token(111);
+                             tipo = new NodoParser("datetime","0",t.beginLine,t.beginColumn); nodo.hijos().add(tipo); {if (true) return nodo;}
+      break;
     case ID:
       tipoL = llamada();
                              nodo.hijos().add(tipoL); {if (true) return nodo;}
       break;
     case VAR:
-      t = jj_consume_token(VAR);
-                             tipo = new NodoParser("VAR",t.image,t.beginLine,t.beginColumn); nodo.hijos().add(tipo); {if (true) return nodo;}
+      tipoL = accesar();
+                             nodo.hijos().add(tipoL); {if (true) return nodo;}
+      break;
+    case RES_CONTAR:
+      exp = contar();
+                             {if (true) return exp;}
       break;
     default:
-      jj_la1[22] = jj_gen;
+      jj_la1[43] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -748,7 +1518,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                      {if (true) return nodo;}
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[44] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -759,24 +1529,24 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo,con,sen; Token t;
     t = jj_consume_token(SI);
                                      nodo = new NodoParser("SI","",t.beginLine,t.beginColumn);
-    jj_consume_token(87);
+    jj_consume_token(110);
     con = condicion();
                                      nodo.hijos().add(con);
-    jj_consume_token(88);
-    jj_consume_token(90);
+    jj_consume_token(111);
+    jj_consume_token(ABRE);
     sen = lista_sentencias();
                                      nodo.hijos().add(sen);
-    jj_consume_token(91);
+    jj_consume_token(CIERRA);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case SINO:
       t = jj_consume_token(SINO);
-      jj_consume_token(90);
+      jj_consume_token(ABRE);
       sen = lista_sentencias();
                                      nodo.hijos().add(sen);
-      jj_consume_token(91);
+      jj_consume_token(CIERRA);
       break;
     default:
-      jj_la1[24] = jj_gen;
+      jj_la1[45] = jj_gen;
       ;
     }
      {if (true) return nodo;}
@@ -787,25 +1557,25 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo,exp,cas,def,sen,sns; Token t;
     t = jj_consume_token(SELECCIONA);
                                      nodo = new NodoParser("SELECCIONA","",t.beginLine,t.beginColumn);
-    jj_consume_token(87);
+    jj_consume_token(110);
     exp = expresion();
                                      nodo.hijos().add(exp);
-    jj_consume_token(88);
-    jj_consume_token(90);
+    jj_consume_token(111);
+    jj_consume_token(ABRE);
     cas = casos();
                                      nodo.hijos().add(cas);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case DEFECTO:
       jj_consume_token(DEFECTO);
-      jj_consume_token(92);
+      jj_consume_token(114);
       sen = lista_sentencias();
                                      nodo.hijos().add(sen);
       break;
     default:
-      jj_la1[25] = jj_gen;
+      jj_la1[46] = jj_gen;
       ;
     }
-    jj_consume_token(91);
+    jj_consume_token(CIERRA);
                                      {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
@@ -816,25 +1586,25 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                      nodo = new NodoParser("CASOS","",t.beginLine,t.beginColumn); caso = new NodoParser("CASO","",t.beginLine,t.beginColumn);
     exp = expresion();
                                      caso.hijos().add(exp);
-    jj_consume_token(92);
+    jj_consume_token(114);
     sen = lista_sentencias();
                                      caso.hijos().add(sen);
      nodo.hijos().add(caso);
-    label_7:
+    label_13:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case CASO:
         ;
         break;
       default:
-        jj_la1[26] = jj_gen;
-        break label_7;
+        jj_la1[47] = jj_gen;
+        break label_13;
       }
       t = jj_consume_token(CASO);
                                      caso = new NodoParser("CASO","",t.beginLine,t.beginColumn);
       exp = expresion();
                                      caso.hijos().add(exp);
-      jj_consume_token(92);
+      jj_consume_token(114);
       sen = lista_sentencias();
                                      caso.hijos().add(sen);
          nodo.hijos().add(caso);
@@ -847,19 +1617,19 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo,asig,con,cre,sen; Token t;
     t = jj_consume_token(PARA);
                                  nodo = new NodoParser("PARA","",t.beginLine,t.beginColumn);
-    jj_consume_token(87);
+    jj_consume_token(110);
     asig = declarar();
                                  nodo.hijos().add(asig);
     con = condicion();
                                  nodo.hijos().add(con);
-    jj_consume_token(86);
+    jj_consume_token(109);
     cre = crecimiento();
                                  nodo.hijos().add(cre);
-    jj_consume_token(88);
-    jj_consume_token(90);
+    jj_consume_token(111);
+    jj_consume_token(ABRE);
     sen = lista_sentencias();
                                  nodo.hijos().add(sen);
-    jj_consume_token(91);
+    jj_consume_token(CIERRA);
                                  {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
@@ -868,25 +1638,49 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
  NodoParser nodo,con,sns,sen; Token t;
     t = jj_consume_token(MIENTRAS);
                                  nodo = new NodoParser("MIENTRAS","",t.beginLine,t.beginColumn);
-    jj_consume_token(87);
+    jj_consume_token(110);
     con = condicion();
                                  nodo.hijos().add(con);
-    jj_consume_token(88);
-    jj_consume_token(90);
+    jj_consume_token(111);
+    jj_consume_token(ABRE);
     sen = lista_sentencias();
                                  nodo.hijos().add(sen);
-    jj_consume_token(91);
+    jj_consume_token(CIERRA);
                                  {if (true) return nodo;}
     throw new Error("Missing return statement in function");
   }
 
   final public NodoParser condicion() throws ParseException {
  NodoParser nodo,ope,con;
-    ope = operando1();
-                         nodo = new NodoParser("EXP","",0,0); if(ope!=null){nodo.hijos().add(ope);}
-    con = condicion2();
-                         if(con!=null){nodo.hijos().add(con);}
-     {if (true) return nodo;}
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ENTERO:
+    case DOBLE:
+    case CADENA:
+    case VERDADERO:
+    case FALSO:
+    case RES_FECHA:
+    case RES_FECHAHORA:
+    case RES_CONTAR:
+    case NOT:
+    case ID:
+    case VAR:
+    case 110:
+    case 113:
+      ope = operando1();
+                             nodo = new NodoParser("EXP","",0,0); if(ope!=null){nodo.hijos().add(ope);}
+      con = condicion2();
+                             if(con!=null){nodo.hijos().add(con);} {if (true) return nodo;}
+      break;
+      jj_consume_token(110);
+      con = condicion();
+      jj_consume_token(111);
+                             {if (true) return con;}
+      break;
+    default:
+      jj_la1[48] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
     throw new Error("Missing return statement in function");
   }
 
@@ -902,7 +1696,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                  if(con!=null){con.hijos().addFirst(ope); nodo.hijos().add(con);}else{nodo.hijos().add(ope);} {if (true) return nodo;}
       break;
     default:
-      jj_la1[27] = jj_gen;
+      jj_la1[49] = jj_gen;
       Empty();
                                  {if (true) return null;}
     }
@@ -929,7 +1723,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                                  if(ope!=null){ope.hijos().addFirst(tip); nodo.hijos().add(ope);}else{nodo.hijos().add(tip);} {if (true) return nodo;}
       break;
     default:
-      jj_la1[28] = jj_gen;
+      jj_la1[50] = jj_gen;
       Empty();
                                  {if (true) return null;}
     }
@@ -943,29 +1737,30 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
       // condicion -> NOT subcondicion | subcondicion;
               t = jj_consume_token(NOT);
                                      System.out.println("! -> NOT"); exp = new NodoParser("EXP","",t.beginLine,t.beginColumn);
-      jj_consume_token(87);
+      jj_consume_token(110);
                                      System.out.println("( -> Parentesis condicion");
       sub = subcondicion();
                                      exp.hijos().addFirst(new NodoParser("NOT","!",t.beginLine,t.beginColumn)); exp.hijos().add(sub);
-      jj_consume_token(88);
+      jj_consume_token(111);
                                      System.out.println(") -> Parentesis condicion"); {if (true) return exp;}
       break;
     case ENTERO:
     case DOBLE:
     case CADENA:
-    case FECHA:
-    case HORA:
     case VERDADERO:
     case FALSO:
+    case RES_FECHA:
+    case RES_FECHAHORA:
     case RES_CONTAR:
     case ID:
     case VAR:
-    case 87:
+    case 110:
+    case 113:
       sub = subcondicion();
                                      System.out.println(") -> Parentesis condicion"); {if (true) return sub;}
       break;
     default:
-      jj_la1[29] = jj_gen;
+      jj_la1[51] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1016,7 +1811,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                            nodo = new NodoParser("EXP","",t.beginLine,t.beginColumn); nodo.hijos().add(new NodoParser("OPELOGICA",">",t.beginLine,t.beginColumn)); nodo.hijos().add(exp); {if (true) return nodo;}
       break;
     default:
-      jj_la1[30] = jj_gen;
+      jj_la1[52] = jj_gen;
       Empty();
                            {if (true) return null;}
     }
@@ -1035,7 +1830,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
                              nodo = new NodoParser("DECREMENTO","--",t.beginLine,t.beginColumn); {if (true) return nodo;}
       break;
     default:
-      jj_la1[31] = jj_gen;
+      jj_la1[53] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -1051,23 +1846,28 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[32];
+  final private int[] jj_la1 = new int[54];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static private int[] jj_la1_2;
+  static private int[] jj_la1_3;
   static {
       jj_la1_init_0();
       jj_la1_init_1();
       jj_la1_init_2();
+      jj_la1_init_3();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x4000,0x400000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x3f000000,0xc0003e00,0x0,0x0,0x0,0xc0003e00,0x0,0x0,0x0,0x0,0x0,0x0,0xc0003e00,0x0,0x0,};
+      jj_la1_0 = new int[] {0x200,0x20000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xc0380000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x3f000000,0x3f000000,0x0,0x3f000000,0x0,0x0,0x0,0x800000,0xc0380000,0x0,0x0,0x0,0x0,0xc0380000,0x0,0x0,0xc0380000,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x3cb3071,0x3cb3071,0x10000000,0x0,0x0,0x8,0x8,0x8,0x200,0x80000000,0xc00,0x0,0x0,0x0,0x0,0x10000,0x0,0x60000000,0x80000000,0x0,0x18a0000,0x40000,0x200000,0x100000,0x0,0x0,0x10000,0x0,0xc000000,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0xc3718c41,0xc0718040,0xc3718c41,0x0,0x0,0x0,0x0,0x0,0x80000,0x80000,0x80000,0x8000000,0x0,0x0,0x0,0x0,0x30000000,0xbe,0x0,0x0,0x0,0x0,0x0,0x0,0x8c,0x3000,0x0,0xbe,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_2() {
-      jj_la1_2 = new int[] {0x0,0x0,0x8,0xc0000,0xc0000,0x0,0x100,0x2000000,0x0,0x0,0x0,0x0,0x40000,0x0,0x800000,0x800000,0x2000000,0x40000,0x8c0000,0x2000000,0x0,0x1,0x8c0000,0x0,0x0,0x0,0x0,0x8000,0x10000,0x8e0000,0xfc,0x0,};
+      jj_la1_2 = new int[] {0x0,0x0,0x4000000,0x72cc,0x7284,0x72cc,0x30,0x80000,0x80000000,0x0,0x400000,0x0,0x0,0x0,0x0,0x0,0x80000,0x0,0x400000,0x0,0x0,0x80000,0x80000,0x7,0x80000,0x80000,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x300000,0xc00000,0x0,0x7,0x6280,0x100,0x800,0x400,0x7,0x0,0x0,0x7,0x7e000000,0x60000,};
+   }
+   private static void jj_la1_init_3() {
+      jj_la1_3 = new int[] {0x0,0x0,0x0,0x600,0x600,0x600,0x0,0x0,0x0,0x10000,0x200,0x0,0x0,0x0,0x0,0x10000,0x0,0x600,0x600,0x0,0x0,0x0,0x4000,0x24600,0x0,0x4000,0x200,0x0,0x0,0x10000,0x0,0x3f,0x10000,0x3f,0x10000,0x200,0x200,0x10000,0x200,0x10000,0x0,0x0,0x0,0x24600,0x0,0x0,0x0,0x0,0x24700,0x40,0x80,0x24700,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -1081,7 +1881,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1095,7 +1895,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1105,7 +1905,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1115,7 +1915,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1124,7 +1924,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1133,7 +1933,7 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 32; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 54; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -1184,12 +1984,12 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[93];
+    boolean[] la1tokens = new boolean[115];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < 54; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -1201,10 +2001,13 @@ public class SintacticoMetodos implements SintacticoMetodosConstants {
           if ((jj_la1_2[i] & (1<<j)) != 0) {
             la1tokens[64+j] = true;
           }
+          if ((jj_la1_3[i] & (1<<j)) != 0) {
+            la1tokens[96+j] = true;
+          }
         }
       }
     }
-    for (int i = 0; i < 93; i++) {
+    for (int i = 0; i < 115; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

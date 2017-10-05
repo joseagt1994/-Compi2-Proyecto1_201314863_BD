@@ -13,7 +13,7 @@ import com.jagt.Logica.SistemaBaseDatos;
  */
 public class Parametro {
     
-    String nombre;
+    public String nombre,objeto;
     int tipo;
 
     public Parametro(String nombre) {

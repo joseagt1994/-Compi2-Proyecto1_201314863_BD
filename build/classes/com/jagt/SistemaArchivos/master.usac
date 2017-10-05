@@ -18,3 +18,24 @@
 		<usuario>0</usuario>
 	</permisos>
 </DB>
+<DB>
+	<nombre>calificacion</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\calificacion.usac"</path>
+	<permisos>
+		<usuario>0</usuario>
+	</permisos>
+</DB>
+<DB>
+	<nombre>calificacionp</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\calificacionp.usac"</path>
+	<permisos>
+		<usuario>0</usuario>
+	</permisos>
+</DB>
+<DB>
+	<nombre>BD_Clases</nombre>
+	<path>"C:\Users\Jose Antonio\Documents\GitHub\[Compi2]Proyecto1_201314863_BD\src\com\jagt\SistemaArchivos\BD\BD_Clases.usac"</path>
+	<permisos>
+		<usuario>0</usuario>
+	</permisos>
+</DB>

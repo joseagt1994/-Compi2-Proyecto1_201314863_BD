@@ -1,0 +1,14 @@
+
+CREAR BASE_DATOS calificacionp;
+
+USAR calificacionp;
+
+CREAR FUNCION T_direcCION_TO_TEXT (T_direcCION @direc) TEXT{
+		RETORNO @direc.calle + " calle, " + @direc.avenida + " avenida, " + @direc.nombre + @direc.descripcion;
+	}
+
+
+
+...
+
+

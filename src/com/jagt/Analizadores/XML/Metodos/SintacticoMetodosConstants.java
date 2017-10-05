@@ -15,35 +15,35 @@ public interface SintacticoMetodosConstants {
   /** RegularExpression Id. */
   int MULTILINEA = 8;
   /** RegularExpression Id. */
-  int ENTERO = 9;
+  int INICIO_PROC = 9;
   /** RegularExpression Id. */
-  int DOBLE = 10;
+  int FIN_PROC = 10;
   /** RegularExpression Id. */
-  int CADENA = 11;
+  int INICIO_NOMBRE = 11;
   /** RegularExpression Id. */
-  int FECHA = 12;
+  int FIN_NOMBRE = 12;
   /** RegularExpression Id. */
-  int HORA = 13;
+  int INICIO_PARAMS = 13;
   /** RegularExpression Id. */
-  int INICIO_PROC = 14;
+  int FIN_PARAMS = 14;
   /** RegularExpression Id. */
-  int FIN_PROC = 15;
+  int INICIO_SRC = 15;
   /** RegularExpression Id. */
-  int INICIO_NOMBRE = 16;
+  int FIN_SRC = 16;
   /** RegularExpression Id. */
-  int FIN_NOMBRE = 17;
+  int INICIO_RET = 17;
   /** RegularExpression Id. */
-  int INICIO_PARAMS = 18;
+  int FIN_RET = 18;
   /** RegularExpression Id. */
-  int FIN_PARAMS = 19;
+  int ENTERO = 19;
   /** RegularExpression Id. */
-  int INICIO_SRC = 20;
+  int DOBLE = 20;
   /** RegularExpression Id. */
-  int FIN_SRC = 21;
+  int CADENA = 21;
   /** RegularExpression Id. */
-  int INICIO_RET = 22;
+  int FECHA = 22;
   /** RegularExpression Id. */
-  int FIN_RET = 23;
+  int HORA = 23;
   /** RegularExpression Id. */
   int RES_DOBLE = 24;
   /** RegularExpression Id. */
@@ -61,113 +61,159 @@ public interface SintacticoMetodosConstants {
   /** RegularExpression Id. */
   int FALSO = 31;
   /** RegularExpression Id. */
-  int RES_INSERTAR = 32;
+  int RES_CREAR = 32;
   /** RegularExpression Id. */
-  int RES_EN = 33;
+  int RES_BD = 33;
   /** RegularExpression Id. */
-  int RES_VALORES = 34;
+  int RES_TABLA = 34;
   /** RegularExpression Id. */
-  int RES_DONDE = 35;
+  int RES_OBJETO = 35;
   /** RegularExpression Id. */
-  int RES_ACTUALIZAR = 36;
+  int RES_PROCEDIMIENTO = 36;
   /** RegularExpression Id. */
-  int RES_BORRAR = 37;
+  int RES_FUNCION = 37;
   /** RegularExpression Id. */
-  int RES_SELECCIONAR = 38;
+  int RETORNAR = 38;
   /** RegularExpression Id. */
-  int RES_DE = 39;
+  int RES_USUARIO = 39;
   /** RegularExpression Id. */
-  int RES_TABLA = 40;
+  int RES_PASSWORD = 40;
   /** RegularExpression Id. */
-  int RES_ORDENAR = 41;
+  int RES_COLOCAR = 41;
   /** RegularExpression Id. */
-  int RES_ASC = 42;
+  int RES_USAR = 42;
   /** RegularExpression Id. */
-  int RES_DESC = 43;
+  int RES_ALTERAR = 43;
   /** RegularExpression Id. */
-  int RES_DECLARAR = 44;
+  int RES_AGREGAR = 44;
   /** RegularExpression Id. */
-  int RES_IMPRIMIR = 45;
+  int RES_QUITAR = 45;
   /** RegularExpression Id. */
-  int RES_FECHA = 46;
+  int RES_CAMBIAR = 46;
   /** RegularExpression Id. */
-  int RES_FECHAHORA = 47;
+  int RES_ELIMINAR = 47;
   /** RegularExpression Id. */
-  int RES_CONTAR = 48;
+  int RES_INSERTAR = 48;
   /** RegularExpression Id. */
-  int SI = 49;
+  int RES_EN = 49;
   /** RegularExpression Id. */
-  int SINO = 50;
+  int RES_VALORES = 50;
   /** RegularExpression Id. */
-  int SELECCIONA = 51;
+  int RES_DONDE = 51;
   /** RegularExpression Id. */
-  int CASO = 52;
+  int RES_ACTUALIZAR = 52;
   /** RegularExpression Id. */
-  int DEFECTO = 53;
+  int RES_BORRAR = 53;
   /** RegularExpression Id. */
-  int DETENER = 54;
+  int RES_SELECCIONAR = 54;
   /** RegularExpression Id. */
-  int PARA = 55;
+  int RES_DE = 55;
   /** RegularExpression Id. */
-  int MIENTRAS = 56;
+  int RES_OTORGAR = 56;
   /** RegularExpression Id. */
-  int RETORNAR = 57;
+  int RES_DENEGAR = 57;
   /** RegularExpression Id. */
-  int INCREMENTO = 58;
+  int RES_PERMISOS = 58;
   /** RegularExpression Id. */
-  int DECREMENTO = 59;
+  int RES_ORDENAR = 59;
   /** RegularExpression Id. */
-  int PUNTO = 60;
+  int RES_ASC = 60;
   /** RegularExpression Id. */
-  int MAS = 61;
+  int RES_DESC = 61;
   /** RegularExpression Id. */
-  int MENOS = 62;
+  int RES_DECLARAR = 62;
   /** RegularExpression Id. */
-  int POR = 63;
+  int RES_IMPRIMIR = 63;
   /** RegularExpression Id. */
-  int DIV = 64;
+  int RES_FECHA = 64;
   /** RegularExpression Id. */
-  int POT = 65;
+  int RES_FECHAHORA = 65;
   /** RegularExpression Id. */
-  int MAYOR = 66;
+  int RES_CONTAR = 66;
   /** RegularExpression Id. */
-  int MENOR = 67;
+  int RES_BACKUP = 67;
   /** RegularExpression Id. */
-  int IGUAL = 68;
+  int RES_USQLDUMP = 68;
   /** RegularExpression Id. */
-  int DIFERENTE = 69;
+  int RES_COMPLETO = 69;
   /** RegularExpression Id. */
-  int MENOR_IGUAL = 70;
+  int RES_RESTAURAR = 70;
   /** RegularExpression Id. */
-  int MAYOR_IGUAL = 71;
+  int SI = 71;
   /** RegularExpression Id. */
-  int ASIGNA = 72;
+  int SINO = 72;
   /** RegularExpression Id. */
-  int RES_NO = 73;
+  int SELECCIONA = 73;
   /** RegularExpression Id. */
-  int RES_NULO = 74;
+  int CASO = 74;
   /** RegularExpression Id. */
-  int RES_AUTOINC = 75;
+  int DEFECTO = 75;
   /** RegularExpression Id. */
-  int RES_PRIMARIA = 76;
+  int DETENER = 76;
   /** RegularExpression Id. */
-  int RES_FORANEA = 77;
+  int PARA = 77;
   /** RegularExpression Id. */
-  int RES_UNICO = 78;
+  int MIENTRAS = 78;
   /** RegularExpression Id. */
-  int OR = 79;
+  int ABRE = 79;
   /** RegularExpression Id. */
-  int AND = 80;
+  int CIERRA = 80;
   /** RegularExpression Id. */
-  int NOT = 81;
+  int INCREMENTO = 81;
   /** RegularExpression Id. */
-  int ID = 82;
+  int DECREMENTO = 82;
   /** RegularExpression Id. */
-  int VAR = 83;
+  int PUNTO = 83;
   /** RegularExpression Id. */
-  int DIGITO = 84;
+  int MAS = 84;
   /** RegularExpression Id. */
-  int LETRA = 85;
+  int MENOS = 85;
+  /** RegularExpression Id. */
+  int POR = 86;
+  /** RegularExpression Id. */
+  int DIV = 87;
+  /** RegularExpression Id. */
+  int POT = 88;
+  /** RegularExpression Id. */
+  int MAYOR = 89;
+  /** RegularExpression Id. */
+  int MENOR = 90;
+  /** RegularExpression Id. */
+  int IGUAL = 91;
+  /** RegularExpression Id. */
+  int DIFERENTE = 92;
+  /** RegularExpression Id. */
+  int MENOR_IGUAL = 93;
+  /** RegularExpression Id. */
+  int MAYOR_IGUAL = 94;
+  /** RegularExpression Id. */
+  int ASIGNA = 95;
+  /** RegularExpression Id. */
+  int RES_NO = 96;
+  /** RegularExpression Id. */
+  int RES_NULO = 97;
+  /** RegularExpression Id. */
+  int RES_AUTOINC = 98;
+  /** RegularExpression Id. */
+  int RES_PRIMARIA = 99;
+  /** RegularExpression Id. */
+  int RES_FORANEA = 100;
+  /** RegularExpression Id. */
+  int RES_UNICO = 101;
+  /** RegularExpression Id. */
+  int OR = 102;
+  /** RegularExpression Id. */
+  int AND = 103;
+  /** RegularExpression Id. */
+  int NOT = 104;
+  /** RegularExpression Id. */
+  int ID = 105;
+  /** RegularExpression Id. */
+  int VAR = 106;
+  /** RegularExpression Id. */
+  int DIGITO = 107;
+  /** RegularExpression Id. */
+  int LETRA = 108;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -183,11 +229,6 @@ public interface SintacticoMetodosConstants {
     "\"\\b\"",
     "<LINEA>",
     "<MULTILINEA>",
-    "<ENTERO>",
-    "<DOBLE>",
-    "<CADENA>",
-    "<FECHA>",
-    "<HORA>",
     "\"<Proc>\"",
     "\"</Proc>\"",
     "\"<nombre>\"",
@@ -198,14 +239,35 @@ public interface SintacticoMetodosConstants {
     "\"</src>\"",
     "\"<ret>\"",
     "\"</ret>\"",
+    "<ENTERO>",
+    "<DOBLE>",
+    "<CADENA>",
+    "<FECHA>",
+    "<HORA>",
     "\"Double\"",
-    "<RES_ENTERO>",
+    "\"Integer\"",
     "\"Text\"",
     "\"Bool\"",
     "\"Date\"",
     "\"Datetime\"",
     "<VERDADERO>",
     "<FALSO>",
+    "\"Crear\"",
+    "\"Base_Datos\"",
+    "\"Tabla\"",
+    "\"Objeto\"",
+    "\"Procedimiento\"",
+    "\"Funcion\"",
+    "\"Retorno\"",
+    "\"Usuario\"",
+    "\"Password\"",
+    "\"Colocar\"",
+    "\"Usar\"",
+    "\"Alterar\"",
+    "\"Agregar\"",
+    "\"Quitar\"",
+    "\"Cambiar\"",
+    "\"Eliminar\"",
     "\"Insertar\"",
     "\"En\"",
     "\"Valores\"",
@@ -214,7 +276,9 @@ public interface SintacticoMetodosConstants {
     "\"Borrar\"",
     "\"Seleccionar\"",
     "\"De\"",
-    "\"Tabla\"",
+    "\"Otorgar\"",
+    "\"Denegar\"",
+    "\"Permisos\"",
     "\"Ordenar_Por\"",
     "\"ASC\"",
     "\"DESC\"",
@@ -223,6 +287,10 @@ public interface SintacticoMetodosConstants {
     "\"Fecha\"",
     "\"Fecha_Hora\"",
     "\"Contar\"",
+    "\"Backup\"",
+    "\"USQLDUMP\"",
+    "\"Completo\"",
+    "\"Restaurar\"",
     "\"Si\"",
     "\"Sino\"",
     "\"Selecciona\"",
@@ -231,7 +299,8 @@ public interface SintacticoMetodosConstants {
     "\"Detener\"",
     "\"Para\"",
     "\"Mientras\"",
-    "\"Retorno\"",
+    "\"{\"",
+    "\"}\"",
     "\"++\"",
     "\"--\"",
     "\".\"",
@@ -253,9 +322,9 @@ public interface SintacticoMetodosConstants {
     "\"Llave_Primaria\"",
     "\"Llave_Foranea\"",
     "\"Unico\"",
-    "\"||\"",
-    "\"&&\"",
-    "\"!\"",
+    "<OR>",
+    "<AND>",
+    "<NOT>",
     "<ID>",
     "<VAR>",
     "<DIGITO>",
@@ -264,8 +333,7 @@ public interface SintacticoMetodosConstants {
     "\"(\"",
     "\")\"",
     "\",\"",
-    "\"{\"",
-    "\"}\"",
+    "\"\\\'\"",
     "\":\"",
   };
 

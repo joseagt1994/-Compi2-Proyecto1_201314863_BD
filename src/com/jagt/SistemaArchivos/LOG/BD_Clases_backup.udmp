@@ -1,0 +1,60 @@
+
+CREAR BASE_DATOS BD_Clases;
+
+USAR BD_Clases;
+
+
+...
+
+
+
+CREAR PROCEDIMIENTO inicio_archivo4(){
+
+crear tabla BANCODEDATOSA(
+	text Valor NUlo,
+	integer TIPO Nulo,
+	integer Orden nulo
+);
+
+crear tabla BANCODEDATOSB(
+	text Valor NUlo,
+	integer TIPO Nulo,
+	integer Orden nulo
+);
+
+crear tabla BANCODEDATOSC(
+	text Valor NUlo,
+	integer TIPO Nulo,
+	integer Orden nulo
+);
+
+CREAR TABLA Profesor(
+	integer codigo Llave_primaria autoincrementable,
+	text nombre no nulo,
+	bool titular no nulo
+);
+
+CREAR TABLA Cursos(
+	integer cod Llave_primaria autoincrementable,
+	text curso no nulo,
+	text semestre no nulo,
+	integer salon 
+);
+
+CREAR OBJETO obj_Carrera(
+	integer id,
+	text name
+);
+
+INSertar en tabla profesor(nombre,TITULAR) valores("JUAN RAYMUNDO GOMEZ RAMIREZ",False);
+INSertar en tabla profesor(nombre,TITULAR) valores("WALTER RAMOS GONZALEZ",False);
+INSertar en tabla profesor(nombre,TITULAR) valores("CESAR TOMAS LOPEZ DE LEON",False);
+INSertar en tabla profesor(nombre,TITULAR) valores("JENNIFER ESTHER CABRERA PIVARAL",False);
+INSertar en tabla profesor(nombre,TITULAR) valores("FREDDY NOEL ROCA ZALDANHA",False);
+INSertar en tabla profesor(nombre,TITULAR) valores("DAVID ANTONIO JOEL DE LEON CABRERA",False);
+
+}
+
+
+...
+

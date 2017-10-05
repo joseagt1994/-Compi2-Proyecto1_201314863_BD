@@ -148,7 +148,7 @@ ManejadorPaquete tipo_paquete():
         <INSTRUCCION>
         ":"
         cadena = html()         {
-                                    manejador = new ManejadorPaquete("?"+cadena+"?");
+                                    manejador = new ManejadorPaquete(cadena);
                                     return manejador;
                                 }
 }

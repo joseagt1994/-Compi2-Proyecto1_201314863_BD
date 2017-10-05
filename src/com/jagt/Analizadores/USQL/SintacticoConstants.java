@@ -303,6 +303,7 @@ public interface SintacticoConstants {
     "\"(\"",
     "\")\"",
     "\",\"",
+    "\"\\\'\"",
     "\":\"",
   };
 

@@ -101,9 +101,11 @@ public class Comunicacion extends Thread implements Runnable {
                             Thread.sleep(100);
                             pw.println(getPaqueteHistoria(h));
                         }
+                        // Enviar restauracion
+                        
                     }else if(mp.tipoPaquete == ManejadorPaquete.REPORTE){
                         Thread.sleep(100);
-                        pw.println("REPORTE!!!");
+                        pw.println("REPORTE!!");
                         Thread.sleep(100);
                         pw.println(mp.reporteHTML);
                     }
